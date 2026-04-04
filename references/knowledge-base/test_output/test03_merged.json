@@ -1,0 +1,311 @@
+{
+  "test_no": "03",
+  "url": "https://cgi.cse.unsw.edu.au/~cs2041/26T1/test/03/questions",
+  "final_url": "F:\\Codex\\9044\\test_html\\test03_live.html",
+  "status": 200,
+  "page_title": "COMP(2041|9044) 26T1 — Week 03 Weekly Test Questions",
+  "login_required": false,
+  "intro_sections": [
+    {
+      "heading": "Getting Started",
+      "text": "test03 There are some provided files for this test which you can fetch with this command: If you're not working at CSE, you can download the provided files as a zip file or a tar file .",
+      "links": [
+        {
+          "text": "zip file",
+          "url": "https://cgi.cse.unsw.edu.au/~cs2041/26T1/test/03/zip"
+        },
+        {
+          "text": "tar file",
+          "url": "https://cgi.cse.unsw.edu.au/~cs2041/26T1/test/03/tar"
+        }
+      ],
+      "code_blocks": [
+        "mkdir test03\r\ncd test03",
+        "2041 fetch test03"
+      ],
+      "content_blocks": [
+        {
+          "type": "paragraph",
+          "text": "test03"
+        },
+        {
+          "type": "code",
+          "text": "mkdir test03\r\ncd test03"
+        },
+        {
+          "type": "paragraph",
+          "text": "There are some provided files for this test which you can fetch with this command:"
+        },
+        {
+          "type": "code",
+          "text": "2041 fetch test03"
+        },
+        {
+          "type": "paragraph",
+          "text": "If you're not working at CSE, you can download the provided files as a zip file or a tar file ."
+        }
+      ]
+    },
+    {
+      "heading": "Submission",
+      "text": "give You can run give multiple times. Only your last submission will be marked. Don't submit any exercises you haven't attempted. If you are working at home, you may find it more convenient to upload your work via give's web interface . Remember you have until Week 4 Thursday 21:00:00 to complete this test. Automarking will be run by the lecturer several days after the submission deadline for the test, using test cases that you haven't seen: different to the test cases autotest runs for you. Hint: do your own testing as well as running autotest Test Marks After automarking is run by the lecturer you can view it here the resulting mark will also be available via via give's web interface or by running this command on a CSE machine: Each test is worth 1.7 marks, and will be automarked. Your total mark for the tests component is computed as a sum of your best 6 of 8 test marks.",
+      "links": [
+        {
+          "text": "give's web interface",
+          "url": "https://cgi.cse.unsw.edu.au/~give/Student/give.php"
+        },
+        {
+          "text": "view it here",
+          "url": "https://cgi.cse.unsw.edu.au/~cs2041/26T1/student/"
+        },
+        {
+          "text": "via give's web interface",
+          "url": "https://cgi.cse.unsw.edu.au/~give/Student/sturec.php"
+        }
+      ],
+      "code_blocks": [
+        "2041 classrun -sturec"
+      ],
+      "content_blocks": [
+        {
+          "type": "paragraph",
+          "text": "give"
+        },
+        {
+          "type": "paragraph",
+          "text": "You can run give multiple times. Only your last submission will be marked."
+        },
+        {
+          "type": "paragraph",
+          "text": "Don't submit any exercises you haven't attempted."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you are working at home, you may find it more convenient to upload your work via give's web interface ."
+        },
+        {
+          "type": "paragraph",
+          "text": "Remember you have until Week 4 Thursday 21:00:00 to complete this test."
+        },
+        {
+          "type": "paragraph",
+          "text": "Automarking will be run by the lecturer several days after the submission deadline for the test, using test cases that you haven't seen: different to the test cases autotest runs for you."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hint: do your own testing as well as running autotest"
+        },
+        {
+          "type": "paragraph",
+          "text": "Test Marks"
+        },
+        {
+          "type": "paragraph",
+          "text": "After automarking is run by the lecturer you can view it here the resulting mark will also be available via via give's web interface or by running this command on a CSE machine:"
+        },
+        {
+          "type": "code",
+          "text": "2041 classrun -sturec"
+        },
+        {
+          "type": "paragraph",
+          "text": "Each test is worth 1.7 marks, and will be automarked. Your total mark for the tests component is computed as a sum of your best 6 of 8 test marks."
+        }
+      ]
+    }
+  ],
+  "exercises": [
+    {
+      "label": "weekly test question",
+      "title": "Printing Student First Names",
+      "content_blocks": [
+        {
+          "type": "paragraph",
+          "text": "We have student enrolment data in this familiar format:"
+        },
+        {
+          "type": "code",
+          "text": "cat enrollments.txt\r\nCOMP1917|3360379|Costner, Kevin Augustus          |3978/1|M\r\nCOMP1917|3364562|Carey, Mary                      |3711/1|M\r\nCOMP3311|3383025|Thorpe, Ian Augustus             |3978/3|M\r\nCOMP2920|3860448|Steenburgen, Mary Nell           |3978/3|F\r\nCOMP1927|3360582|Neeson, Liam                     |3711/2|M\r\nCOMP3411|3863711|Klum, Heidi June Anne            |3978/3|F\r\nCOMP3141|3383025|Thorpe, Ian Augustus             |3978/3|M\r\nCOMP3891|3863711|Klum, Heidi June Anne            |3978/3|F\r\nCOMP3331|3383025|Thorpe, Ian Augustus             |3978/3|M\r\nCOMP2041|3860448|Steenburgen, Mary Nell           |3978/3|F\r\nCOMP2041|3360582|Neeson, Liam                     |3711/2|M\r\nCOMP3311|3711611|Klum, Mary                       |3978/3|F\r\nCOMP3311|3371161|Thorpe, Ian Fredrick             |3711/3|M\r\nCOMP3331|5122456|Wang, Wei                        |3978/2|M\r\nCOMP3331|5456732|Wang, Wei                        |3648/3|M\r\nCOMP4920|5456732|Wang, Wei                        |3648/3|M"
+        },
+        {
+          "type": "paragraph",
+          "text": "Note the input is unordered i.e. not sorted in any way."
+        },
+        {
+          "type": "paragraph",
+          "text": "You should find a copy of the above data in the file enrollments.txt ."
+        },
+        {
+          "type": "paragraph",
+          "text": "Write a shell pipeline that, given student enrollment data in this format, outputs the first name of all students."
+        },
+        {
+          "type": "paragraph",
+          "text": "The first names should be printed one per line, and each student's first name should be printed once, no matter how many courses they are enrolled in. But, for example, if three students have the same first name, the first name should be printed 3 times."
+        },
+        {
+          "type": "paragraph",
+          "text": "Only their first names should be printed. The names should be printed in sorted order."
+        },
+        {
+          "type": "paragraph",
+          "text": "Put your shell pipeline in a file named ./student_first_names.sh"
+        },
+        {
+          "type": "paragraph",
+          "text": "For example, your pipeline should output this:"
+        },
+        {
+          "type": "code",
+          "text": "./student_first_names.sh  <enrollments.txt\r\nHeidi\r\nIan\r\nIan\r\nKevin\r\nLiam\r\nMary\r\nMary\r\nMary\r\nWei\r\nWei\r\n./student_first_names.sh  <more_enrollments.txt | head\r\nAaron\r\nAbdullah\r\nAditya\r\nAdrian\r\nAlvin\r\nAlvin\r\nBo\r\nBrendan\r\nBrian\r\nCallum\r\n./student_first_names.sh  <more_enrollments.txt | tail\r\nZeyu\r\nZeyu\r\nZeyu\r\nZeyu\r\nZeyu\r\nZhihao\r\nZhihao\r\nZihao\r\nZijian\r\nZiyang\r\n./student_first_names.sh <more_enrollments.txt | wc -l \r\n73"
+        },
+        {
+          "type": "paragraph",
+          "text": "Your answer must be a single Shell pipeline. Your pipeline should take input from standard input. Your shell pipeline should be placed in the file ./student_first_names.sh . For example, if your answer to this question is grep Andrew | sed 's/^/Hello/' | sort then ./student_first_names.sh should contain: cat student_first_names.sh #!/bin/dash grep Andrew | sed 's/^/Hello/' | sort You may use any UNIX filters covered in lectures. You may not use if , while , for , or other shell constructs. You must use POSIX shell. No bash or zsh extensions. You may not use Perl, C, Python, or any other language. No error checking is necessary."
+        },
+        {
+          "type": "paragraph",
+          "text": "When you think your program is working you can autotest to run some simple automated tests:"
+        },
+        {
+          "type": "code",
+          "text": "2041 autotest student_first_names"
+        },
+        {
+          "type": "paragraph",
+          "text": "give"
+        },
+        {
+          "type": "code",
+          "text": "give cs2041 test03_student_first_names student_first_names.sh"
+        }
+      ],
+      "notes": [],
+      "autotest": {
+        "paragraphs": [],
+        "code_blocks": []
+      },
+      "submission": {
+        "paragraphs": [],
+        "code_blocks": []
+      },
+      "links": []
+    },
+    {
+      "label": "weekly test question",
+      "title": "Printing The Most Common First Name",
+      "content_blocks": [
+        {
+          "type": "paragraph",
+          "text": "Write a Shell pipeline that, given student enrollment data in the same format as the previous question, outputs the the most common first name for students enrolled in COMP2041 or COMP9044."
+        },
+        {
+          "type": "paragraph",
+          "text": "Put your shell pipeline in a file named ./most_common_first_name.sh"
+        },
+        {
+          "type": "paragraph",
+          "text": "Your pipeline should print a single line of output."
+        },
+        {
+          "type": "paragraph",
+          "text": "This line should contain only a single word."
+        },
+        {
+          "type": "paragraph",
+          "text": "For example:"
+        },
+        {
+          "type": "code",
+          "text": "./most_common_first_name.sh  <enrollments.txt\r\nMary\r\n./most_common_first_name.sh  <more_enrollments.txt\r\nZeyu"
+        },
+        {
+          "type": "paragraph",
+          "text": "If multiple first names are equally most common, you should print the one that is alphabetically first. Your answer must be a single Shell pipeline. Your pipeline should take input from standard input. Your shell pipeline should be placed in the file ./most_common_first_name.sh . For example, if your answer to this question is grep Andrew | sed 's/^/Hello/' | sort then ./most_common_first_name.sh should contain: cat most_common_first_name.sh #!/bin/dash grep Andrew | sed 's/^/Hello/' | sort You may use any UNIX filters covered in lectures. You may not use if , while , for , or other shell constructs. You must use POSIX shell. No bash or zsh extensions. You may not use Perl, C, Python, or any other language. No error checking is necessary."
+        },
+        {
+          "type": "paragraph",
+          "text": "When you think your program is working you can autotest to run some simple automated tests:"
+        },
+        {
+          "type": "code",
+          "text": "2041 autotest most_common_first_name"
+        },
+        {
+          "type": "paragraph",
+          "text": "give"
+        },
+        {
+          "type": "code",
+          "text": "give cs2041 test03_most_common_first_name most_common_first_name.sh"
+        }
+      ],
+      "notes": [],
+      "autotest": {
+        "paragraphs": [],
+        "code_blocks": []
+      },
+      "submission": {
+        "paragraphs": [],
+        "code_blocks": []
+      },
+      "links": []
+    },
+    {
+      "label": "weekly test question",
+      "title": "Printing Students Taking Two Courses",
+      "content_blocks": [
+        {
+          "type": "paragraph",
+          "text": "Write a Shell pipeline that, given student enrollment data in the same format as the previous question, outputs the ID number of all students enrolled in exactly two courses."
+        },
+        {
+          "type": "paragraph",
+          "text": "Only the ID numbers should be printed. Each ID number should be printed once. The ID numbers should be printed one per line. The ID numbers should be printed in numerical order."
+        },
+        {
+          "type": "paragraph",
+          "text": "Put your shell pipeline in a file named two_courses.sh"
+        },
+        {
+          "type": "paragraph",
+          "text": "For example, your pipeline should output this:"
+        },
+        {
+          "type": "code",
+          "text": "./two_courses.sh  <enrollments.txt\r\n3360582\r\n3860448\r\n3863711\r\n5456732\r\n./two_courses.sh  <more_enrollments.txt\r\n5200211\r\n5202676\r\n5204057\r\n5210651\r\n5217609\r\n5221931\r\n5224839\r\n5226749\r\n5231825\r\n5242415\r\n5246710\r\n5252050\r\n5257279\r\n5265537\r\n5271243\r\n5275189\r\n5276793\r\n5277536\r\n5289500\r\n5294823\r\n5296401"
+        },
+        {
+          "type": "paragraph",
+          "text": "Your answer must be a single Shell pipeline. Your pipeline should take input from standard input. Your shell pipeline should be placed in the file two_courses.sh . For example, if your answer to this question is grep Andrew | sed 's/^/Hello/' | sort then two_courses.sh should contain: cat two_courses.sh #!/bin/dash grep Andrew | sed 's/^/Hello/' | sort You may use any UNIX filters covered in lectures. You may not use if , while , for , or other shell constructs. You must use POSIX shell. No bash or zsh extensions. You may not use Perl, C, Python, or any other language. No error checking is necessary."
+        },
+        {
+          "type": "paragraph",
+          "text": "When you think your program is working you can autotest to run some simple automated tests:"
+        },
+        {
+          "type": "code",
+          "text": "2041 autotest two_courses"
+        },
+        {
+          "type": "paragraph",
+          "text": "give"
+        },
+        {
+          "type": "code",
+          "text": "give cs2041 test03_two_courses two_courses.sh"
+        }
+      ],
+      "notes": [],
+      "autotest": {
+        "paragraphs": [],
+        "code_blocks": []
+      },
+      "submission": {
+        "paragraphs": [],
+        "code_blocks": []
+      },
+      "links": []
+    }
+  ]
+}

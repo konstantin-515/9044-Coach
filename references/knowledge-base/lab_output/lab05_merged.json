@@ -1,0 +1,671 @@
+{
+  "lab_no": "05",
+  "url": "https://cgi.cse.unsw.edu.au/~cs2041/26T1/lab/05/questions",
+  "page_title": "COMP(2041|9044) 26T1 — Week 05 Laboratory Exercises",
+  "intro_sections": [
+    {
+      "heading": "Objectives",
+      "text": "Objectives Practising manipulating files with Shell Exploring code useful for assignment 1 Practice using the Git CLI. Practice using the GitLab GUI. Getting familiar with managing remote Git repositories",
+      "links": [],
+      "code_blocks": []
+    },
+    {
+      "heading": "Preparation",
+      "text": "Preparation Before the lab you should re-read the relevant lecture slides and their accompanying examples.",
+      "links": [],
+      "code_blocks": []
+    },
+    {
+      "heading": "Getting Started",
+      "text": "Getting Started Set up for the lab by creating a new directory called lab05 and changing to this directory. mkdir lab05 cd lab05 There are no provided files for this lab.",
+      "links": [],
+      "code_blocks": [
+        "mkdir lab05\ncd lab05"
+      ]
+    }
+  ],
+  "exercises": [
+    {
+      "label": "Exercise",
+      "title": "Backing Up a File",
+      "content_blocks": [
+        {
+          "type": "paragraph",
+          "text": "Your program should create a backup copy of this file."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the file is named example.txt the backup should be called .example.txt.0 but you should not overwrite any previous backup copies."
+        },
+        {
+          "type": "paragraph",
+          "text": "So if .example.txt.0 exists, the backup copy should be called .example.txt.1 and if .example.txt.1 also exists it should be called .example.txt.2 and so on."
+        },
+        {
+          "type": "paragraph",
+          "text": "For example:"
+        },
+        {
+          "type": "code",
+          "text": "seq 1 3 > n.txt\ncat n.txt\n1\n2\n3\n./backup.sh n.txt\nBackup of 'n.txt' saved as '.n.txt.0'\ncat .n.txt.0\n1\n2\n3\n./backup.sh n.txt\nBackup of 'n.txt' saved as '.n.txt.1'\n./backup.sh n.txt\nBackup of 'n.txt' saved as '.n.txt.2'\n./backup.sh n.txt\nBackup of 'n.txt' saved as '.n.txt.3'\nls .n.txt.*\n.n.txt.0\n.n.txt.1\n.n.txt.2\n.n.txt.3"
+        }
+      ],
+      "notes": [
+        {
+          "text": "You can assume only ordinary files are present in the current directory. Make the first line of your shell-script #!/bin/dash You may not use non-POSIX-compatible shell features such as bash extensions. Your script must work when run by /bin/dash on a CSE system. You are not permitted to rely on the extra features provided by /bin/bash or /bin/sh . You can assume anything that works with the version of /bin/dash on CSE systems is POSIX compatible. You may not use Perl, C, Python, or any other language.",
+          "paragraphs": [
+            "You can assume only ordinary files are present in the current directory.",
+            "Make the first line of your shell-script #!/bin/dash",
+            "You may not use non-POSIX-compatible shell features such as bash extensions. Your script must work when run by /bin/dash on a CSE system. You are not permitted to rely on the extra features provided by /bin/bash or /bin/sh . You can assume anything that works with the version of /bin/dash on CSE systems is POSIX compatible.",
+            "You may not use Perl, C, Python, or any other language."
+          ],
+          "code_blocks": [],
+          "links": []
+        }
+      ],
+      "autotest": {
+        "paragraphs": [
+          "When you think your program is working, you can use autotest to run some simple automated tests:"
+        ],
+        "code_blocks": [
+          "2041 autotest shell_backup"
+        ]
+      },
+      "submission": {
+        "paragraphs": [
+          "When you are finished working on this exercise, you must submit your work by running give :",
+          "before Monday 30 March 2026 12:00 (midday) (2026-03-30 12:00:00) to obtain the marks for this lab exercise."
+        ],
+        "code_blocks": [
+          "give cs2041 lab05_shell_backup backup.sh"
+        ]
+      },
+      "links": [],
+      "file_matches": [
+        "backup.sh",
+        "example.txt",
+        "n.txt"
+      ]
+    },
+    {
+      "label": "Exercise",
+      "title": "Shell Programs to Back Up a Directory",
+      "content_blocks": [
+        {
+          "type": "paragraph",
+          "text": "snapshot-save.sh should first create a directory named .snapshot.0 to store the backup copies of the files."
+        },
+        {
+          "type": "paragraph",
+          "text": "But if .snapshot.0 already exists, the backup directory should be called .snapshot.1 and if .snapshot.1 also exists it should be called .snapshot.2 and so on."
+        },
+        {
+          "type": "paragraph",
+          "text": "snapshot-save.sh should ignore files with names starting with ."
+        },
+        {
+          "type": "paragraph",
+          "text": "snapshot-save.sh should also ignore itself and snapshot-load.sh (not backup snapshot-save.sh and snapshot-load.sh)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Before doing this it should copy the current version of all files in a new .snapshot directory, (using snapshot-save.sh )"
+        },
+        {
+          "type": "paragraph",
+          "text": "This is to make sure the user doesn't accidentally lose some work when restoring files. It is always done even if the user wouldn't lose work."
+        },
+        {
+          "type": "code",
+          "text": "ls .snapshot.*/*\nls: cannot access '.snapshot.*/*': No such file or directory\necho hello > a.txt\n./snapshot-save.sh\nCreating snapshot 0\nls .snapshot.*/*\n.snapshot.0/a.txt\necho word > a.txt\n./snapshot-load.sh 0\nCreating snapshot 1\nRestoring snapshot 0\nls .snapshot.*/*\n.snapshot.0/a.txt\n.snapshot.1/a.txt\ncat a.txt\nhello"
+        },
+        {
+          "type": "code",
+          "text": "echo hello0 > a.txt\necho world0 > b.txt\n./snapshot-save.sh\nCreating snapshot 0\necho hello1 > a.txt\necho world1 > b.txt\n./snapshot-save.sh\nCreating snapshot 1\necho hello2 > a.txt\necho world2 > b.txt\nls .snapshot.*/*\n.snapshot.0/a.txt\n.snapshot.0/b.txt\n.snapshot.1/a.txt\n.snapshot.1/b.txt\n./snapshot-load.sh 0\nCreating snapshot 2\nRestoring snapshot 0\ngrep . ?.txt\na.txt:hello0\nb.txt:world0\n./snapshot-load.sh 1\nCreating snapshot 3\nRestoring snapshot 1\ngrep . ?.txt\na.txt:hello1\nb.txt:world1\n./snapshot-load.sh 2\nCreating snapshot 4\nRestoring snapshot 2\ngrep . ?.txt\na.txt:hello2\nb.txt:world2\n./snapshot-load.sh 0\nCreating snapshot 5\nRestoring snapshot 0\ngrep . ?.txt\na.txt:hello0\nb.txt:world0\nls .snapshot.*/*\n.snapshot.0/a.txt\n.snapshot.0/b.txt\n.snapshot.1/a.txt\n.snapshot.1/b.txt\n.snapshot.2/a.txt\n.snapshot.2/b.txt\n.snapshot.3/a.txt\n.snapshot.3/b.txt\n.snapshot.4/a.txt\n.snapshot.4/b.txt\n.snapshot.5/a.txt\n.snapshot.5/b.txt"
+        }
+      ],
+      "notes": [
+        {
+          "text": "Autotest and automarking will run your scripts with a current working directory different to the directory containing the script. The directory containing your submission will be in $PATH . This means running ./snapshot-save.sh from snapshot-load.sh will not work , but running snapshot-save.sh will work . You can assume the current directory contains only ordinary files. It does not contain directories or other special files. Make the first line of your shell-scripts #!/bin/dash You may not use non-POSIX-compatible shell features such as bash extensions. Your script must work when run by /bin/dash on a CSE system. You are not permitted to rely on the extra features provided by /bin/bash or /bin/sh . You can assume anything that works with the version of /bin/dash on CSE systems is POSIX compatible. You may not use Perl, C, Python, or any other language. No error checking is necessary.",
+          "paragraphs": [
+            "Autotest and automarking will run your scripts with a current working directory different to the directory containing the script. The directory containing your submission will be in $PATH .",
+            "This means running ./snapshot-save.sh from snapshot-load.sh will not work , but running snapshot-save.sh will work .",
+            "You can assume the current directory contains only ordinary files. It does not contain directories or other special files.",
+            "Make the first line of your shell-scripts #!/bin/dash",
+            "You may not use non-POSIX-compatible shell features such as bash extensions. Your script must work when run by /bin/dash on a CSE system. You are not permitted to rely on the extra features provided by /bin/bash or /bin/sh . You can assume anything that works with the version of /bin/dash on CSE systems is POSIX compatible.",
+            "You may not use Perl, C, Python, or any other language.",
+            "No error checking is necessary."
+          ],
+          "code_blocks": [],
+          "links": []
+        }
+      ],
+      "autotest": {
+        "paragraphs": [
+          "When you think your program is working, you can use autotest to run some simple automated tests:"
+        ],
+        "code_blocks": [
+          "2041 autotest shell_snapshot"
+        ]
+      },
+      "submission": {
+        "paragraphs": [
+          "When you are finished working on this exercise, you must submit your work by running give :",
+          "before Monday 30 March 2026 12:00 (midday) (2026-03-30 12:00:00) to obtain the marks for this lab exercise."
+        ],
+        "code_blocks": [
+          "give cs2041 lab05_shell_snapshot snapshot-save.sh snapshot-load.sh"
+        ]
+      },
+      "links": [],
+      "file_matches": [
+        "a.txt",
+        "b.txt",
+        "snapshot-load.sh",
+        "snapshot-save.sh",
+        "snapshot.0/a.txt",
+        "snapshot.0/b.txt",
+        "snapshot.1/a.txt",
+        "snapshot.1/b.txt",
+        "snapshot.2/a.txt",
+        "snapshot.2/b.txt",
+        "snapshot.3/a.txt",
+        "snapshot.3/b.txt",
+        "snapshot.4/a.txt",
+        "snapshot.4/b.txt",
+        "snapshot.5/a.txt",
+        "snapshot.5/b.txt"
+      ]
+    },
+    {
+      "label": "Exercise",
+      "title": "Creating a new Git repository",
+      "content_blocks": [
+        {
+          "type": "paragraph",
+          "text": "Before you can continue, you will need to create your CSE Gitlab account. You can do this by visiting: https://gitlab.cse.unsw.edu.au/ , and signing in with your zID and zPass. Make sure you use the Login with UNSW Single Sign On (SSO - zID@ad.unsw.edu.au) button to log in, don't enter your email and password directly into GitLab."
+        },
+        {
+          "type": "paragraph",
+          "text": "Once logged in, you will need to link an SSH key to your account, in order to have permission to pull / push code in Gitlab."
+        },
+        {
+          "type": "paragraph",
+          "text": "To link an SSH key, visit: https://gitlab.cse.unsw.edu.au/-/user_settings/ssh_keys . You can find GitLab's instructions for generating and linking an SSH keys here: https://docs.gitlab.com/user/ssh/ . If you have any problems with this, please ask a tutor or make a post on the course forum."
+        },
+        {
+          "type": "paragraph",
+          "text": "To start working on a new project, you'll first have to create a new remote Git repository."
+        },
+        {
+          "type": "paragraph",
+          "text": "To create a new repository go to the GitLab dashboard . You should find a blue New project button in the upper right-hand corner, where you can create your new repository! Choose the option to create a blank project . Choose a name for your project, and set the visibility level to private ."
+        },
+        {
+          "type": "paragraph",
+          "text": "Make sure that the \"Initialize repository with a README\" option is unchecked . We will be manually adding a README file in a later exercise."
+        },
+        {
+          "type": "paragraph",
+          "text": "Once you're done, hit the Create project button, and have a look around your new Git repository!"
+        },
+        {
+          "type": "paragraph",
+          "text": "Take note of the URL used to access your project -- you will need to pass this to 2041 autotest ."
+        },
+        {
+          "type": "paragraph",
+          "text": "Now that you have a GitLab project, we can add files to it."
+        },
+        {
+          "type": "paragraph",
+          "text": "On your local machine, create a new git repository"
+        },
+        {
+          "type": "code",
+          "text": "git init <repository name>\ncd <repository name>\nThe git repository name doesn't have to be the same as the GitLab project name\nBut it's generally a good idea to keep them similar"
+        },
+        {
+          "type": "paragraph",
+          "text": "Link your local git repository to your remote GitLab project. (Look for the blue \"Clone\" button on GitLab, to get your SSH URL.)"
+        },
+        {
+          "type": "code",
+          "text": "git remote add origin <SSH URL>"
+        },
+        {
+          "type": "paragraph",
+          "text": "Now you can add some files"
+        },
+        {
+          "type": "code",
+          "text": "echo \"Hello Git\" > my_first_git_file.txt"
+        },
+        {
+          "type": "paragraph",
+          "text": "Next: add , commit , and push your files"
+        },
+        {
+          "type": "paragraph",
+          "text": "Check back on GitLab to see if your files have appeared. (You might have to refresh the page)"
+        },
+        {
+          "type": "paragraph",
+          "text": "Lastly, invite the course account as a collaborator to your project, so that we can see your work and give you marks for this activity."
+        },
+        {
+          "type": "paragraph",
+          "text": "To do this, go to your project page on GitLab, and click on the \"Manage\" tab in the left-hand menu. Then click on the \"Members\" tab on the left-hand side. In the \"Invite member\" section, add the username COMP2041 , and select the Developer role. Finally, click the \"Invite\" button to send the invitation."
+        },
+        {
+          "type": "paragraph",
+          "text": "You can now run autotest to make sure everything has worked correctly."
+        }
+      ],
+      "notes": [
+        {
+          "text": "Use the following command to run autotest : <repo-url> is the HTTPS webpage URL of your GitLab repository, not the SSH URL that you would use for cloning 2041 autotest gitlab_new_repo <repo-url>",
+          "paragraphs": [
+            "Use the following command to run autotest :"
+          ],
+          "code_blocks": [
+            "    <repo-url> is the HTTPS webpage URL of your GitLab repository, not the SSH URL that you would use for cloning\n    2041 autotest gitlab_new_repo <repo-url>"
+          ],
+          "links": []
+        },
+        {
+          "text": "The autotest and submission instructions below are not correct for this activity. Simply running autotest as shown above is all that is needed to receive marks for this activity. To get marks for this activity your project must still exist when marking occurs, and the course account must still be added as a collaborator to your project. Don't delete your project until the end of the trimester, after that you are free to delete it if you wish.",
+          "paragraphs": [
+            "The autotest and submission instructions below are not correct for this activity.",
+            "Simply running autotest as shown above is all that is needed to receive marks for this activity.",
+            "To get marks for this activity your project must still exist when marking occurs, and the course account must still be added as a collaborator to your project. Don't delete your project until the end of the trimester, after that you are free to delete it if you wish."
+          ],
+          "code_blocks": [],
+          "links": []
+        }
+      ],
+      "autotest": {
+        "paragraphs": [
+          "When you think your program is working, you can use autotest to run some simple automated tests:"
+        ],
+        "code_blocks": [
+          "2041 autotest gitlab_new_repo"
+        ]
+      },
+      "submission": {
+        "paragraphs": [
+          "When you are finished working on this exercise, you must submit your work by running give :",
+          "before Monday 30 March 2026 12:00 (midday) (2026-03-30 12:00:00) to obtain the marks for this lab exercise."
+        ],
+        "code_blocks": [
+          "give cs2041 lab05_gitlab_new_repo gitlab_new_repo.c"
+        ]
+      },
+      "links": [
+        {
+          "text": "https://gitlab.cse.unsw.edu.au/",
+          "url": "https://gitlab.cse.unsw.edu.au"
+        },
+        {
+          "text": "https://gitlab.cse.unsw.edu.au/-/user_settings/ssh_keys",
+          "url": "https://gitlab.cse.unsw.edu.au/-/user_settings/ssh_keys"
+        },
+        {
+          "text": "https://docs.gitlab.com/user/ssh/",
+          "url": "https://docs.gitlab.com/user/ssh/"
+        },
+        {
+          "text": "dashboard",
+          "url": "https://gitlab.cse.unsw.edu.au/dashboard"
+        }
+      ],
+      "file_matches": [
+        "my_first_git_file.txt"
+      ]
+    },
+    {
+      "label": "Exercise",
+      "title": "Creating a new Gitlab issue",
+      "content_blocks": [
+        {
+          "type": "paragraph",
+          "text": "Now we will create an issue to track your progress. Programming to solve issues is a very common practice in industry, and is something you will likely need to do after you leave UNSW."
+        },
+        {
+          "type": "paragraph",
+          "text": "To create an issue, you must navigate to your GitLab repository you created in the previous exercise, Enter the Work items section on the left sidebar. You will then find a New item button to get started."
+        },
+        {
+          "type": "paragraph",
+          "text": "Your first task will be to give your issue an appropriate title. In this Gitlab project, you're going to write a program that is completely up to you! Decide on a simple task for yourself to implement in Shell ."
+        },
+        {
+          "type": "paragraph",
+          "text": "Once you've decided on a task, make the title of your issue reflect the fact that you are going to implement this task, and describe your task and what you want to accompish in the description section."
+        },
+        {
+          "type": "paragraph",
+          "text": "Assign the task to yourself , modify any other options as you would like, (Like GitLab Milestone and Labels) and finally create the issue."
+        },
+        {
+          "type": "paragraph",
+          "text": "Back on your local machine, implement the simple shell script you've decided on."
+        },
+        {
+          "type": "paragraph",
+          "text": "Once you've implemented the task, add , commit , and push your code."
+        },
+        {
+          "type": "paragraph",
+          "text": "Return to GitLab and check your file has appeared."
+        },
+        {
+          "type": "paragraph",
+          "text": "Once your file is on GitLab, return to your issue and close it. Optionally, you can add a comment to your issue."
+        },
+        {
+          "type": "paragraph",
+          "text": "You can now run autotest to make sure everything has worked correctly."
+        }
+      ],
+      "notes": [
+        {
+          "text": "Use the following command to run autotest : 2041 autotest gitlab_create_issue <repo-url>",
+          "paragraphs": [
+            "Use the following command to run autotest :"
+          ],
+          "code_blocks": [
+            "    2041 autotest gitlab_create_issue <repo-url>"
+          ],
+          "links": []
+        },
+        {
+          "text": "The autotest and submission instructions below are not correct for this activity. Simply running autotest is all that is needed to receive marks for this activity. To get marks for this activity your project must exist. Don't delete your project until the end of the trimester, after that you are free to delete it of you wish.",
+          "paragraphs": [
+            "The autotest and submission instructions below are not correct for this activity.",
+            "Simply running autotest is all that is needed to receive marks for this activity.",
+            "To get marks for this activity your project must exist. Don't delete your project until the end of the trimester, after that you are free to delete it of you wish."
+          ],
+          "code_blocks": [],
+          "links": []
+        }
+      ],
+      "autotest": {
+        "paragraphs": [
+          "When you think your program is working, you can use autotest to run some simple automated tests:"
+        ],
+        "code_blocks": [
+          "2041 autotest gitlab_create_issue"
+        ]
+      },
+      "submission": {
+        "paragraphs": [
+          "When you are finished working on this exercise, you must submit your work by running give :",
+          "before Monday 30 March 2026 12:00 (midday) (2026-03-30 12:00:00) to obtain the marks for this lab exercise."
+        ],
+        "code_blocks": [
+          "give cs2041 lab05_gitlab_create_issue gitlab_create_issue.c"
+        ]
+      },
+      "links": [],
+      "file_matches": []
+    },
+    {
+      "label": "Exercise",
+      "title": "Creating a new Git Branch",
+      "content_blocks": [
+        {
+          "type": "paragraph",
+          "text": "Pushing Code directly to the default branch of a remote repository is generally considered a bad idea. The default branch is the first branch that anyone looking at your repository will see, and the code that will be cloned. You should always try to keep the code on the default branch clean, commented, tested, and functional."
+        },
+        {
+          "type": "paragraph",
+          "text": "When developing a new feature, you should always create a new branch. Once the new feature is complete, you can then merge it into the default branch."
+        },
+        {
+          "type": "paragraph",
+          "text": "In your local repository create a new branch with git branch <branch-name> . Then checkout the new branch with git checkout <branch-name>"
+        },
+        {
+          "type": "paragraph",
+          "text": "You can also use git checkout -b <branch-name> to do both steps at once."
+        },
+        {
+          "type": "paragraph",
+          "text": "Now that you are on your new branch, you can start working on your new feature."
+        },
+        {
+          "type": "paragraph",
+          "text": "This feature can be whatever you want it to be. You can create a new file, modify an existing file, or both!"
+        },
+        {
+          "type": "paragraph",
+          "text": "Once your new feature is complete you should add , commit , and push ."
+        },
+        {
+          "type": "paragraph",
+          "text": "When you push , git will ask you to link your local branch to the remote repository. Simply copy the command provided by git."
+        },
+        {
+          "type": "paragraph",
+          "text": "Back on GitLab, nothing should look like it has changed. Becase you are viewing the default branch, and your frature was added to a different branch."
+        },
+        {
+          "type": "paragraph",
+          "text": "Near the top left of the page you can find the meanu to swap branches. Select your new branch and you will see your new feature."
+        },
+        {
+          "type": "paragraph",
+          "text": "All that is left is to merge your feature into the default branch."
+        },
+        {
+          "type": "paragraph",
+          "text": "This can be done on the command line with git merge"
+        },
+        {
+          "type": "paragraph",
+          "text": "But GitLab an another option, a Merge Request"
+        },
+        {
+          "type": "paragraph",
+          "text": "To create an merge request, you must navigate to your GitLab repository you created in the previous exercise, Enter the Merge requests section on the left sidebar. You will then find a New merge request button to get started."
+        },
+        {
+          "type": "paragraph",
+          "text": "Select your feature branch as the Source branch, and your default branch as the Target branch Now click the Compare branches and continue button."
+        },
+        {
+          "type": "paragraph",
+          "text": "Similar to the issue we previously created, make the title of your merge request reflect the feature you have implemented, and describe your task and what you have accompished in the description section."
+        },
+        {
+          "type": "paragraph",
+          "text": "Assign the merge request to yourself , modify any other options as you would like, (Like GitLab Milestone and Labels) and finally create the merge request."
+        },
+        {
+          "type": "paragraph",
+          "text": "Once the merge request is created, you can optionally approve it. Once you are happy with the merge request, you can merge it into your default branch. Optionally, you can add a comment to your merge request."
+        },
+        {
+          "type": "paragraph",
+          "text": "You can now run autotest to make sure everything has worked correctly."
+        }
+      ],
+      "notes": [
+        {
+          "text": "Make you you untick the Delete source branch checkbox.",
+          "paragraphs": [
+            "Make you you untick the Delete source branch checkbox."
+          ],
+          "code_blocks": [],
+          "links": []
+        },
+        {
+          "text": "Use the following command to run autotest : 2041 autotest gitlab_new_branch <repo-url>",
+          "paragraphs": [
+            "Use the following command to run autotest :"
+          ],
+          "code_blocks": [
+            "    2041 autotest gitlab_new_branch <repo-url>"
+          ],
+          "links": []
+        },
+        {
+          "text": "The autotest and submission instructions below are not correct for this activity. Simply running autotest is all that is needed to receive marks for this activity. To get marks for this activity your project must exist. Don't delete your project until the end of the trimester, after that you are free to delete it of you wish.",
+          "paragraphs": [
+            "The autotest and submission instructions below are not correct for this activity.",
+            "Simply running autotest is all that is needed to receive marks for this activity.",
+            "To get marks for this activity your project must exist. Don't delete your project until the end of the trimester, after that you are free to delete it of you wish."
+          ],
+          "code_blocks": [],
+          "links": []
+        }
+      ],
+      "autotest": {
+        "paragraphs": [
+          "When you think your program is working, you can use autotest to run some simple automated tests:"
+        ],
+        "code_blocks": [
+          "2041 autotest gitlab_new_branch"
+        ]
+      },
+      "submission": {
+        "paragraphs": [
+          "When you are finished working on this exercise, you must submit your work by running give :",
+          "before Monday 30 March 2026 12:00 (midday) (2026-03-30 12:00:00) to obtain the marks for this lab exercise."
+        ],
+        "code_blocks": [
+          "give cs2041 lab05_gitlab_new_branch gitlab_new_branch.c"
+        ]
+      },
+      "links": [],
+      "file_matches": []
+    },
+    {
+      "label": "Exercise",
+      "title": "Documenting your Gitlab repository",
+      "content_blocks": [
+        {
+          "type": "paragraph",
+          "text": "You now have made a successful Gitlab project, with your own code! However, other members of the open source community may want to read some documentation before diving into your project."
+        },
+        {
+          "type": "paragraph",
+          "text": "Learn how to use markdown to document your project (eg. https://www.markdowntutorial.com/ -- approx. 10 minute tutorial). (and Optionally GitLabs Markdown documentation for more advanced features)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Create a file README.md in the root directory of your project, with overall documentation about the project, including at least:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "A title for your project",
+            "The authors of the project (currently just you)",
+            "What your project aims to do",
+            "Which programming languages and tools it uses, and corresponding URLs to their documentation"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "You should use at least these markdown features:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "A heading",
+            "Bolded text",
+            "Italicised text",
+            "A markdown link (see: https://www.markdownguide.org/basic-syntax/#links )"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Create an INSTALL.md in the root directory of your project. Explaining to a completely new user how they can install / run the project. This should include how they can clone your Git repository, and execute any commands necessary to run your project. It must be formatted in Markdown, but does not have any requirements on features that you must use."
+        },
+        {
+          "type": "paragraph",
+          "text": "Now that your project is all set up, it's time to choose an open-source license."
+        },
+        {
+          "type": "paragraph",
+          "text": "Open-source licenses allow you to dictate how the broader community is allowed to use your code, and restrictions on what can and can't be done with it. Each license has different permissions, conditions, and limitations - so be sure to understand the implications on your project before selecting one."
+        },
+        {
+          "type": "paragraph",
+          "text": "Visit the website https://choosealicense.com/licenses/ , and choose an open-source license for your project to use. There are no correct or incorrect licenses, so feel free to choose whichever one you believe is best for your project. For a full list of the most popular open-source licenses,"
+        },
+        {
+          "type": "paragraph",
+          "text": "Once you have decided on a license, copy the contents of the license text, and paste it into a new file in your project called LICENSE . This will make it clear to other developers how your project is licensed."
+        },
+        {
+          "type": "paragraph",
+          "text": "Now that you have your three files README.md , INSTALL.md , and LICENSE . add , commit , and push the files. Optionally you can also add other common files like CONTRIBUTING.md and CHANGELOG to your project."
+        },
+        {
+          "type": "paragraph",
+          "text": "You can now run autotest to make sure everything has worked correctly."
+        }
+      ],
+      "notes": [
+        {
+          "text": "Use the following command to run autotest : 2041 autotest gitlab_document_code <repo-url>",
+          "paragraphs": [
+            "Use the following command to run autotest :"
+          ],
+          "code_blocks": [
+            "    2041 autotest gitlab_document_code <repo-url>"
+          ],
+          "links": []
+        },
+        {
+          "text": "The autotest and submission instructions below are not correct for this activity. Simply running autotest is all that is needed to receive marks for this activity. To get marks for this activity your project must exist. Don't delete your project until the end of the trimester, after that you are free to delete it of you wish.",
+          "paragraphs": [
+            "The autotest and submission instructions below are not correct for this activity.",
+            "Simply running autotest is all that is needed to receive marks for this activity.",
+            "To get marks for this activity your project must exist. Don't delete your project until the end of the trimester, after that you are free to delete it of you wish."
+          ],
+          "code_blocks": [],
+          "links": []
+        }
+      ],
+      "autotest": {
+        "paragraphs": [
+          "When you think your program is working, you can use autotest to run some simple automated tests:"
+        ],
+        "code_blocks": [
+          "2041 autotest gitlab_document_code"
+        ]
+      },
+      "submission": {
+        "paragraphs": [
+          "When you are finished working on this exercise, you must submit your work by running give :",
+          "before Monday 30 March 2026 12:00 (midday) (2026-03-30 12:00:00) to obtain the marks for this lab exercise."
+        ],
+        "code_blocks": [
+          "give cs2041 lab05_gitlab_document_code gitlab_document_code.c"
+        ]
+      },
+      "links": [
+        {
+          "text": "https://www.markdowntutorial.com/",
+          "url": "https://www.markdowntutorial.com/"
+        },
+        {
+          "text": "GitLabs Markdown documentation",
+          "url": "https://docs.gitlab.com/ee/user/markdown.html"
+        },
+        {
+          "text": "https://www.markdownguide.org/basic-syntax/#links",
+          "url": "https://www.markdownguide.org/basic-syntax/#links"
+        },
+        {
+          "text": "https://choosealicense.com/licenses/",
+          "url": "https://choosealicense.com/licenses/"
+        }
+      ],
+      "file_matches": []
+    }
+  ]
+}

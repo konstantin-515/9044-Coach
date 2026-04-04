@@ -1,0 +1,493 @@
+{
+  "lab_no": "04",
+  "url": "https://cgi.cse.unsw.edu.au/~cs2041/26T1/lab/04/questions",
+  "page_title": "COMP(2041|9044) 26T1 — Week 04 Laboratory Exercises",
+  "intro_sections": [
+    {
+      "heading": "Objectives",
+      "text": "Objectives Practice writing shell scripts for real tasks. Practice processing collections of files with shell scripts.",
+      "links": [],
+      "code_blocks": []
+    },
+    {
+      "heading": "Preparation",
+      "text": "Preparation Before the lab you should re-read the relevant lecture slides and their accompanying examples.",
+      "links": [],
+      "code_blocks": []
+    },
+    {
+      "heading": "Getting Started",
+      "text": "Getting Started Set up for the lab by creating a new directory called lab04 and changing to this directory. mkdir lab04 cd lab04 There are some provided files for this lab which you can fetch with this command: 2041 fetch lab04 If you're not working at CSE, you can download the provided files as a zip file or a tar file .",
+      "links": [
+        {
+          "text": "zip file",
+          "url": "https://cgi.cse.unsw.edu.au/~cs2041/26T1/lab/04/zip"
+        },
+        {
+          "text": "tar file",
+          "url": "https://cgi.cse.unsw.edu.au/~cs2041/26T1/lab/04/tar"
+        }
+      ],
+      "code_blocks": [
+        "mkdir lab04\ncd lab04",
+        "2041 fetch lab04"
+      ]
+    }
+  ],
+  "exercises": [
+    {
+      "label": "Exercise",
+      "title": "Converting Images from JPG to PNG",
+      "content_blocks": [
+        {
+          "type": "paragraph",
+          "text": "Write a POSIX-compatible shell script jpg2png.sh which converts all images in the current directory in JPEG format to PNG format."
+        },
+        {
+          "type": "paragraph",
+          "text": "You can assume that JPEG files and only JPEG files have the suffix jpg ."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the conversion is successful the JPEG file should be removed."
+        },
+        {
+          "type": "paragraph",
+          "text": "Your script should stop with the error message shown below and exit status 1 if a destination PNG file already exists."
+        },
+        {
+          "type": "code",
+          "text": "unzip images.zip\nArchive:  images.zip\n  inflating: Johannes Vermeer - The Girl With The Pearl Earring.jpg\n  inflating: labelled_penguins.jpg\n  inflating: nautilus.jpg\n  inflating: panic.jpg\n  inflating: penguins.jpg\n  inflating: shell.jpg\n  inflating: stingray.jpg\n  inflating: treefrog.jpg\n./jpg2png.sh\nls -1\n'Johannes Vermeer - The Girl With The Pearl Earring.png'\nlabelled_penguins.png\nnautilus.png\npanic.png\npenguins.png\nshell.png\nstingray.png\ntreefrog.png\nwget https://cgi.cse.unsw.edu.au/~cs2041/26T1/activities/jpg2png/files.ln/penguins.jpg\nls -1\n'Johannes Vermeer - The Girl With The Pearl Earring.png'\nlabelled_penguins.png\nnautilus.png\npanic.png\npenguins.jpg\npenguins.png\nshell.png\nstingray.png\ntreefrog.png\n./jpg2png.sh\npenguins.png already exists"
+        }
+      ],
+      "notes": [
+        {
+          "text": "Make the first line of your shell-script #!/bin/dash You may find sed(1) and a sub-shell useful. The tool convert(1) , a part of ImageMagick, will convert between many image formats; for example: convert penguins.jpg penguins.png",
+          "paragraphs": [
+            "Make the first line of your shell-script #!/bin/dash",
+            "You may find sed(1) and a sub-shell useful.",
+            "The tool convert(1) , a part of ImageMagick, will convert between many image formats; for example:",
+            "convert penguins.jpg penguins.png"
+          ],
+          "code_blocks": [
+            "convert penguins.jpg penguins.png"
+          ],
+          "links": []
+        },
+        {
+          "text": "You may not use non-POSIX-compatible shell features such as bash extensions. Your script must work when run by /bin/dash on a CSE system. You are not permitted to rely on the extra features provided by /bin/bash or /bin/sh . You can assume anything that works with the version of /bin/dash on CSE systems is POSIX compatible. You may not use Perl, C, Python, or any other language.",
+          "paragraphs": [
+            "You may not use non-POSIX-compatible shell features such as bash extensions. Your script must work when run by /bin/dash on a CSE system. You are not permitted to rely on the extra features provided by /bin/bash or /bin/sh . You can assume anything that works with the version of /bin/dash on CSE systems is POSIX compatible. You may not use Perl, C, Python, or any other language."
+          ],
+          "code_blocks": [],
+          "links": []
+        }
+      ],
+      "autotest": {
+        "paragraphs": [
+          "When you think your program is working, you can use autotest to run some simple automated tests:"
+        ],
+        "code_blocks": [
+          "2041 autotest jpg2png"
+        ]
+      },
+      "submission": {
+        "paragraphs": [
+          "When you are finished working on this exercise, you must submit your work by running give :",
+          "before Monday 16 March 2026 12:00 (midday) (2026-03-16 12:00:00) to obtain the marks for this lab exercise."
+        ],
+        "code_blocks": [
+          "give cs2041 lab04_jpg2png jpg2png.sh"
+        ]
+      },
+      "links": [
+        {
+          "text": "JPEG",
+          "url": "http://en.wikipedia.org/wiki/JPEG"
+        },
+        {
+          "text": "PNG",
+          "url": "http://en.wikipedia.org/wiki/Portable_Network_Graphics"
+        }
+      ],
+      "file_matches": [
+        "images.zip",
+        "jpg2png.sh"
+      ]
+    },
+    {
+      "label": "Exercise",
+      "title": "Email that Image?",
+      "content_blocks": [
+        {
+          "type": "paragraph",
+          "text": "Write a shell script email_image.sh which given a list of image files as arguments displays them one-by-one. After the user has viewed an image the script should prompt the user for an e-mail address. If the user does enter an email address, the script should prompt the user for a message to accompany the image and then send the image to the specified e-mail address."
+        },
+        {
+          "type": "code",
+          "text": "./email_image.sh penguins.png treefrog.png shell.png\npenguins.png displayed to screen if possible\nAddress to e-mail this image to? nobody@nowhere.com\nMessage to accompany image? Penguins are cool.\npenguins.png sent to nobody@nowhere.com\ntreefrog.png displayed to screen if possible\nAddress to e-mail this image to? nobody@nowhere.com\nMessage to accompany image? This is a White-lipped Tree Frog\ntreefrog.png sent to nobody@nowhere.com\nshell.png displayed to screen if possible\nAddress to e-mail this image to?\nNo email sent"
+        },
+        {
+          "type": "paragraph",
+          "text": "There is no autotest and no automarking of this question."
+        },
+        {
+          "type": "paragraph",
+          "text": "When you are finished working on this exercise, demonstrate your work to another student in your lab and ask them to enter a peer assessment . It is preferred you do this during your lab, but if this is not possible you may demonstrate your work to any other COMP(2041|9044) student before Monday 16 March 2026 12:00 (midday) (2026-03-16 12:00:00). Note, you must also submit the work with give ."
+        }
+      ],
+      "notes": [
+        {
+          "text": "Make the first line of your shell-script #!/bin/dash The program display(1) can be used to view image files. The program mutt(1) can be used to send mail from the command line including attachments, for example: echo 'Penguins are cool.' | mutt -s 'penguins!' -e 'set copy=no' -a penguins.png -- nobody@nowhere.com A standard SSH connection won't be able to display an image to the screen and will instead display an error. This is expected, try vlab or a lab computer to successfully display the image.",
+          "paragraphs": [
+            "Make the first line of your shell-script #!/bin/dash",
+            "The program display(1) can be used to view image files.",
+            "The program mutt(1) can be used to send mail from the command line including attachments, for example:",
+            "echo 'Penguins are cool.' | mutt -s 'penguins!' -e 'set copy=no' -a penguins.png -- nobody@nowhere.com",
+            "A standard SSH connection won't be able to display an image to the screen and will instead display an error.",
+            "This is expected, try vlab or a lab computer to successfully display the image."
+          ],
+          "code_blocks": [
+            "\necho 'Penguins are cool.' | mutt -s 'penguins!' -e 'set copy=no' -a penguins.png -- nobody@nowhere.com"
+          ],
+          "links": []
+        },
+        {
+          "text": "You may not use non-POSIX-compatible shell features such as bash extensions. Your script must work when run by /bin/dash on a CSE system. You are not permitted to rely on the extra features provided by /bin/bash or /bin/sh . You can assume anything that works with the version of /bin/dash on CSE systems is POSIX compatible. You may not use Perl, C, Python, or any other language.",
+          "paragraphs": [
+            "You may not use non-POSIX-compatible shell features such as bash extensions. Your script must work when run by /bin/dash on a CSE system. You are not permitted to rely on the extra features provided by /bin/bash or /bin/sh . You can assume anything that works with the version of /bin/dash on CSE systems is POSIX compatible. You may not use Perl, C, Python, or any other language."
+          ],
+          "code_blocks": [],
+          "links": []
+        }
+      ],
+      "autotest": {
+        "paragraphs": [],
+        "code_blocks": []
+      },
+      "submission": {
+        "paragraphs": [
+          "When you are finished working on this exercise, you must submit your work by running give :",
+          "before Monday 16 March 2026 12:00 (midday) (2026-03-16 12:00:00) to obtain the marks for this lab exercise."
+        ],
+        "code_blocks": [
+          "give cs2041 lab04_email_image email_image.sh"
+        ]
+      },
+      "links": [
+        {
+          "text": "peer assessment",
+          "url": "https://cgi.cse.unsw.edu.au/~cs2041/26T1/peer_assess/lab04_email_image/"
+        }
+      ],
+      "file_matches": [
+        "email_image.sh"
+      ]
+    },
+    {
+      "label": "Exercise",
+      "title": "Date A Penguin?",
+      "content_blocks": [
+        {
+          "type": "paragraph",
+          "text": "Write a POSIX-compatible shell script date_image.sh which given a list of image files as arguments changes each file so it has a label added to the image indicating the time it was taken. You can assume the last-modification time of the image file is the time it was taken."
+        },
+        {
+          "type": "paragraph",
+          "text": "For example: if we run these commands:"
+        },
+        {
+          "type": "code",
+          "text": "ls -l penguins.jpg\n-rw-r--r-- 1 andrewt andrewt 58092 Mar 16 16:08 penguins.jpg\n./date_image.sh penguins.jpg\ndisplay penguins.jpg"
+        },
+        {
+          "type": "paragraph",
+          "text": "Then penguins.jpg should have been be modified to look like this:"
+        },
+        {
+          "type": "paragraph",
+          "text": "There is no autotest and no automarking of this question."
+        },
+        {
+          "type": "paragraph",
+          "text": "When you are finished working on this exercise, demonstrate your work to another student in your lab and ask them to enter a peer assessment . It is preferred you do this during your lab, but if this is not possible you may demonstrate your work to any other COMP(2041|9044) student before Monday 16 March 2026 12:00 (midday) (2026-03-16 12:00:00). Note, you must also submit the work with give ."
+        }
+      ],
+      "notes": [
+        {
+          "text": "Make the first line of your shell-script #!/bin/dash The program convert(1) or mogrify(1) can be used to label an image. Eg: convert -gravity south -pointsize 36 -draw \"text 0,10 'Andrew rocks'\" penguins.jpg temporary_file.jpg sed(1) and/or cut(1) may be useful to extract the date and time from ls(1) 's output. find(1) can also be used for date and time extract. convert(1) produces confusing messages if you don't get its option syntax exactly right.",
+          "paragraphs": [
+            "Make the first line of your shell-script #!/bin/dash",
+            "The program convert(1) or mogrify(1) can be used to label an image.",
+            "Eg:",
+            "convert -gravity south -pointsize 36 -draw \"text 0,10 'Andrew rocks'\" penguins.jpg temporary_file.jpg",
+            "sed(1) and/or cut(1) may be useful to extract the date and time from ls(1) 's output.",
+            "find(1) can also be used for date and time extract.",
+            "convert(1) produces confusing messages if you don't get its option syntax exactly right."
+          ],
+          "code_blocks": [
+            " convert -gravity south -pointsize 36 -draw \"text 0,10 'Andrew rocks'\" penguins.jpg temporary_file.jpg"
+          ],
+          "links": []
+        },
+        {
+          "text": "You may not use non-POSIX-compatible shell features such as bash extensions. Your script must work when run by /bin/dash on a CSE system. You are not permitted to rely on the extra features provided by /bin/bash or /bin/sh . You can assume anything that works with the version of /bin/dash on CSE systems is POSIX compatible. You may not use Perl, C, Python, or any other language.",
+          "paragraphs": [
+            "You may not use non-POSIX-compatible shell features such as bash extensions. Your script must work when run by /bin/dash on a CSE system. You are not permitted to rely on the extra features provided by /bin/bash or /bin/sh . You can assume anything that works with the version of /bin/dash on CSE systems is POSIX compatible. You may not use Perl, C, Python, or any other language."
+          ],
+          "code_blocks": [],
+          "links": []
+        }
+      ],
+      "autotest": {
+        "paragraphs": [],
+        "code_blocks": []
+      },
+      "submission": {
+        "paragraphs": [
+          "When you are finished working on this exercise, you must submit your work by running give :",
+          "before Monday 16 March 2026 12:00 (midday) (2026-03-16 12:00:00) to obtain the marks for this lab exercise."
+        ],
+        "code_blocks": [
+          "give cs2041 lab04_date_image date_image.sh"
+        ]
+      },
+      "links": [
+        {
+          "text": "peer assessment",
+          "url": "https://cgi.cse.unsw.edu.au/~cs2041/26T1/peer_assess/lab04_date_image/"
+        }
+      ],
+      "file_matches": [
+        "date_image.sh"
+      ]
+    },
+    {
+      "label": "Exercise",
+      "title": "Tagging a Collection of Music",
+      "content_blocks": [
+        {
+          "type": "paragraph",
+          "text": "Andrew regularly spends time far from the internet and streaming music services such as Spotify, so he has a large collection of MP3 files containing music."
+        },
+        {
+          "type": "paragraph",
+          "text": "Andrew has a problem: The ID3 tags in the MP3 files in his music collection are incorrect. Unfortunately Andrew's favourite player software organises music using the information from these ID3 tags. Your task it to fix Andrew's problem by set the ID3 tags to the correct values. Fortunately the correct value for the tags can be retrieved from the file names and the names of the directories the files are in."
+        },
+        {
+          "type": "paragraph",
+          "text": "Your task is to write a POSIX-compatible shell script tag_music.sh which sets the ID3 tags of MP3 files using the information from file names and directory names."
+        },
+        {
+          "type": "paragraph",
+          "text": "You can assume the names of files and directories follow a standard format. You can determine this format by look at the files in Andrew's music collection."
+        },
+        {
+          "type": "code",
+          "text": "unzip music.zip\nArchive:  music.zip\n   creating: music/\n..."
+        },
+        {
+          "type": "paragraph",
+          "text": "The command id3 can be used to list the value of ID3 tags in an MP3 file. For example:"
+        },
+        {
+          "type": "code",
+          "text": "id3 -l 'music/Triple J Hottest 100, 2013/1 - Riptide - Vance Joy.mp3'\nmusic/Triple J Hottest 100, 2013/1 - Riptide - Vance Joy.mp3:\nTitle  : Andrew Rocks                    Artist: Andrew\nAlbum  : Best of Andrew                  Year: 2038, Genre: Unknown (255)\nComment:                                 Track: 42"
+        },
+        {
+          "type": "paragraph",
+          "text": "But, as you can see, the ID3 tags of this music file have been accidentally over-written. The ID3 tags should be:"
+        },
+        {
+          "type": "code",
+          "text": "id3 -l 'music/Triple J Hottest 100, 2013/1 - Riptide - Vance Joy.mp3'\nmusic/Triple J Hottest 100, 2013/1 - Riptide - Vance Joy.mp3:\nTitle  : Riptide                         Artist: Vance Joy\nAlbum  : Triple J Hottest 100, 2013      Year: 2013, Genre: Unknown (255)\nComment:                                 Track: 1"
+        },
+        {
+          "type": "paragraph",
+          "text": "Fortunately, all the information needed to fix the ID3 tags is available in the name of the file and the name of the directory it is in."
+        },
+        {
+          "type": "paragraph",
+          "text": "You will write a shell script tag_music.sh which takes the name of 1 or more directories as arguments and fixes the ID3 tags of the all MP3 files in that directory. For example:"
+        },
+        {
+          "type": "code",
+          "text": "./tag_music.sh 'music/Triple J Hottest 100, 2015'\nid3 -l 'music/Triple J Hottest 100, 2015/4 - The Less I Know The Better - Tame Impala.mp3'\nmusic/Triple J Hottest 100, 2015/4 - The Less I Know the Better - Tame Impala.mp3:\nTitle  : The Less I Know the Better      Artist: Tame Impala\nAlbum  : Triple J Hottest 100, 2015      Year: 2015, Genre: Unknown (255)\nComment:                                 Track: 4\n./tag_music.sh music/*\nid3 -l 'music/Triple J Hottest 100, 1995/10 - Greg! The Stop Sign!! - TISM.mp3'\nmusic/Triple J Hottest 100, 1995/10 - Greg! The Stop Sign!! - TISM.mp3:\nTitle  : Greg! The Stop Sign!!           Artist: TISM\nAlbum  : Triple J Hottest 100, 1995      Year: 1995, Genre: Unknown (255)\nComment:                                 Track: 10\nid3 -l 'music/Triple J Hottest 100, 1999/1 - These Days - Powderfinger.mp3'\nmusic/Triple J Hottest 100, 1999/1 - These Days - Powderfinger.mp3:\nTitle  : These Days                      Artist: Powderfinger\nAlbum  : Triple J Hottest 100, 1999      Year: 1999, Genre: Unknown (255)\nComment:                                 Track: 1\nid3 -l 'music/Triple J Hottest 100, 2012/2 - Little Talks - Of Monsters And Men.mp3'\nmusic/Triple J Hottest 100, 2012/2 - Little Talks - Of Monsters And Men.mp3:\nTitle  : Little Talks                    Artist: Of Monsters And Men\nAlbum  : Triple J Hottest 100, 2012      Year: 2012, Genre: Unknown (255)\nComment:                                 Track: 2"
+        },
+        {
+          "type": "paragraph",
+          "text": "Your script should determine Title , Artist , Track , Album , and Year from the directory and filename."
+        },
+        {
+          "type": "paragraph",
+          "text": "Your script should not change the Genre or Comment fields."
+        }
+      ],
+      "notes": [
+        {
+          "text": "Make the first line of your shell-script #!/bin/dash id3(1) is a tool for manipulating ID3 tags.",
+          "paragraphs": [
+            "Make the first line of your shell-script #!/bin/dash",
+            "id3(1) is a tool for manipulating ID3 tags."
+          ],
+          "code_blocks": [],
+          "links": []
+        },
+        {
+          "text": "It can be difficult debugging your script on Andrew's music collection. In cases like these it usually worth creating a smaller data set for initial debugging. Such a tiny data set is available in tiny_music.zip if you want to use it for debugging. This dataset is used in the first autotests. unzip tiny_music.zip Archive: tiny_music.zip creating: tiny_music/ ...",
+          "paragraphs": [
+            "It can be difficult debugging your script on Andrew's music collection. In cases like these it usually worth creating a smaller data set for initial debugging. Such a tiny data set is available in tiny_music.zip if you want to use it for debugging.",
+            "This dataset is used in the first autotests.",
+            "unzip tiny_music.zip Archive: tiny_music.zip creating: tiny_music/ ..."
+          ],
+          "code_blocks": [
+            "unzip tiny_music.zip\nArchive:  tiny_music.zip\n   creating: tiny_music/\n..."
+          ],
+          "links": [
+            {
+              "text": "tiny_music.zip",
+              "url": "https://cgi.cse.unsw.edu.au/~cs2041/26T1/activities/tag_music//files.ln/tiny_music.zip"
+            }
+          ]
+        },
+        {
+          "text": "You may not use non-POSIX-compatible shell features such as bash extensions. Your script must work when run by /bin/dash on a CSE system. You are not permitted to rely on the extra features provided by /bin/bash or /bin/sh . You can assume anything that works with the version of /bin/dash on CSE systems is POSIX compatible. You may not use Perl, C, Python, or any other language.",
+          "paragraphs": [
+            "You may not use non-POSIX-compatible shell features such as bash extensions. Your script must work when run by /bin/dash on a CSE system. You are not permitted to rely on the extra features provided by /bin/bash or /bin/sh . You can assume anything that works with the version of /bin/dash on CSE systems is POSIX compatible. You may not use Perl, C, Python, or any other language."
+          ],
+          "code_blocks": [],
+          "links": []
+        }
+      ],
+      "autotest": {
+        "paragraphs": [
+          "When you think your program is working, you can use autotest to run some simple automated tests:"
+        ],
+        "code_blocks": [
+          "2041 autotest tag_music"
+        ]
+      },
+      "submission": {
+        "paragraphs": [
+          "When you are finished working on this exercise, you must submit your work by running give :",
+          "before Monday 16 March 2026 12:00 (midday) (2026-03-16 12:00:00) to obtain the marks for this lab exercise."
+        ],
+        "code_blocks": [
+          "give cs2041 lab04_tag_music tag_music.sh"
+        ]
+      },
+      "links": [
+        {
+          "text": "large collection",
+          "url": "https://cgi.cse.unsw.edu.au/~cs2041/26T1/activities/tag_music//files.ln/music.zip"
+        },
+        {
+          "text": "MP3",
+          "url": "https://en.wikipedia.org/wiki/MP3"
+        },
+        {
+          "text": "ID3",
+          "url": "https://en.wikipedia.org/wiki/ID3"
+        },
+        {
+          "text": "tiny_music.zip",
+          "url": "https://cgi.cse.unsw.edu.au/~cs2041/26T1/activities/tag_music//files.ln/tiny_music.zip"
+        }
+      ],
+      "file_matches": [
+        "music.zip",
+        "tag_music.sh",
+        "tiny_music.zip"
+      ]
+    },
+    {
+      "label": "Challenge Exercise",
+      "title": "Creating A Fake Music Collection",
+      "content_blocks": [
+        {
+          "type": "paragraph",
+          "text": "The test data for the previous question is not really Andrew's music collection. All the mp3 files contain identical contents. The directories and filenames were created from the source of this web page ."
+        },
+        {
+          "type": "paragraph",
+          "text": "Write a POSIX-compatible shell script create_music.sh which uses the above webpage to create exactly the same directories and files as in the test data set supplied above."
+        },
+        {
+          "type": "paragraph",
+          "text": "Your script should take 2 arguments: the name of an MP3 file to use as the contents of the MP3 files you create and the directory in which to create the test data. For example:"
+        },
+        {
+          "type": "code",
+          "text": "mkdir my_fake_music\nls my_fake_music\n./create_music.sh sample.mp3 my_fake_music\nls my_fake_music\n'Triple J Hottest 100, 1993'  'Triple J Hottest 100, 1999'  'Triple J Hottest 100, 2005'  'Triple J Hottest 100, 2011'  'Triple J Hottest 100, 2017'\n'Triple J Hottest 100, 1994'  'Triple J Hottest 100, 2000'  'Triple J Hottest 100, 2006'  'Triple J Hottest 100, 2012'  'Triple J Hottest 100, 2018'\n'Triple J Hottest 100, 1995'  'Triple J Hottest 100, 2001'  'Triple J Hottest 100, 2007'  'Triple J Hottest 100, 2013'  'Triple J Hottest 100, 2019'\n'Triple J Hottest 100, 1996'  'Triple J Hottest 100, 2002'  'Triple J Hottest 100, 2008'  'Triple J Hottest 100, 2014'  'Triple J Hottest 100, 2020'\n'Triple J Hottest 100, 1997'  'Triple J Hottest 100, 2003'  'Triple J Hottest 100, 2009'  'Triple J Hottest 100, 2015'  'Triple J Hottest 100, 2021'\n'Triple J Hottest 100, 1998'  'Triple J Hottest 100, 2004'  'Triple J Hottest 100, 2010'  'Triple J Hottest 100, 2016'  'Triple J Hottest 100, 2022'\nls -1 'my_fake_music/Triple J Hottest 100, 2007'\n'1 - Knights of Cydonia - Muse.mp3'\n\"10 - Don't Fight It - The Panics.mp3\"\n'2 - Straight Lines - Silverchair.mp3'\n'3 - On Call - Kings of Leon.mp3'\n'4 - Better Than - John Butler Trio.mp3'\n'5 - This Heart Attack - Faker.mp3'\n'6 - The Pretender - Foo Fighters.mp3'\n'7 - Harder, Better, Faster, Stronger (Alive 2007) - Daft Punk.mp3'\n'8 - Hang Me Up to Dry - Cold War Kids.mp3'\n\"9 - I'll Kill Her - Soko.mp3\"\nls -1 'my_fake_music/Triple J Hottest 100, 2022'\n'1 - Say Nothing - Flume featuring May-a.mp3'\n'10 - Glimpse of Us - Joji.mp3'\n'2 - B.O.T.A. (Baddest of Them All) - Eliza Rose and Interplanetary Criminal.mp3'\n'3 - Hardlight - Spacey Jane.mp3'\n'4 - Bad Habit - Steve Lacy.mp3'\n\"5 - It's Been a Long Day - Spacey Jane.mp3\"\n'6 - Sitting Up - Spacey Jane.mp3'\n'7 - About Damn Time - Lizzo.mp3'\n'8 - Stars in My Eyes - Ball Park Music.mp3'\n'9 - In the Wake of Your Leave - Gang of Youths.mp3'"
+        }
+      ],
+      "notes": [
+        {
+          "text": "Make the first line of your shell-script #!/bin/dash Instead of reading the HTML directly wikipedia provides a raw version (wikitext) of the page which is easier to parse. wget -q -O- 'https://en.wikipedia.org/w/index.php?title=Triple_J_Hottest_100&oldid=1228180214&action=raw' You may find this web page useful for dealing with unicode characters, such as the en dash . If a song title contains the character / , you should replace it with the - character.",
+          "paragraphs": [
+            "Make the first line of your shell-script #!/bin/dash",
+            "Instead of reading the HTML directly wikipedia provides a raw version (wikitext) of the page which is easier to parse.",
+            "wget -q -O- 'https://en.wikipedia.org/w/index.php?title=Triple_J_Hottest_100&oldid=1228180214&action=raw'",
+            "You may find this web page useful for dealing with unicode characters, such as the en dash .",
+            "If a song title contains the character / , you should replace it with the - character."
+          ],
+          "code_blocks": [
+            "wget -q -O- 'https://en.wikipedia.org/w/index.php?title=Triple_J_Hottest_100&oldid=1228180214&action=raw'"
+          ],
+          "links": [
+            {
+              "text": "this web page",
+              "url": "https://r12a.github.io/app-conversion/"
+            },
+            {
+              "text": "en dash",
+              "url": "https://en.wikipedia.org/wiki/Dash"
+            }
+          ]
+        },
+        {
+          "text": "You may not use non-POSIX-compatible shell features such as bash extensions. Your script must work when run by /bin/dash on a CSE system. You are not permitted to rely on the extra features provided by /bin/bash or /bin/sh . You can assume anything that works with the version of /bin/dash on CSE systems is POSIX compatible. You may not use Perl, C, Python, or any other language.",
+          "paragraphs": [
+            "You may not use non-POSIX-compatible shell features such as bash extensions. Your script must work when run by /bin/dash on a CSE system. You are not permitted to rely on the extra features provided by /bin/bash or /bin/sh . You can assume anything that works with the version of /bin/dash on CSE systems is POSIX compatible. You may not use Perl, C, Python, or any other language."
+          ],
+          "code_blocks": [],
+          "links": []
+        }
+      ],
+      "autotest": {
+        "paragraphs": [
+          "When you think your program is working, you can use autotest to run some simple automated tests:"
+        ],
+        "code_blocks": [
+          "2041 autotest create_music"
+        ]
+      },
+      "submission": {
+        "paragraphs": [
+          "When you are finished working on this exercise, you must submit your work by running give :",
+          "before Monday 16 March 2026 12:00 (midday) (2026-03-16 12:00:00) to obtain the marks for this lab exercise."
+        ],
+        "code_blocks": [
+          "give cs2041 lab04_create_music create_music.sh"
+        ]
+      },
+      "links": [
+        {
+          "text": "web page",
+          "url": "https://en.wikipedia.org/wiki/Triple_J_Hottest_100"
+        },
+        {
+          "text": "this web page",
+          "url": "https://r12a.github.io/app-conversion/"
+        },
+        {
+          "text": "en dash",
+          "url": "https://en.wikipedia.org/wiki/Dash"
+        }
+      ],
+      "file_matches": [
+        "create_music.sh"
+      ]
+    }
+  ]
+}

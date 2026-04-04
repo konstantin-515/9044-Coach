@@ -1,0 +1,307 @@
+{
+  "test_no": "04",
+  "url": "https://cgi.cse.unsw.edu.au/~cs2041/26T1/test/04/questions",
+  "final_url": "F:\\Codex\\9044\\test_html\\test04_live.html",
+  "status": 200,
+  "page_title": "COMP(2041|9044) 26T1 — Week 04 Weekly Test Questions",
+  "login_required": false,
+  "intro_sections": [
+    {
+      "heading": "Getting Started",
+      "text": "test04 There are some provided files for this test which you can fetch with this command: If you're not working at CSE, you can download the provided files as a zip file or a tar file .",
+      "links": [
+        {
+          "text": "zip file",
+          "url": "https://cgi.cse.unsw.edu.au/~cs2041/26T1/test/04/zip"
+        },
+        {
+          "text": "tar file",
+          "url": "https://cgi.cse.unsw.edu.au/~cs2041/26T1/test/04/tar"
+        }
+      ],
+      "code_blocks": [
+        "mkdir test04\r\ncd test04",
+        "2041 fetch test04"
+      ],
+      "content_blocks": [
+        {
+          "type": "paragraph",
+          "text": "test04"
+        },
+        {
+          "type": "code",
+          "text": "mkdir test04\r\ncd test04"
+        },
+        {
+          "type": "paragraph",
+          "text": "There are some provided files for this test which you can fetch with this command:"
+        },
+        {
+          "type": "code",
+          "text": "2041 fetch test04"
+        },
+        {
+          "type": "paragraph",
+          "text": "If you're not working at CSE, you can download the provided files as a zip file or a tar file ."
+        }
+      ]
+    },
+    {
+      "heading": "Submission",
+      "text": "give You can run give multiple times. Only your last submission will be marked. Don't submit any exercises you haven't attempted. If you are working at home, you may find it more convenient to upload your work via give's web interface . Remember you have until Week 5 Thursday 21:00:00 to complete this test. Automarking will be run by the lecturer several days after the submission deadline for the test, using test cases that you haven't seen: different to the test cases autotest runs for you. Hint: do your own testing as well as running autotest Test Marks After automarking is run by the lecturer you can view it here the resulting mark will also be available via via give's web interface or by running this command on a CSE machine: Each test is worth 1.7 marks, and will be automarked. Your total mark for the tests component is computed as a sum of your best 6 of 8 test marks.",
+      "links": [
+        {
+          "text": "give's web interface",
+          "url": "https://cgi.cse.unsw.edu.au/~give/Student/give.php"
+        },
+        {
+          "text": "view it here",
+          "url": "https://cgi.cse.unsw.edu.au/~cs2041/26T1/student/"
+        },
+        {
+          "text": "via give's web interface",
+          "url": "https://cgi.cse.unsw.edu.au/~give/Student/sturec.php"
+        }
+      ],
+      "code_blocks": [
+        "2041 classrun -sturec"
+      ],
+      "content_blocks": [
+        {
+          "type": "paragraph",
+          "text": "give"
+        },
+        {
+          "type": "paragraph",
+          "text": "You can run give multiple times. Only your last submission will be marked."
+        },
+        {
+          "type": "paragraph",
+          "text": "Don't submit any exercises you haven't attempted."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you are working at home, you may find it more convenient to upload your work via give's web interface ."
+        },
+        {
+          "type": "paragraph",
+          "text": "Remember you have until Week 5 Thursday 21:00:00 to complete this test."
+        },
+        {
+          "type": "paragraph",
+          "text": "Automarking will be run by the lecturer several days after the submission deadline for the test, using test cases that you haven't seen: different to the test cases autotest runs for you."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hint: do your own testing as well as running autotest"
+        },
+        {
+          "type": "paragraph",
+          "text": "Test Marks"
+        },
+        {
+          "type": "paragraph",
+          "text": "After automarking is run by the lecturer you can view it here the resulting mark will also be available via via give's web interface or by running this command on a CSE machine:"
+        },
+        {
+          "type": "code",
+          "text": "2041 classrun -sturec"
+        },
+        {
+          "type": "paragraph",
+          "text": "Each test is worth 1.7 marks, and will be automarked. Your total mark for the tests component is computed as a sum of your best 6 of 8 test marks."
+        }
+      ]
+    }
+  ],
+  "exercises": [
+    {
+      "label": "weekly test question",
+      "title": "Create A File of Integers In Shell",
+      "content_blocks": [
+        {
+          "type": "paragraph",
+          "text": "create_integers_file.sh"
+        },
+        {
+          "type": "paragraph",
+          "text": "The first & second arguments will specify a range of integers."
+        },
+        {
+          "type": "paragraph",
+          "text": "The third argument will specify a filename."
+        },
+        {
+          "type": "paragraph",
+          "text": "Your program should create a file of this name containing the specified integers."
+        },
+        {
+          "type": "paragraph",
+          "text": "For example:"
+        },
+        {
+          "type": "code",
+          "text": "./create_integers_file.sh 40 42 fortytwo.txt\r\ncat fortytwo.txt\r\n40\r\n41\r\n42\r\n./create_integers_file.sh 1 5 a.txt\r\ncat a.txt\r\n1\r\n2\r\n3\r\n4\r\n5\r\n./create_integers_file.sh 1 1000 1000.txt\r\nwc 1000.txt\r\n1000 1000 3893 1000.txt"
+        },
+        {
+          "type": "paragraph",
+          "text": "Make the first line of your shell-script #!/bin/dash"
+        },
+        {
+          "type": "paragraph",
+          "text": "You are not permitted to use external programs such as grep , sort , uniq , .... In particular you are not permitted to use the external program: seq . You are permitted to use built-in shell arithmetic and other built-in shell features including: case cd exit for if pwd read shift test while [ Note most of the above built-in shell features features are not useful for this problem. You may not use non-POSIX-compatible shell features such as bash extensions. Your script must work when run by /bin/dash on a CSE system. You are not permitted to rely on the extra features provided by /bin/bash or /bin/sh . You can assume anything that works with the version of /bin/dash on CSE systems is POSIX compatible. You may not use Perl, C, Python, or any other language. No error checking is necessary."
+        },
+        {
+          "type": "paragraph",
+          "text": "When you think your program is working you can autotest to run some simple automated tests:"
+        },
+        {
+          "type": "code",
+          "text": "2041 autotest shell_create_integers_file"
+        },
+        {
+          "type": "paragraph",
+          "text": "give"
+        },
+        {
+          "type": "code",
+          "text": "give cs2041 test04_shell_create_integers_file create_integers_file.sh"
+        }
+      ],
+      "notes": [],
+      "autotest": {
+        "paragraphs": [],
+        "code_blocks": []
+      },
+      "submission": {
+        "paragraphs": [],
+        "code_blocks": []
+      },
+      "links": []
+    },
+    {
+      "label": "weekly test question",
+      "title": "Change the Suffix of HTML Files",
+      "content_blocks": [
+        {
+          "type": "paragraph",
+          "text": ".html"
+        },
+        {
+          "type": "paragraph",
+          "text": ".htm"
+        },
+        {
+          "type": "paragraph",
+          "text": "Write a POSIX-compatible shell script htm2html.sh which changes the name of all files with the suffix .htm in the current directory to have the suffix .html . For example:"
+        },
+        {
+          "type": "code",
+          "text": "touch index.htm small.htm large.htm\r\nls *.htm*\r\nindex.htm  large.htm  small.htm\r\n./htm2html.sh\r\nls *.htm*\r\nindex.html  large.html  small.html"
+        },
+        {
+          "type": "paragraph",
+          "text": "1"
+        },
+        {
+          "type": "paragraph",
+          "text": ".html"
+        },
+        {
+          "type": "code",
+          "text": "touch andrew.htm andrew.html\r\n./htm2html.sh \r\nandrew.html exists"
+        },
+        {
+          "type": "paragraph",
+          "text": "You are permitted to use external programs such as mv . Make the first line of your shell-script #!/bin/dash You are permitted to use built-in shell features. You may not use non-POSIX-compatible shell features such as bash extensions. Your script must work when run by /bin/dash on a CSE system. You are not permitted to rely on the extra features provided by /bin/bash or /bin/sh . You can assume anything that works with the version of /bin/dash on CSE systems is POSIX compatible. You may not use Perl, C, Python, or any other language. No error checking other than described above is necessary."
+        },
+        {
+          "type": "paragraph",
+          "text": "When you think your program is working you can autotest to run some simple automated tests:"
+        },
+        {
+          "type": "code",
+          "text": "2041 autotest htm2html"
+        },
+        {
+          "type": "paragraph",
+          "text": "give"
+        },
+        {
+          "type": "code",
+          "text": "give cs2041 test04_htm2html htm2html.sh"
+        }
+      ],
+      "notes": [],
+      "autotest": {
+        "paragraphs": [],
+        "code_blocks": []
+      },
+      "submission": {
+        "paragraphs": [],
+        "code_blocks": []
+      },
+      "links": []
+    },
+    {
+      "label": "weekly test question",
+      "title": "Checking for Missing Include Files",
+      "content_blocks": [
+        {
+          "type": "paragraph",
+          "text": "Write a POSIX-comaptible shell script missing_include.sh which is give one of more filenames as argument. The files will contain C code."
+        },
+        {
+          "type": "paragraph",
+          "text": "missing_include.sh should print a message if any file included by the C program is not present in the current directory."
+        },
+        {
+          "type": "paragraph",
+          "text": "Reminder C include lines are of this form:"
+        },
+        {
+          "type": "code",
+          "text": "#include \"file.h\""
+        },
+        {
+          "type": "code",
+          "text": "cat a.c\r\n#include <stdio.h>\r\n\r\n#include \"a.h\"\r\n#include \"b.h\"\r\n#include \"input.h\"\r\n\r\nint a(void){\r\n    return 42;\r\n}\r\ncat b.c\r\n#include <stdio.h>\r\n\r\n#include \"b.h\"\r\n#include \"c.h\"\r\n#include \"d.h\"\r\n#include <string.h>\r\n#include \"global.h\"\r\n\r\nint b(void){\r\n    return b.c;\r\n}\r\n./missing_include.sh a.c\r\na.h included into a.c does not exist\r\ninput.h included into a.c does not exist\r\n./missing_include.sh b.c\r\nc.h included into b.c does not exist\r\nglobal.h included into b.c does not exist\r\n./missing_include.sh a.c b.c\r\na.h included into a.c does not exist\r\ninput.h included into a.c does not exist\r\nc.h included into b.c does not exist\r\nglobal.h included into b.c does not exist"
+        },
+        {
+          "type": "code",
+          "text": "#include <stdio.h>"
+        },
+        {
+          "type": "paragraph",
+          "text": "You can assume filenames do not contain whitespace or glob characters ( *[]? ). You are permitted to use external programs such as grep . Make the first line of your shell-script #!/bin/dash You are permitted to use built-in shell features. You may not use non-POSIX-compatible shell features such as bash extensions. Your script must work when run by /bin/dash on a CSE system. You are not permitted to rely on the extra features provided by /bin/bash or /bin/sh . You can assume anything that works with the version of /bin/dash on CSE systems is POSIX compatible. You may not use Perl, C, Python, or any other language. No error checking is necessary."
+        },
+        {
+          "type": "paragraph",
+          "text": "When you think your program is working you can autotest to run some simple automated tests:"
+        },
+        {
+          "type": "code",
+          "text": "2041 autotest missing_include"
+        },
+        {
+          "type": "paragraph",
+          "text": "give"
+        },
+        {
+          "type": "code",
+          "text": "give cs2041 test04_missing_include missing_include.sh"
+        }
+      ],
+      "notes": [],
+      "autotest": {
+        "paragraphs": [],
+        "code_blocks": []
+      },
+      "submission": {
+        "paragraphs": [],
+        "code_blocks": []
+      },
+      "links": []
+    }
+  ]
+}

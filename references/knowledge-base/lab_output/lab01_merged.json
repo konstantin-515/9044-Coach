@@ -1,0 +1,336 @@
+{
+  "lab_no": "01",
+  "url": "https://cgi.cse.unsw.edu.au/~cs2041/26T1/lab/01/questions",
+  "page_title": "COMP(2041|9044) 26T1 — Week 01 Laboratory Exercises",
+  "intro_sections": [
+    {
+      "heading": "Objectives",
+      "text": "Objectives Understanding regular expressions Understanding use of UNIX filters (grep)",
+      "links": [],
+      "code_blocks": []
+    },
+    {
+      "heading": "Preparation",
+      "text": "Preparation Before the lab you should re-read the relevant lecture slides and their accompanying examples.",
+      "links": [],
+      "code_blocks": []
+    },
+    {
+      "heading": "Getting Started",
+      "text": "Getting Started Set up for the lab by creating a new directory called lab01 and changing to this directory. mkdir lab01 cd lab01 There are some provided files for this lab which you can fetch with this command: 2041 fetch lab01 If you're not working at CSE, you can download the provided files as a zip file or a tar file .",
+      "links": [
+        {
+          "text": "zip file",
+          "url": "https://cgi.cse.unsw.edu.au/~cs2041/26T1/lab/01/zip"
+        },
+        {
+          "text": "tar file",
+          "url": "https://cgi.cse.unsw.edu.au/~cs2041/26T1/lab/01/tar"
+        }
+      ],
+      "code_blocks": []
+    }
+  ],
+  "exercises": [
+    {
+      "label": "Exercise",
+      "title": "grep-ing a Dictionary",
+      "intro_paragraphs": [
+        "You have been given a file named",
+        "The autotest scripts depend on the format of",
+        "On most Unix systems you will find one or more dictionaries containing many thousands of words:",
+        "We've created an example dictionary named"
+      ],
+      "intro_code_blocks": [],
+      "questions": [
+        {
+          "number": 1,
+          "prompt": "Write a",
+          "extra_paragraphs": [],
+          "hint_paragraphs": [
+            "It should print:"
+          ],
+          "hint_code_blocks": [
+            "almner\nalmners\ncalmness\ncalmnesses"
+          ],
+          "check_paragraphs": [
+            "The COMP2041 class account contains a script named",
+            "Once you have entered your answer you can check it like this:"
+          ],
+          "check_code_blocks": [],
+          "links": []
+        },
+        {
+          "number": 2,
+          "prompt": "Write a",
+          "extra_paragraphs": [],
+          "hint_paragraphs": [
+            "It should print:"
+          ],
+          "hint_code_blocks": [
+            "aqueous\narchaeoastronomer\narchaeoastronomers\narchaeoastronomical\narchaeoastronomies\narchaeoastronomy\nbanlieue\nbeauish\nblooie\ncooee\ncooeed\ncooeeing\ncooees\nenqueue\nepigaeous\nepopoeia\nepopoeias\neuoi\neuois\neuouae\neuouaes\nflooie\ngiaour\ngiaours\ngooier\ngooiest\nguaiac\nguaiacol\nguaiacols\nguaiacs\nguaiacum\nguaiacums\nguaiocum\nguaiocums\nhawaiians\nhomoiousian\nhomoiousians\nhypoaeolian\nhypogaeous\nloaiasis\nlooie\nlooies\nlouie\nlouies\nmaieutic\nmaieutical\nmaieutics\nmeoued\nmeouing\nmetasequoia\nmetasequoias\nmiaou\nmiaoued\nmiaouing\nmiaous\nmythopoeia\nmythopoeias\nnonaqueous\nobloquious\nobsequious\nobsequiously\nobsequiousness\nobsequiousnesses\nonomatopoeia\nonomatopoeias\npalaeoanthropic\npalaeoanthropological\npalaeoanthropologies\npalaeoanthropologist\npalaeoanthropologists\npalaeoanthropology\npalaeoecologic\npalaeoecological\npalaeoecologies\npalaeoecologist\npalaeoecologists\npalaeoecology\npalaeoethnologic\npalaeoethnological\npalaeoethnologist\npalaeoethnologists\npalaeoethnology\npharmacopoeia\npharmacopoeial\npharmacopoeian\npharmacopoeias\nplateaued\nplateauing\nprosopopoeia\nprosopopoeial\nprosopopoeias\nqueue\nqueued\nqueueing\nqueueings\nqueuer\nqueuers\nqueues\nqueuings\nradioautograph\nradioautographic\nradioautographies\nradioautographs\nradioautography\nradioiodine\nradioiodines\nreliquiae\nrhythmopoeia\nsaouari\nsaouaris\nscarabaeoid\nscarabaeoids\nsequoia\nsequoias\nsubaqueous\ntenuious\nterraqueous\nzoaea\nzooea\nzooeae\nzooeal\nzooeas\nzoogloeae\nzoogloeoid\nzooier\nzooiest"
+          ],
+          "check_paragraphs": [
+            "Once you have entered your answer you can check it like this:"
+          ],
+          "check_code_blocks": [],
+          "links": []
+        },
+        {
+          "number": 3,
+          "prompt": "Write a",
+          "extra_paragraphs": [
+            "The words may contain more than 5 vowels but they must contain \"aeiou\" in that order."
+          ],
+          "hint_paragraphs": [
+            "It should print:"
+          ],
+          "hint_code_blocks": [
+            "abstemious\nabstemiously\nabstemiousness\nabstemiousnesses\nabstentious\nadenocarcinomatous\nadventitious\nadventitiously\nadventitiousness\nadventitiousnesses\naeruginous\namentiferous\nandrodioecious\nandromonoecious\nanemophilous\nantenniferous\nantireligious\narenicolous\nargentiferous\narsenious\narteriovenous\nasclepiadaceous\nautoecious\nautoeciously\nbacteriophagous\ncaesalpiniaceous\ncaesious\ncavernicolous\nchaetiferous\nfacetious\nfacetiously\nfacetiousness\nfacetiousnesses\nflagelliferous\ngarnetiferous\nhaemoglobinous\nhamamelidaceous\nlateritious\nparoecious\nquadrigeminous\nsacrilegious\nsacrilegiously\nsacrilegiousness\nsacrilegiousnesses\nsarraceniaceous\nsupercalifragilisticexpialidocious\nultrareligious\nultraserious\nvalerianaceous"
+          ],
+          "check_paragraphs": [
+            "Once you have entered your answer you can check it like this:"
+          ],
+          "check_code_blocks": [],
+          "links": []
+        },
+        {
+          "number": 4,
+          "prompt": "Write a",
+          "extra_paragraphs": [],
+          "hint_paragraphs": [
+            "It should print:"
+          ],
+          "hint_code_blocks": [
+            "abstemious\nabstemiously\nabstentious\narsenious\ncaesious\nfacetious\nfacetiously"
+          ],
+          "check_paragraphs": [
+            "Once you have entered your answer you can check it like this:"
+          ],
+          "check_code_blocks": [],
+          "links": []
+        }
+      ],
+      "footer_paragraphs": [
+        "When you are finished working on this exercise, you must submit your work by running",
+        "before"
+      ],
+      "footer_code_blocks": [],
+      "links": [],
+      "file_matches": [
+        "dictionary.txt",
+        "dictionary_answers.txt"
+      ]
+    },
+    {
+      "label": "Exercise",
+      "title": "grep-ing Federal Parliament",
+      "intro_paragraphs": [
+        "You have been given a file named",
+        "The autotest scripts depend on the format of",
+        "In this exercise you will analyze a file named"
+      ],
+      "intro_code_blocks": [],
+      "questions": [
+        {
+          "number": 1,
+          "prompt": "Write a",
+          "extra_paragraphs": [],
+          "hint_paragraphs": [
+            "It should print:"
+          ],
+          "hint_code_blocks": [
+            "Hon Scott Buchholz: Member for Wright, Queensland\nHon Tony Burke: Member for Watson, New South Wales\nHon Stephen Jones: Member for Whitlam, New South Wales\nMr Peter Khalil: Member for Wills, Victoria\nMr Llew O'Brien: Member for Wide Bay, Queensland\nMs Allegra Spender: Member for Wentworth, New South Wales\nMs Anne Stanley: Member for Werriwa, New South Wales\nMs Zali Steggall OAM: Member for Warringah, New South Wales\nHon Dan Tehan: Member for Wannon, Victoria"
+          ],
+          "check_paragraphs": [
+            "Once you have entered your answer you can check it like this:"
+          ],
+          "check_code_blocks": [],
+          "links": []
+        },
+        {
+          "number": 2,
+          "prompt": "Write a",
+          "extra_paragraphs": [],
+          "hint_paragraphs": [
+            "It should print:"
+          ],
+          "hint_code_blocks": [
+            "Dr Andrew Charlton: Member for Parramatta, New South Wales\nHon Andrew Gee: Member for Calare, New South Wales\nHon Andrew Giles: Member for Scullin, Victoria\nHon Andrew Hastie: Member for Canning, Western Australia\nHon Dr Andrew Leigh: Member for Fenner, Australian Capital Territory\nMr Andrew Wallace: Member for Fisher, Queensland\nMr Andrew Wilkie: Member for Clark, Tasmania\nMr Andrew Willcox: Member for Dawson, Queensland"
+          ],
+          "check_paragraphs": [
+            "Once you have entered your answer you can check it like this:"
+          ],
+          "check_code_blocks": [],
+          "links": []
+        },
+        {
+          "number": 3,
+          "prompt": "Write a",
+          "extra_paragraphs": [],
+          "hint_paragraphs": [
+            "It should print:"
+          ],
+          "hint_code_blocks": [
+            "Ms Angie Bell: Member for Moncrieff, Queensland\nMr Sam Birrell: Member for Nicholls, Victoria\nMr Matt Burnell: Member for Spence, South Australia\nMr Julian Hill: Member for Bruce, Victoria\nMr Brian Mitchell: Member for Lyons, Tasmania\nMr Rob Mitchell: Member for McEwen, Victoria\nMs Zali Steggall OAM: Member for Warringah, New South Wales"
+          ],
+          "check_paragraphs": [
+            "Once you have entered your answer you can check it like this:"
+          ],
+          "check_code_blocks": [],
+          "links": []
+        },
+        {
+          "number": 4,
+          "prompt": "Write a",
+          "extra_paragraphs": [],
+          "hint_paragraphs": [
+            "It should print:"
+          ],
+          "hint_code_blocks": [
+            "Ms Peta Murphy: Member for Dunkley, Victoria\nMr Rowan Ramsey: Member for Grey, South Australia"
+          ],
+          "check_paragraphs": [
+            "Once you have entered your answer you can check it like this:"
+          ],
+          "check_code_blocks": [],
+          "links": []
+        },
+        {
+          "number": 5,
+          "prompt": "Write a",
+          "extra_paragraphs": [],
+          "hint_paragraphs": [
+            "It should print:"
+          ],
+          "hint_code_blocks": [
+            "Hon Dr Anne Aly: Member for Cowan, Western Australia\nHon Linda Burney: Member for Barton, New South Wales\nMs Kate Chaney: Member for Curtin, Western Australia\nHon Pat Conroy: Member for Shortland, New South Wales\nHon Milton Dick: Member for Oxley, Queensland\nHon Ed Husic: Member for Chifley, New South Wales\nHon Bob Katter: Member for Kennedy, Queensland\nHon Ged Kearney: Member for Cooper, Victoria\nHon Michelle Landry: Member for Capricornia, Queensland\nHon Sussan Ley: Member for Farrer, New South Wales\nMr Sam Lim: Member for Tangney, Western Australia\nMrs Melissa McIntosh: Member for Lindsay, New South Wales\nMs Louise Miller-Frost: Member for Boothby, South Australia\nMs Peta Murphy: Member for Dunkley, Victoria\nMr Llew O'Brien: Member for Wide Bay, Queensland\nHon Tanya Plibersek: Member for Sydney, New South Wales\nMr Rowan Ramsey: Member for Grey, South Australia\nHon Michelle Rowland: Member for Greenway, New South Wales\nMs Anne Stanley: Member for Werriwa, New South Wales\nMs Kylea Tink: Member for North Sydney, New South Wales\nMr Aaron Violi: Member for Casey, Victoria\nHon Anika Wells: Member for Lilley, Queensland"
+          ],
+          "check_paragraphs": [
+            "Once you have entered your answer you can check it like this:"
+          ],
+          "check_code_blocks": [],
+          "links": []
+        },
+        {
+          "number": 6,
+          "prompt": "Write a",
+          "extra_paragraphs": [],
+          "hint_paragraphs": [
+            "It should print:"
+          ],
+          "hint_code_blocks": [
+            "Mr Luke Gosling OAM: Member for Solomon, Northern Territory\nHon Andrew Hastie: Member for Canning, Western Australia\nHon Catherine King: Member for Ballarat, Victoria\nHon Madeleine King: Member for Brand, Western Australia\nMr Jerome Laxale: Member for Bennelong, New South Wales\nDr Monique Ryan: Member for Kooyong, Victoria\nHon Bill Shorten: Member for Maribyrnong, Victoria\nMr Terry Young: Member for Longman, Queensland"
+          ],
+          "check_paragraphs": [
+            "Once you have entered your answer you can check it like this:"
+          ],
+          "check_code_blocks": [],
+          "links": []
+        },
+        {
+          "number": 7,
+          "prompt": "Write a",
+          "extra_paragraphs": [],
+          "hint_paragraphs": [
+            "It should print:"
+          ],
+          "hint_code_blocks": [
+            "Hon Anthony Albanese: Member for Grayndler, New South Wales"
+          ],
+          "check_paragraphs": [
+            "Once you have entered your answer you can check it like this:"
+          ],
+          "check_code_blocks": [],
+          "links": []
+        },
+        {
+          "number": 8,
+          "prompt": "Write a",
+          "extra_paragraphs": [],
+          "hint_paragraphs": [
+            "It should print:"
+          ],
+          "hint_code_blocks": [
+            "Hon Barnaby Joyce: Member for New England, New South Wales\nHon Kristy McBain: Member for Eden-Monaro, New South Wales\nMr Llew O'Brien: Member for Wide Bay, Queensland\nHon Matt Thistlethwaite: Member for Kingsford Smith, New South Wales\nMs Kylea Tink: Member for North Sydney, New South Wales\nHon Jason Wood: Member for La Trobe, Victoria"
+          ],
+          "check_paragraphs": [
+            "Once you have entered your answer you can check it like this:"
+          ],
+          "check_code_blocks": [],
+          "links": []
+        }
+      ],
+      "footer_paragraphs": [
+        "When you are finished working on this exercise, you must submit your work by running",
+        "before"
+      ],
+      "footer_code_blocks": [],
+      "links": [],
+      "file_matches": [
+        "parliament.txt",
+        "parliament_answers.txt"
+      ]
+    },
+    {
+      "label": "Challenge Exercise",
+      "title": "Exploring Regular Expressions",
+      "intro_paragraphs": [
+        "You have been given a file named",
+        "The autotest scripts depend on the format of",
+        "Use",
+        "We've provided a set of test cases in"
+      ],
+      "intro_code_blocks": [],
+      "questions": [
+        {
+          "number": 1,
+          "prompt": "Write a",
+          "extra_paragraphs": [
+            "Once you have entered your answer you can check it like this:"
+          ],
+          "hint_paragraphs": [],
+          "hint_code_blocks": [],
+          "check_paragraphs": [],
+          "check_code_blocks": [],
+          "links": []
+        },
+        {
+          "number": 2,
+          "prompt": "Write a",
+          "extra_paragraphs": [
+            "In other words if there is pair of",
+            "Once you have entered your answer you can check it like this:"
+          ],
+          "hint_paragraphs": [],
+          "hint_code_blocks": [],
+          "check_paragraphs": [],
+          "check_code_blocks": [],
+          "links": []
+        },
+        {
+          "number": 3,
+          "prompt": "Write a",
+          "extra_paragraphs": [
+            "Once you have entered your answer you can check it like this:"
+          ],
+          "hint_paragraphs": [],
+          "hint_code_blocks": [],
+          "check_paragraphs": [],
+          "check_code_blocks": [],
+          "links": []
+        }
+      ],
+      "footer_paragraphs": [
+        "When you are finished working on this exercise, you must submit your work by running",
+        "before"
+      ],
+      "footer_code_blocks": [],
+      "links": [],
+      "file_matches": [
+        "ab_answers.txt",
+        "input.txt"
+      ]
+    }
+  ]
+}

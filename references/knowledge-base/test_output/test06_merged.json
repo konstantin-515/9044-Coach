@@ -1,0 +1,281 @@
+{
+  "test_no": "06",
+  "url": "https://cgi.cse.unsw.edu.au/~cs2041/26T1/test/06/questions",
+  "final_url": "F:\\Codex\\9044\\test_html\\test06_live.html",
+  "status": 200,
+  "page_title": "COMP(2041|9044) 26T1 — Week 06 Weekly Test Questions",
+  "login_required": false,
+  "intro_sections": [
+    {
+      "heading": "Getting Started",
+      "text": "test06",
+      "links": [],
+      "code_blocks": [
+        "mkdir test06\r\ncd test06"
+      ],
+      "content_blocks": [
+        {
+          "type": "paragraph",
+          "text": "test06"
+        },
+        {
+          "type": "code",
+          "text": "mkdir test06\r\ncd test06"
+        }
+      ]
+    },
+    {
+      "heading": "Submission",
+      "text": "give You can run give multiple times. Only your last submission will be marked. Don't submit any exercises you haven't attempted. If you are working at home, you may find it more convenient to upload your work via give's web interface . Remember you have until Week 7 Thursday 21:00:00 to complete this test. Automarking will be run by the lecturer several days after the submission deadline for the test, using test cases that you haven't seen: different to the test cases autotest runs for you. Hint: do your own testing as well as running autotest Test Marks After automarking is run by the lecturer you can view it here the resulting mark will also be available via via give's web interface or by running this command on a CSE machine: Each test is worth 1.7 marks, and will be automarked. Your total mark for the tests component is computed as a sum of your best 6 of 8 test marks.",
+      "links": [
+        {
+          "text": "give's web interface",
+          "url": "https://cgi.cse.unsw.edu.au/~give/Student/give.php"
+        },
+        {
+          "text": "view it here",
+          "url": "https://cgi.cse.unsw.edu.au/~cs2041/26T1/student/"
+        },
+        {
+          "text": "via give's web interface",
+          "url": "https://cgi.cse.unsw.edu.au/~give/Student/sturec.php"
+        }
+      ],
+      "code_blocks": [
+        "2041 classrun -sturec"
+      ],
+      "content_blocks": [
+        {
+          "type": "paragraph",
+          "text": "give"
+        },
+        {
+          "type": "paragraph",
+          "text": "You can run give multiple times. Only your last submission will be marked."
+        },
+        {
+          "type": "paragraph",
+          "text": "Don't submit any exercises you haven't attempted."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you are working at home, you may find it more convenient to upload your work via give's web interface ."
+        },
+        {
+          "type": "paragraph",
+          "text": "Remember you have until Week 7 Thursday 21:00:00 to complete this test."
+        },
+        {
+          "type": "paragraph",
+          "text": "Automarking will be run by the lecturer several days after the submission deadline for the test, using test cases that you haven't seen: different to the test cases autotest runs for you."
+        },
+        {
+          "type": "paragraph",
+          "text": "Hint: do your own testing as well as running autotest"
+        },
+        {
+          "type": "paragraph",
+          "text": "Test Marks"
+        },
+        {
+          "type": "paragraph",
+          "text": "After automarking is run by the lecturer you can view it here the resulting mark will also be available via via give's web interface or by running this command on a CSE machine:"
+        },
+        {
+          "type": "code",
+          "text": "2041 classrun -sturec"
+        },
+        {
+          "type": "paragraph",
+          "text": "Each test is worth 1.7 marks, and will be automarked. Your total mark for the tests component is computed as a sum of your best 6 of 8 test marks."
+        }
+      ]
+    }
+  ],
+  "exercises": [
+    {
+      "label": "weekly test question",
+      "title": "Remove the vowels from a file",
+      "content_blocks": [
+        {
+          "type": "paragraph",
+          "text": "Write a POSIX-compatible shell script devowel_file.sh , which takes one command line argument, the name of a file."
+        },
+        {
+          "type": "paragraph",
+          "text": "devowel_file.sh should remove vowels from the file."
+        },
+        {
+          "type": "paragraph",
+          "text": "Your program can assume vowels are {'a', 'e', 'i', 'o', 'u'} and their upper-case equivalents {'A', 'E', 'I', 'O', 'U'}"
+        },
+        {
+          "type": "paragraph",
+          "text": "Your program should not print anything to stdout. The only thing it should do is change the file."
+        },
+        {
+          "type": "paragraph",
+          "text": "For example:"
+        },
+        {
+          "type": "code",
+          "text": "cat frost.txt\r\nI shall be telling this with a sigh\r\nSomewhere ages and ages hence:\r\nTwo roads diverged in a wood, and I --\r\nI took the one less traveled by,\r\nAnd that has made all the difference.\r\n./devowel_file.sh frost.txt\r\ncat frost.txt\r\n shll b tllng ths wth  sgh\r\nSmwhr gs nd gs hnc:\r\nTw rds dvrgd n  wd, nd  --\r\n tk th n lss trvld by,\r\nnd tht hs md ll th dffrnc."
+        },
+        {
+          "type": "paragraph",
+          "text": "devowel_file.sh"
+        },
+        {
+          "type": "paragraph",
+          "text": "Make sure your program does this."
+        },
+        {
+          "type": "paragraph",
+          "text": "Your program can assume it is given one argument which is the name of a file. Your program can assume the file exists. Your program should print nothing to stdout. You are permitted to create temporary files. You are permitted to use these and only these external programs: basename cat chmod cmp cp cut diff dirname echo expr false find grep head ls mkdir mktemp mv printf pwd rev rm rmdir sed seq sort stat strings tac tail tee test touch tr true uniq wc xargs You are permitted to use any built-in shell features including: case cd exit for if pwd read shift test while [ You may not use non-POSIX-compatible Shell. You are not permitted to use /bin/bash or /bin/sh . You can assume anything that works with the version of /bin/dash on CSE systems is POSIX compatible. You may not use Perl, C, Python, or any other language. No error checking is necessary."
+        },
+        {
+          "type": "paragraph",
+          "text": "When you think your program is working you can autotest to run some simple automated tests:"
+        },
+        {
+          "type": "code",
+          "text": "2041 autotest shell_devowel_file"
+        },
+        {
+          "type": "paragraph",
+          "text": "give"
+        },
+        {
+          "type": "code",
+          "text": "give cs2041 test06_shell_devowel_file devowel_file.sh"
+        }
+      ],
+      "notes": [],
+      "autotest": {
+        "paragraphs": [],
+        "code_blocks": []
+      },
+      "submission": {
+        "paragraphs": [],
+        "code_blocks": []
+      },
+      "links": []
+    },
+    {
+      "label": "weekly test question",
+      "title": "Create Copies of a File",
+      "content_blocks": [
+        {
+          "type": "paragraph",
+          "text": "n_copies.sh"
+        },
+        {
+          "type": "paragraph",
+          "text": "The first command line argument will be a filename file"
+        },
+        {
+          "type": "paragraph",
+          "text": "The second command-line argument will be a positive integer n"
+        },
+        {
+          "type": "paragraph",
+          "text": "Your script n_copies.sh should create n copies of file named file .1 , file .2 ... file . n"
+        },
+        {
+          "type": "paragraph",
+          "text": "For example:"
+        },
+        {
+          "type": "code",
+          "text": "echo hello COMP2041 and COMP9041 >message\r\ncat message\r\nhello COMP2041 and COMP9041\r\nls message*\r\nmessage\r\n./n_copies.sh message 3\r\nls message*\r\nmessage\r\nmessage.1\r\nmessage.2\r\nmessage.3\r\ncat message.2\r\nhello COMP2041 and COMP9041"
+        },
+        {
+          "type": "code",
+          "text": "seq 6 10 >five_numbers.txt\r\ncat five_numbers.txt\r\n6\r\n7\r\n8\r\n9\r\n10\r\nls five_numbers.txt*\r\nfive_numbers.txt\r\n./n_copies.sh five_numbers.txt 11\r\nls five_numbers.txt*\r\nfive_numbers.txt\r\nfive_numbers.txt.1\r\nfive_numbers.txt.10\r\nfive_numbers.txt.11\r\nfive_numbers.txt.2\r\nfive_numbers.txt.3\r\nfive_numbers.txt.4\r\nfive_numbers.txt.5\r\nfive_numbers.txt.6\r\nfive_numbers.txt.7\r\nfive_numbers.txt.8\r\nfive_numbers.txt.9\r\ncat five_numbers.txt.10\r\n6\r\n7\r\n8\r\n9\r\n10"
+        },
+        {
+          "type": "paragraph",
+          "text": "You can assume the filename supplied as the first argument to your script exists. You can assume the files to be created by your script do not exist. You can assume the integer supplied as a second argument to your script is greater than zero. You are not permitted to create temporary files. You are permitted to use these and only these external programs: basename cat chmod cmp cp cut diff dirname echo expr false find grep head ls mkdir mktemp mv printf pwd rev rm rmdir sed seq sort stat strings tac tail tee test touch tr true uniq wc xargs You are permitted to use any built-in shell features including: case cd exit for if pwd read shift test while [ You may not use non-POSIX-compatible Shell. You are not permitted to use /bin/bash or /bin/sh . You can assume anything that works with the version of /bin/dash on CSE systems is POSIX compatible. You may not use Perl , C , Python , or any other language. You may not use awk . No error checking is necessary."
+        },
+        {
+          "type": "paragraph",
+          "text": "When you think your program is working you can autotest to run some simple automated tests:"
+        },
+        {
+          "type": "code",
+          "text": "2041 autotest shell_n_copies"
+        },
+        {
+          "type": "paragraph",
+          "text": "give"
+        },
+        {
+          "type": "code",
+          "text": "give cs2041 test06_shell_n_copies n_copies.sh"
+        }
+      ],
+      "notes": [],
+      "autotest": {
+        "paragraphs": [],
+        "code_blocks": []
+      },
+      "submission": {
+        "paragraphs": [],
+        "code_blocks": []
+      },
+      "links": []
+    },
+    {
+      "label": "weekly test question",
+      "title": "Three vowel echo",
+      "content_blocks": [
+        {
+          "type": "paragraph",
+          "text": "three_vowel_echo.sh"
+        },
+        {
+          "type": "paragraph",
+          "text": "echo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Your program can assume vowels are there are 5 vowel {'a', 'e', 'i', 'o', 'u'} and their upper-case equivalents {'A', 'E', 'I', 'O', 'U'}"
+        },
+        {
+          "type": "code",
+          "text": "./three_vowel_echo.sh Pompeii Rome Aeolian Florence\r\nPompeii Aeolian\r\n./three_vowel_echo.sh an anxious bedouin beauty booed an ancient zoologist\r\nanxious bedouin beauty booed\r\n./three_vowel_echo.sh \r\n\r\n./three_vowel_echo.sh abstemiously adenocarcinomatous Hawaiian Eoanthropus\r\nabstemiously Hawaiian Eoanthropus\r\n./three_vowel_echo.sh aaa aata EEE EETEE TeeE aEo aeteituu\r\naaa EEE TeeE aEo"
+        },
+        {
+          "type": "paragraph",
+          "text": "Your shell script should produce only 1 line of output. Your shell script may produce an extra space at the end of the line. You are not permitted to create temporary files. You are permitted to use these and only these external programs: basename cat chmod cmp cp cut diff dirname echo expr false find grep head ls mkdir mktemp mv printf pwd rev rm rmdir sed seq sort stat strings tac tail tee test touch tr true uniq wc xargs You are permitted to use any built-in shell features including: case cd exit for if pwd read shift test while [ You may not use non-POSIX-compatible Shell. You are not permitted to use /bin/bash or /bin/sh . You can assume anything that works with the version of /bin/dash on CSE systems is POSIX compatible. You may not use Perl , C , Python , or any other language. You may not use awk . No error checking is necessary."
+        },
+        {
+          "type": "paragraph",
+          "text": "When you think your program is working you can autotest to run some simple automated tests:"
+        },
+        {
+          "type": "code",
+          "text": "2041 autotest shell_three_vowel_echo"
+        },
+        {
+          "type": "paragraph",
+          "text": "give"
+        },
+        {
+          "type": "code",
+          "text": "give cs2041 test06_shell_three_vowel_echo three_vowel_echo.sh"
+        }
+      ],
+      "notes": [],
+      "autotest": {
+        "paragraphs": [],
+        "code_blocks": []
+      },
+      "submission": {
+        "paragraphs": [],
+        "code_blocks": []
+      },
+      "links": []
+    }
+  ]
+}

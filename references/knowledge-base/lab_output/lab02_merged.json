@@ -1,0 +1,483 @@
+{
+  "lab_no": "02",
+  "url": "https://cgi.cse.unsw.edu.au/~cs2041/26T1/lab/02/questions",
+  "page_title": "COMP(2041|9044) 26T1 — Week 02 Laboratory Exercises",
+  "intro_sections": [
+    {
+      "heading": "Objectives",
+      "text": "Objectives Understanding use of UNIX pipelines Understanding use of UNIX filters (sed, sort, uniq, cut, tr)",
+      "links": [],
+      "code_blocks": []
+    },
+    {
+      "heading": "Preparation",
+      "text": "Preparation Before the lab you should re-read the relevant lecture slides and their accompanying examples.",
+      "links": [],
+      "code_blocks": []
+    },
+    {
+      "heading": "Getting Started",
+      "text": "Getting Started Set up for the lab by creating a new directory called lab02 and changing to this directory. mkdir lab02 cd lab02 There are some provided files for this lab which you can fetch with this command: 2041 fetch lab02 If you're not working at CSE, you can download the provided files as a zip file or a tar file .",
+      "links": [
+        {
+          "text": "zip file",
+          "url": "https://cgi.cse.unsw.edu.au/~cs2041/26T1/lab/02/zip"
+        },
+        {
+          "text": "tar file",
+          "url": "https://cgi.cse.unsw.edu.au/~cs2041/26T1/lab/02/tar"
+        }
+      ],
+      "code_blocks": [
+        "mkdir lab02\ncd lab02",
+        "2041 fetch lab02"
+      ]
+    }
+  ],
+  "exercises": [
+    {
+      "label": "Exercise",
+      "title": "Sorting UNSW Enrolments",
+      "intro_paragraphs": [
+        "There is a template file named sorting_enrolments_answers.txt which you must use to enter the answers for this exercise.",
+        "The autotest scripts depend on the format of sorting_enrolments_answers.txt so just add your answers don't otherwise change the file.",
+        "The file enrolments.psv contains a list of fake CSE enrolments.",
+        "The file enrolments.psv has 9 columns of data (columns are pipe separated):",
+        "Each row of data represents one enrolment."
+      ],
+      "intro_code_blocks": [],
+      "intro_lists": [
+        [
+          "UNSW Course Code",
+          "UNSW zID",
+          "Name",
+          "UNSW Program",
+          "UNSW Plan",
+          "WAM",
+          "UNSW Session",
+          "Birthdate",
+          "Sex"
+        ]
+      ],
+      "questions": [
+        {
+          "number": 1,
+          "prompt": "Write the sort and the head or tail commands needed to print the enrolment for the student with the lowest zID .",
+          "extra_paragraphs": [
+            "If the student with the lowest zID has multiple enrolments, print their enrolment in the course with the highest Course Code ."
+          ],
+          "hint_paragraphs": [
+            "It should print:",
+            "Note that this is one line.",
+            "The same is true for the other parts of this activity."
+          ],
+          "hint_code_blocks": [
+            "COMP9414|5200002|Tran Joel, Steven Brian Ben                       |3784/3|MECHAH|074.003|23T2|20010111|M"
+          ],
+          "check_paragraphs": [
+            "As always autotests are available"
+          ],
+          "check_code_blocks": [
+            "            2041 autotest sorting_enrolments Q1"
+          ],
+          "links": []
+        },
+        {
+          "number": 2,
+          "prompt": "Write the sort and the head or tail commands needed to print the first 100 enrolments ordered first by Course Code , then by zID .",
+          "extra_paragraphs": [],
+          "hint_paragraphs": [
+            "It should print:"
+          ],
+          "hint_code_blocks": [
+            "BINF3010|5201804|Wong, Nathan Yuxuan                               |3778/3|COMPAS|037.997|23T2|20000214|M\nBINF3010|5202234|Zhao, Harry                                       |8543|DPBSA1|073.089|23T2|19970905|M\nBINF3010|5204248|Tan Angus, Andre Oscar Md                         |3778/1|SENGAH|036.699|23T2|19981217|M\nBINF3010|5206611|Zhang, Ethan Jay Josh                             |8543|COMPA1|051.641|23T2|19991101|M\nBINF3010|5207861|Chen, Elizabeth Vanessa Michelle                  |8543|COMPA1|056.589|23T2|19841203|F\nBINF3010|5209846|Zhang, Nicholas                                   |8543|COMPA1|068.062|23T2|20020721|M\nBINF3010|5209994|Gupta, Jesse Jason                                |3768/4|SENGAH|051.538|23T2|20030205|M\nBINF3010|5212733|Liang, Yifan                                      |3707/4|COMPCS|047.897|23T2|20030116|M\nBINF3010|5217703|Wang, Michael Antonio                             |8543|COMPA1|051.995|23T2|20021001|M\nBINF3010|5218071|Tan, Angela Kelly Hannah                          |3784/3|COMPSS|060.166|23T2|19911004|F\nBINF3010|5218274|Chen, Darren Sam Luke                             |3707/2|DPBSA1|083.761|23T2|19980318|M\nBINF3010|5223005|Phan, Adrian Christopher                          |3784/3|BIOMDS|067.008|23T2|20031201|M\nBINF3010|5227026|Li, Ryan Haoran Felix                             |8543|COMPA1|095.598|23T2|20010504|M\nBINF3010|5232551|Qian, Alexander Ibrahim Louis                     |3707/1|ELECAH|072.755|23T2|19921123|M\nBINF3010|5237535|Nguyen, Michael                                   |3778/3|COMPCS|057.865|23T2|20030624|M\nBINF3010|5237727|Cao, Cheng Jordan Zac                             |3762/2|BIOMDS ELECAH|068.501|23T2|19980724|M\nBINF3010|5239503|Liu, Jessica                                      |8543|COMPA1|037.452|23T2|19941212|F\nBINF3010|5240138|Lim, Tristan Ivan Tsz Jacob                       |3785/2|COMPY1|039.284|23T2|19970720|M\nBINF3010|5244983|Li, Ryan Joel                                     |8543|COMPA1|080.377|23T2|19970304|M\nBINF3010|5245695|He, Chun                                          |7004/1|ENGGAH|067.036|23T2|20010207|M\nBINF3010|5245941|Xu, Haotian Arnav Leo                             |3768/1|SENGAH|041.633|23T2|20050405|M\nBINF3010|5246049|He, Peter                                         |7004/1|SENGAH|087.590|23T2|19980816|M\nBINF3010|5248646|Wang, Jessica Rachel                              |8543|COMPA1|045.217|23T2|20031118|F\nBINF3010|5249320|Du, Amy Jing Yu                                   |3133/4|BIOMDS MECHAH|073.698|23T2|19990312|F\nBINF3010|5249555|Wang, Eric Yang                                   |8543|COMPA1|067.363|23T2|19960220|M\nBINF3010|5251112|Huang, Luke Isaac Ruiqi                           |3778/1|SENGAH|082.871|23T2|19981025|M\nBINF3010|5251256|Smith, Liam Bohan                                 |3785/1|ELECAH|060.653|23T2|19970916|M\nBINF3010|5252013|Zhao, Isaac                                       |3784/1|COMPAS|066.212|23T2|19980930|M\nBINF3010|5253443|Song Yuhan, Alice Winnie                          |3785/2|DPENX1|032.704|23T2|20030911|F\nBINF3010|5257134|Chan, Hannah                                      |3778/2|SENGAH|073.933|23T2|20030202|F\nBINF3010|5258182|Fan, Tim Eric                                     |7004/1|COMPAS COMPSS|073.095|23T2|20010925|M\nBINF3010|5260129|Huynh, Karen                                      |3785/3|ELECAH|073.287|23T2|20000512|F\nBINF3010|5263438|Kim Michael, Liam Timothy                         |3764/1|COMPCH|046.753|23T2|20030213|M\nBINF3010|5263620|Yang, Ryan Ze                                     |3707/1|COMPA1|070.901|23T2|19981021|M\nBINF3010|5264102|Chen, Alex Chris Gabriel                          |8543|COMPA1|080.160|23T2|19990605|M\nBINF3010|5266002|Ma, Adrian                                        |1650|COMPY1|019.855|23T2|20010522|M\nBINF3010|5267625|Chan, Mitchell Peter Harrison Gordon              |8543|MTRNAH|065.261|23T2|19960526|M\nBINF3010|5268496|Chen, Yi Sebastian                                |3789/4|COMPAS|052.445|23T2|19920629|M\nBINF3010|5272109|Lin Aditi, Catherine Vivian                       |3707/4|COMPSS|096.447|23T2|20040903|F\nBINF3010|5272404|Nguyen, Dylan Benjamin Tristan                    |1650|COMPA1|032.872|23T2|20000416|M\nBINF3010|5276965|Park, Tony Anish                                  |3674/2|UNDL-U|050.429|23T2|20010310|M\nBINF3010|5289021|Wang, Ryan Jonathan Gordon                        |8543|COMPA1|073.166|23T2|19990202|M\nBINF3010|5290699|Hu, Luke Ivan Danny                               |3785/1|COMPA1|046.852|23T2|19991029|M\nBINF3010|5295319|Wang, Michael Jia                                 |8543|COMPA1|058.703|23T2|19921120|M\nBINF3010|5297819|Nguyen, Ryan Josh Ayush                           |3707/1|COMPA1|052.193|23T2|20001111|M\nBINF9010|5202701|Yin, Xin Jessica                                  |3783/2|CEICAH|061.013|23T2|19861112|F\nBINF9010|5228372|Wang, William Felix                               |8543|COMPA1|051.552|23T2|20000307|M\nBINF9010|5229328|Xu, Alexander Ricky Nathaniel Zac Matthew         |3778/3|COMPCS|043.644|23T2|20010904|M\nBINF9010|5232791|Ding, Derek Chun Will                             |3783/1|ACTLE1 COMPA1|080.907|23T2|19991228|M\nBINF9010|5266930|Le, Andrew Jimmy Kenneth Mohammed                 |3778/3|COMPAS|083.830|23T2|19950921|M\nBIOM1010|5205212|Zhang Yuxuan, Jason Sean Bowen Zhou               |8543|COMPA1|089.914|23T2|20040220|M\nBIOM1010|5206606|Wang, Jessica Katherine Emily Sarah               |3707/1|COMPA1|049.001|23T2|20000309|F\nBIOM1010|5206630|Xiong Sophie, Jessica Winnie Olivia               |3738/1|COMPD1 FINSA1|037.897|23T2|19901113|F\nBIOM1010|5206723|Patel, Jiahao Angus                               |3674/1|COMPQS|028.951|23T2|19960526|M\nBIOM1010|5207058|Lu, James Nathaniel Jun                           |3784/2|COMPCS|036.779|23T2|20020209|M\nBIOM1010|5207762|Yu, Xin Sophie Ashley                             |1650|MECHAH|057.132|23T2|19990127|F\nBIOM1010|5207793|Huang, Aiden Laurence                             |8543|DPHUB1|065.937|23T2|20020526|M\nBIOM1010|5210902|Hua, Jimmy Danny                                  |3736/1|CRIMA1|069.992|23T2|20030329|M\nBIOM1010|5213983|Yin, Xinyi Jiayu Amanda                           |1650|AEROAH|069.873|23T2|20040806|F\nBIOM1010|5217184|Luo, Tiffany Grace                                |3970/1|COMPA1 MTRNAH|078.933|23T2|19991211|F\nBIOM1010|5219063|Huynh, Jordan Cheng                               |3673/4|ACTLD1 COMPA1|067.054|23T2|20040201|M\nBIOM1010|5221130|Xu Xin, Megan Yan                                 |3778/2|COMPA1|047.261|23T2|19900504|F\nBIOM1010|5222251|Fu, Zhou                                          |3767/3|COMPS1 TELEAH|079.677|23T2|19971002|M\nBIOM1010|5222829|Khan, Tim Stephen                                 |8959|MTRNES|039.141|23T2|20011022|M\nBIOM1010|5223425|Feng, Lachlan Jia                                 |3706/1|BINFAH|029.145|23T2|20000828|M\nBIOM1010|5225537|Wu, Han Christopher                               |3707/1|COMPA1|046.467|23T2|19891023|M\nBIOM1010|5226090|Fu Jenny, Natalie Tiffany Ashley                  |3784/1|COMPZ1|059.421|23T2|20000725|F\nBIOM1010|5227987|Luo, Brandon Jack                                 |3707/2|COMPAS COMPCS|074.718|23T2|20031109|M\nBIOM1010|5234944|Xu, Tom                                           |3785/1|DPBSA1|071.419|23T2|19990921|M\nBIOM1010|5235284|Luo, Zihao Jian Isaac                             |3707/4|COMPCS|047.997|23T2|20050721|M\nBIOM1010|5240207|Tang, Winnie Xinyue                               |3768/4|UNDL-U|085.521|23T2|19991214|F\nBIOM1010|5244252|Liu Katherine, Jessica                            |8543|COMPA1|088.472|23T2|20050812|F\nBIOM1010|5244507|Kim, Han Ryan                                     |3673/2|COMPES|066.370|23T2|19960115|M\nBIOM1010|5244938|Zhang, Jessica Vanessa                            |8543|COMPA1|093.235|23T2|20000315|F\nBIOM1010|5245298|Lu, Andrew Jiawei                                 |3784/1|MTRNAH|042.124|23T2|19990809|M\nBIOM1010|5246919|Yu, Andy Gabriel                                  |3784/1|MECHAH|057.784|23T2|20040801|M\nBIOM1010|5247276|Ma, Dylan                                         |3778/1|COMPA1|028.814|23T2|20020906|M\nBIOM1010|5248871|Zou William, Jiayi Andrew Hugo Yang               |3783/1|COMPD1|066.684|23T2|20010720|M\nBIOM1010|5249915|Liu, Andy Jordan                                  |8543|COMPA1|052.561|23T2|19980927|M\nBIOM1010|5250595|Yang Vivian, Angela                               |3778/2|COMPA1|058.900|23T2|20001105|F\nBIOM1010|5251436|Shen, Mohammad Laurence                           |7003/1|SENGAH|068.050|23T2|20000710|M\nBIOM1010|5252076|Ma, Benjamin George                               |7001/1|COMPD1|019.147|23T2|20001203|M\nBIOM1010|5252677|Wang, Andrew Max                                  |8543|COMPA1|031.697|23T2|19960927|M\nBIOM1010|5255168|Nguyen Robert, Luke Henry                         |3961/1|COMPAS INFSKS|062.165|23T2|19871029|M\nBIOM1010|5255953|Yu, Hannah                                        |3778/2|UNDL-U|037.419|23T2|20040128|F\nBIOM1010|5255975|Duan, Ray Jian Jonathan                           |3962/1|COMMJ1 COMPD1|046.259|23T2|19940727|M\nBIOM1010|5258536|Ng, Zihao Austin Ayush                            |3674/2|ELECAH|055.967|23T2|19950803|M\nBIOM1010|5259131|Zhang Charlotte Elizabeth, Anna Alicia Lara Christ|8543|COMPA1|066.881|23T2|20020612|F\nBIOM1010|5264771|Lim, David                                        |3674/1|DPENX1|066.111|23T2|19991026|M\nBIOM1010|5267838|Fu, Cindy Hannah                                  |3061/1|DDESB1 MDIAR2|030.681|23T2|20020326|F\nBIOM1010|5269780|Zhang, Angela Yan                                 |8543|COMPA1|084.410|23T2|20010429|F\nBIOM1010|5270784|Liao Jerry, Jonathan Liam                         |8338|COMPA1 MATHA1|082.284|23T2|20040625|M\nBIOM1010|5275340|Wang Thomas, Matthew                              |3707/1|COMPA1|065.881|23T2|19870726|M\nBIOM1010|5275746|Gong, Timothy Hugo                                |3768/3|CEICAH|032.200|23T2|19860410|M\nBIOM1010|5279455|Yang, Jack Joel                                   |3784/2|COMPER|090.653|23T2|20000407|M\nBIOM1010|5279645|Wang, William                                     |8543|COMPA1|079.799|23T2|19800122|M\nBIOM1010|5280127|Tang Andy, Brian Dylan                            |3707/4|COMPSS|043.828|23T2|20040213|M\nBIOM1010|5282285|Tao, Steven                                       |8750/1|MATHNS|057.091|23T2|19910919|M\nBIOM1010|5282675|Lai, Yu Emma Lara                                 |3782/1|BINFAH|099.858|23T2|20040612|F\nBIOM1010|5283612|Khan Jessica, Lucy Xinyue Michelle                |3784/3|DPENX1|080.405|23T2|20040921|F"
+          ],
+          "check_paragraphs": [
+            "As always autotests are available"
+          ],
+          "check_code_blocks": [
+            "            2041 autotest sorting_enrolments Q2"
+          ],
+          "links": []
+        },
+        {
+          "number": 3,
+          "prompt": "Write the sort and the head or tail commands needed to print the first 50 enrolments ordered first by Birthdate , then by Course Code , then by Zid .",
+          "extra_paragraphs": [],
+          "hint_paragraphs": [
+            "It should print:"
+          ],
+          "hint_code_blocks": [
+            "COMP9313|5282134|Li, Christopher Oliver Joel                       |3778/2|COMPCS|061.069|23T2|19570918|M\nCOMP9417|5289452|Nguyen, Joshua Terry                              |3778/2|COMPCS|041.749|23T2|19570918|M\nDPGE1002|5289452|Nguyen, Joshua Terry                              |3778/2|COMPCS|041.749|23T2|19570918|M\nCOMP1511|5236538|Trinh, Yan Natalie                                |3707/1|COMPBH|021.732|23T2|19590220|F\nCOMP4952|5236538|Trinh, Yan Natalie                                |3707/1|COMPBH|021.732|23T2|19590220|F\nCOMP9417|5284939|Mei, Frank Austin                                 |3764/2|COMPA1 MTRNAH|067.113|23T2|19590220|M\nCOMP9900|5250145|Zhao, Victor Gordon                               |3778/1|COMPCS|083.041|23T2|19590220|M\nDPBS1120|5284939|Mei, Frank Austin                                 |3764/2|COMPA1 MTRNAH|067.113|23T2|19590220|M\nCOMP3153|5276435|Liu, Grace Joyce                                  |8543|COMPA1|061.354|23T2|19620722|F\nCOMP6452|5276435|Liu, Grace Joyce                                  |8543|COMPA1|061.354|23T2|19620722|F\nCOMP9312|5276435|Liu, Grace Joyce                                  |8543|COMPA1|061.354|23T2|19620722|F\nCOMP9444|5286618|Wang, Victoria Aditi Jing Jennifer Alicia Jennifer|3707/1|ELECAH|045.011|23T2|19620722|F\nDPGE1002|5240982|Xiao Tiffany, Emily                               |3673/3|COMPI1 ELECAH|043.846|23T2|19620722|F\nCOMP1531|5287908|Mu, Dhruv James Patrick                           |3782/4|ACCTA1 FINSA1|061.189|23T2|19630823|M\nCOMP4601|5215280|Huang, Richard Hugo Isaac                         |3778/3|COMPA1|087.705|23T2|19630823|M\nCOMP9024|5287908|Mu, Dhruv James Patrick                           |3782/4|ACCTA1 FINSA1|061.189|23T2|19630823|M\nCOMP9417|5215280|Huang, Richard Hugo Isaac                         |3778/3|COMPA1|087.705|23T2|19630823|M\nCOMP9444|5263308|Lee, Chris Louis                                  |8543|COMPA1|056.191|23T2|19630823|M\nDPGE1001|5243700|Wei, Adrian                                       |3791/3|ELECAH|093.170|23T2|19630823|M\nDPGE1002|5215280|Huang, Richard Hugo Isaac                         |3778/3|COMPA1|087.705|23T2|19630823|M\nDPST1031|5209031|Nguyen Lisa, Sarah Christine Amy Jiayu Emma       |8543|COMPA1|074.454|23T2|19630823|F\nCOMP1531|5217454|Lee, Xin Victoria                                 |3778/2|COMPA1|084.053|23T2|19661218|F\nCOMP9021|5217454|Lee, Xin Victoria                                 |3778/2|COMPA1|084.053|23T2|19661218|F\nCOMP9024|5263205|Li Gregory, Oliver                                |3785/1|COMPCS|070.453|23T2|19661218|M\nCOMP9312|5263205|Li Gregory, Oliver                                |3785/1|COMPCS|070.453|23T2|19661218|M\nCOMP1511|5278327|Kim, Hao Ray                                      |3778/1|SENGAH|074.695|23T2|19681109|M\nCOMP1521|5249383|Li, Luke                                          |3778/2|COMPA1|052.228|23T2|19681109|M\nCOMP1911|5222418|Yang, Matthew Nicholas                            |8543|COMPCS|070.222|23T2|19681109|M\nCOMP2041|5278327|Kim, Hao Ray                                      |3778/1|SENGAH|074.695|23T2|19681109|M\nCOMP2521|5249383|Li, Luke                                          |3778/2|COMPA1|052.228|23T2|19681109|M\nCOMP3121|5280978|Zhang, Emily Charlotte Catherine Chloe Christine  |8543|COMPA1|056.223|23T2|19681109|F\nCOMP3900|5280978|Zhang, Emily Charlotte Catherine Chloe Christine  |8543|COMPA1|056.223|23T2|19681109|F\nCOMP6452|5249383|Li, Luke                                          |3778/2|COMPA1|052.228|23T2|19681109|M\nCOMP9331|5280978|Zhang, Emily Charlotte Catherine Chloe Christine  |8543|COMPA1|056.223|23T2|19681109|F\nCOMP9417|5278327|Kim, Hao Ray                                      |3778/1|SENGAH|074.695|23T2|19681109|M\nDPBS1120|5280433|Chen Rui, Aryan                                   |3778/3|COMPAS|082.709|23T2|19681109|M\nDPST1013|5280978|Zhang, Emily Charlotte Catherine Chloe Christine  |8543|COMPA1|056.223|23T2|19681109|F\nCOMP1511|5265057|Wan, Chun Jin Samuel                              |3767/3|DPHUD1|038.415|23T2|19690307|M\nCOMP1521|5201661|Yang, Joshua Tsz David                            |3778/1|SENGAH|066.655|23T2|19690307|M\nCOMP1521|5289463|Zhao, Andrew Karan Arjun                          |7004/1|SENGAH|064.292|23T2|19690307|M\nCOMP1531|5216127|Geng, Yan Ken                                     |3956/1|BIOMBS|080.077|23T2|19690307|M\nCOMP2041|5201661|Yang, Joshua Tsz David                            |3778/1|SENGAH|066.655|23T2|19690307|M\nCOMP3141|5265057|Wan, Chun Jin Samuel                              |3767/3|DPHUD1|038.415|23T2|19690307|M\nCOMP3141|5289463|Zhao, Andrew Karan Arjun                          |7004/1|SENGAH|064.292|23T2|19690307|M\nCOMP9020|5289463|Zhao, Andrew Karan Arjun                          |7004/1|SENGAH|064.292|23T2|19690307|M\nCOMP9414|5216127|Geng, Yan Ken                                     |3956/1|BIOMBS|080.077|23T2|19690307|M\nCOMP1521|5219286|Guo, Joyce Karen                                  |8338|COMPAS|067.357|23T2|19691224|F\nCOMP1911|5250938|Lin Zheng, Oliver                                 |3959/3|COMPAS COMPSS|060.545|23T2|19691224|M\nCOMP3511|5250938|Lin Zheng, Oliver                                 |3959/3|COMPAS COMPSS|060.545|23T2|19691224|M\nCOMP1511|5268502|Hoang, Stephen Tao Minh Samuel                    |1650|ECONI1 MTRNAH|057.305|23T2|19700119|M"
+          ],
+          "check_paragraphs": [
+            "As always autotests are available"
+          ],
+          "check_code_blocks": [
+            "            2041 autotest sorting_enrolments Q3"
+          ],
+          "links": []
+        },
+        {
+          "number": 4,
+          "prompt": "Write the sort and the head or tail commands needed to print the first 25 enrolments ordered first by the decimal part of the WAM in descending order, then by zID in ascending order, then by Course Code also in ascending order.",
+          "extra_paragraphs": [],
+          "hint_paragraphs": [
+            "It should print:"
+          ],
+          "hint_code_blocks": [
+            "COMP1511|5212432|Wang, Chloe Amanda Yu                             |8543|COMPA1|062.999|23T2|19960408|F\nCOMP9313|5215738|Nguyen, Max                                       |3707/1|COMPA1|081.999|23T2|19920915|M\nCOMP9417|5215738|Nguyen, Max                                       |3707/1|COMPA1|081.999|23T2|19920915|M\nCOMP3141|5219983|Zhu, Rachel Grace                                 |8543|DPBSA1|078.999|23T2|19980225|F\nDPGE1002|5219983|Zhu, Rachel Grace                                 |8543|DPBSA1|078.999|23T2|19980225|F\nDPBS1150|5225868|Wong, Yu Xinyue                                   |3707/1|SENGAH|062.999|23T2|19940626|F\nCOMP9444|5226001|Sharma, Aryan Zachary Francis                     |3768/3|ELECAH|078.999|23T2|19871129|M\nDPGE1003|5226001|Sharma, Aryan Zachary Francis                     |3768/3|ELECAH|078.999|23T2|19871129|M\nCOMP2041|5235855|Jiang, Jesse Pranav                               |3768/4|COMPAH|058.999|23T2|19990220|M\nCOMP1511|5250497|Liu, Emily Karen                                  |8543|COMPA1|060.999|23T2|20010423|F\nCOMP1531|5250497|Liu, Emily Karen                                  |8543|COMPA1|060.999|23T2|20010423|F\nCOMP9444|5250497|Liu, Emily Karen                                  |8543|COMPA1|060.999|23T2|20010423|F\nDPBS1140|5250497|Liu, Emily Karen                                  |8543|COMPA1|060.999|23T2|20010423|F\nCOMP9444|5251974|Lee, Nicole Rachel                                |7004/1|COMPAS|048.999|23T2|19970104|F\nCOMP3121|5263804|Huang, Alice                                      |3778/3|COMPAS|034.999|23T2|19971203|F\nDPGE1003|5263804|Huang, Alice                                      |3778/3|COMPAS|034.999|23T2|19971203|F\nCOMP1521|5281281|Wang, Anna Sophia                                 |8543|COMPA1|010.999|23T2|20050530|F\nCOMP3900|5281281|Wang, Anna Sophia                                 |8543|COMPA1|010.999|23T2|20050530|F\nDPGE1002|5281281|Wang, Anna Sophia                                 |8543|COMPA1|010.999|23T2|20050530|F\nCOMP1531|5215378|Wu, Samuel Zihao                                  |3778/2|COMPCS|096.998|23T2|19940626|M\nCOMP6452|5251820|Guo, Zheng                                        |3781/1|AEROAH|084.998|23T2|20031228|M\nCOMP2521|5252367|Zhao, Edward                                      |3707/2|MTRNAH|035.998|23T2|20050629|M\nCOMP1511|5258610|Li, Daniel Yuhao                                  |8543|COMPA1|071.998|23T2|19901016|M\nCOMP1521|5262296|Qi, Zhou Yan Callum Yang                          |3784/2|MATHP1|064.998|23T2|20000629|M\nCOMP2511|5262296|Qi, Zhou Yan Callum Yang                          |3784/2|MATHP1|064.998|23T2|20000629|M"
+          ],
+          "check_paragraphs": [
+            "As always autotests are available"
+          ],
+          "check_code_blocks": [
+            "            2041 autotest sorting_enrolments Q4"
+          ],
+          "links": []
+        }
+      ],
+      "footer_paragraphs": [
+        "When you are finished working on this exercise, you must submit your work by running give :",
+        "before Monday 02 March 2026 12:00 (midday) (2026-03-02 12:00:00) to obtain the marks for this lab exercise."
+      ],
+      "footer_code_blocks": [
+        "2041 autotest sorting_enrolments",
+        "give cs2041 lab02_sorting_enrolments sorting_enrolments_answers.txt"
+      ],
+      "links": [],
+      "file_matches": [
+        "sorting_enrolments_answers.txt"
+      ]
+    },
+    {
+      "label": "Exercise",
+      "title": "Counting UNSW classes",
+      "intro_paragraphs": [
+        "There is a template file named counting_classes_answers.txt which you must use to enter the answers for this exercise.",
+        "The autotest scripts depend on the format of counting_classes_answers.txt so just add your answers don't otherwise change the file.",
+        "The file classes.tsv contains a list of CSE classes.",
+        "The file classes.tsv has 7 columns of data (columns are tab separated):",
+        "Each row of data represents one class."
+      ],
+      "intro_code_blocks": [],
+      "intro_lists": [
+        [
+          "UNSW course code",
+          "UNSW class id",
+          "CSE class type",
+          "Number of enrolled students",
+          "Class enrolment cap",
+          "Class time",
+          "Class Location"
+        ]
+      ],
+      "questions": [
+        {
+          "number": 1,
+          "prompt": "Write a shell pipeline which will print how many classes there are.",
+          "extra_paragraphs": [],
+          "hint_paragraphs": [
+            "It should print:"
+          ],
+          "hint_code_blocks": [
+            "1275"
+          ],
+          "check_paragraphs": [
+            "As always autotests are available"
+          ],
+          "check_code_blocks": [
+            "            2041 autotest counting_classes Q1"
+          ],
+          "links": []
+        },
+        {
+          "number": 2,
+          "prompt": "Write a shell pipeline which will print how many different courses have classes.",
+          "extra_paragraphs": [],
+          "hint_paragraphs": [
+            "It should print:"
+          ],
+          "hint_code_blocks": [
+            "75"
+          ],
+          "check_paragraphs": [
+            "As always autotests are available"
+          ],
+          "check_code_blocks": [
+            "            2041 autotest counting_classes Q2"
+          ],
+          "links": []
+        },
+        {
+          "number": 3,
+          "prompt": "Write a shell pipeline which will print the course with the most classes, and how many classes are in this course.",
+          "extra_paragraphs": [
+            "If there are multiple courses with the same number of classes, print the course that is alphabeticaly first."
+          ],
+          "hint_paragraphs": [
+            "It should print:"
+          ],
+          "hint_code_blocks": [
+            "     84 COMP1511"
+          ],
+          "check_paragraphs": [
+            "As always autotests are available"
+          ],
+          "check_code_blocks": [
+            "            2041 autotest counting_classes Q3"
+          ],
+          "links": []
+        },
+        {
+          "number": 4,
+          "prompt": "Write a shell pipeline which will print the two rooms most frequently used by non-LAB CSE classes and how often they are used.",
+          "extra_paragraphs": [
+            "If there are multiple rooms that are used by the same number of non-LAB CSE classes, print order them alphabeticaly."
+          ],
+          "hint_paragraphs": [
+            "It should print:"
+          ],
+          "hint_code_blocks": [
+            "     92 Online\n     28 Quad G054"
+          ],
+          "check_paragraphs": [
+            "As always autotests are available"
+          ],
+          "check_code_blocks": [
+            "            2041 autotest counting_classes Q4"
+          ],
+          "links": []
+        },
+        {
+          "number": 5,
+          "prompt": "Write a shell pipeline which will print the most common day in the week and hour in the day for classes to start and how many classes start at that time.",
+          "extra_paragraphs": [
+            "If there are multiple days and times that are used by the same number of classes, print the day and time that is alphabeticaly first."
+          ],
+          "hint_paragraphs": [
+            "It should print:"
+          ],
+          "hint_code_blocks": [
+            "     48 Tue 14"
+          ],
+          "check_paragraphs": [
+            "As always autotests are available"
+          ],
+          "check_code_blocks": [
+            "            2041 autotest counting_classes Q5"
+          ],
+          "links": []
+        },
+        {
+          "number": 6,
+          "prompt": "Write a shell pipeline which will print the latest time a class will finish.",
+          "extra_paragraphs": [],
+          "hint_paragraphs": [
+            "It should print:"
+          ],
+          "hint_code_blocks": [
+            "21"
+          ],
+          "check_paragraphs": [
+            "As always autotests are available"
+          ],
+          "check_code_blocks": [
+            "            2041 autotest counting_classes Q6"
+          ],
+          "links": []
+        },
+        {
+          "number": 7,
+          "prompt": "Write a shell pipeline which will print a list of the course codes of COMP courses that run 2 or more classes of the same type starting at the same time on the same day. (e.g. three tuts starting Monday at 10:00).",
+          "extra_paragraphs": [],
+          "hint_paragraphs": [
+            "It should print:"
+          ],
+          "hint_code_blocks": [
+            "COMP1511\nCOMP1521\nCOMP1531\nCOMP1911\nCOMP2041\nCOMP2511\nCOMP2521\nCOMP3121\nCOMP3331\nCOMP3511\nCOMP3900\nCOMP6445\nCOMP6452\nCOMP6733\nCOMP6845\nCOMP9044\nCOMP9101\nCOMP9311\nCOMP9312\nCOMP9313\nCOMP9331\nCOMP9414\nCOMP9417\nCOMP9444\nCOMP9900"
+          ],
+          "check_paragraphs": [
+            "As always autotests are available"
+          ],
+          "check_code_blocks": [
+            "            2041 autotest counting_classes Q7"
+          ],
+          "links": []
+        }
+      ],
+      "footer_paragraphs": [
+        "When you are finished working on this exercise, you must submit your work by running give :",
+        "before Monday 02 March 2026 12:00 (midday) (2026-03-02 12:00:00) to obtain the marks for this lab exercise."
+      ],
+      "footer_code_blocks": [
+        "2041 autotest counting_classes",
+        "give cs2041 lab02_counting_classes counting_classes_answers.txt"
+      ],
+      "links": [],
+      "file_matches": [
+        "counting_classes_answers.txt"
+      ]
+    },
+    {
+      "label": "Exercise",
+      "title": "Editing C Source Files",
+      "intro_paragraphs": [
+        "There is a template file named editing_programs_answers.txt which you must use to enter the answers for this exercise.",
+        "The autotest scripts depend on the format of editing_programs_answers.txt so just add your answers don't otherwise change the file.",
+        "The file program.c contains a C library implementing some simple sorting algorithms."
+      ],
+      "intro_code_blocks": [],
+      "intro_lists": [],
+      "questions": [
+        {
+          "number": 1,
+          "prompt": "Write a sed command to change all the sort related functions from V1 to V2 . This includes all relevant comments.",
+          "extra_paragraphs": [],
+          "hint_paragraphs": [
+            "It should print:"
+          ],
+          "hint_code_blocks": [
+            "#include \"stdlib.h\"\n#include <stddef.h>\n#include \"bits/types.h\"\n\ntypedef int (*compar)(const void *, const void *);\n\n#define SWAP(a, b, size)             \\\n\tdo {                             \\\n\t\tsize_t __size = (size);      \\\n\t\tchar *__a = (a), *__b = (b); \\\n\t\tdo {                         \\\n\t\t\tchar __tmp = *__a;       \\\n\t\t\t*__a++ = *__b;           \\\n\t\t\t*__b++ = __tmp;          \\\n\t\t} while (--__size > 0);      \\\n\t} while (0)\n\n/**\n * bubble_sort_V2\n * dumb bubble sort using the stdlib::qsort interface\n * @param base       pointer to start of array to be sorted\n * @param nmemb      number of elements in array to be sorted\n * @param size       number of bytes of each element\n * @param comparator function to compare two element\n */\nvoid bubble_sort_V2 (void *base, size_t nmemb, size_t size, compar comparator)\n{\n\t// TODO: use better variable names.\n\tchar *base_ptr = (char *)base;\n\tfor (size_t loop_V1 = 0; loop_V1 < nmemb; loop_V1++) {\n\t\tfor (size_t loop_V2 = 1; loop_V2 < nmemb; loop_V2++) {\n\t\t\tif ((*comparator)((void *)(&base_ptr[loop_V2*size]), (void *)(&base_ptr[(loop_V2-1)*size])) < 0) {\n\t\t\t\tSWAP((void *)(&base_ptr[loop_V2*size]), (void *)(&base_ptr[(loop_V2-1)*size]), size);\n\t\t\t}\n\t\t}\n\t}\n}\n\nextern int strcmp(const char *s1, const char *s2);\n\nint cmpstringp(const void *p1, const void *p2)\n{\n\treturn strcmp(*(char *const *)p1, *(char *const *)p2);\n}\n\nint cmpintp(const void *p1, const void *p2)\n{\n\treturn (*(int *)p1 > *(int *)p2) - (*(int *)p1 < *(int *)p2);\n}\n\nextern int printf(const char *format, ...);\n\nint main(void) {\n\t// Test that our bubble sort is working properly\n\tint array[10] = {6, 8, 3, 2, 7, 0, 100, -66, 63, 44}; // TODO: make this array bigger\n\n\tbubble_sort_V2(array, 10, sizeof(int), cmpintp);\n\n\tfor (size_t i = 0; i < 10; i++) printf(\"%d, \", array[i]);\n\tprintf(\"\\n\");\n\n\treturn 0;\n}\n\n/**\n * selection_sort_V2\n * selection sort using the stdlib::qsort interface\n * @param base       pointer to start of array to be sorted\n * @param nmemb      number of elements in array to be sorted\n * @param size       number of bytes of each element\n * @param comparator function to compare two element\n */\nvoid selection_sort_V2 (void *base, size_t nmemb, size_t size, compar comparator)\n{\n\t// FIXME: implement this function.\n\t(void) base, (void) nmemb, (void) size, (void) comparator;\n\treturn;\n}\n\n/**\n * insertion_sort_V2\n * insertion sort using the stdlib::qsort interface\n * @param base       pointer to start of array to be sorted\n * @param nmemb      number of elements in array to be sorted\n * @param size       number of bytes of each element\n * @param comparator function to compare two element\n */\nvoid insertion_sort_V2 (void *base, size_t nmemb, size_t size, compar comparator)\n{\n\tchar *base_ptr = (char *)base;\n\tfor (size_t i = 1; i < nmemb; i++) {\n\t\twhile ((*comparator)((void *)(&base_ptr[i*size]), (void *)(&base_ptr[(i-1)*size])) < 0) {\n\t\t\tSWAP((void *)(&base_ptr[i*size]), (void *)(&base_ptr[(i-1)*size]), size);\n\t\t}\n\t}\n}"
+          ],
+          "check_paragraphs": [
+            "As always autotests are available"
+          ],
+          "check_code_blocks": [
+            "            2041 autotest editing_programs Q1"
+          ],
+          "links": []
+        },
+        {
+          "number": 2,
+          "prompt": "Write a sed command to remove all single line comments starting with TODO or FIXME .",
+          "extra_paragraphs": [],
+          "hint_paragraphs": [
+            "It should print:"
+          ],
+          "hint_code_blocks": [
+            "#include \"stdlib.h\"\n#include <stddef.h>\n#include \"bits/types.h\"\n\ntypedef int (*compar)(const void *, const void *);\n\n#define SWAP(a, b, size)             \\\n\tdo {                             \\\n\t\tsize_t __size = (size);      \\\n\t\tchar *__a = (a), *__b = (b); \\\n\t\tdo {                         \\\n\t\t\tchar __tmp = *__a;       \\\n\t\t\t*__a++ = *__b;           \\\n\t\t\t*__b++ = __tmp;          \\\n\t\t} while (--__size > 0);      \\\n\t} while (0)\n\n/**\n * bubble_sort_V1\n * dumb bubble sort using the stdlib::qsort interface\n * @param base       pointer to start of array to be sorted\n * @param nmemb      number of elements in array to be sorted\n * @param size       number of bytes of each element\n * @param comparator function to compare two element\n */\nvoid bubble_sort_V1 (void *base, size_t nmemb, size_t size, compar comparator)\n{\n\t\n\tchar *base_ptr = (char *)base;\n\tfor (size_t loop_V1 = 0; loop_V1 < nmemb; loop_V1++) {\n\t\tfor (size_t loop_V2 = 1; loop_V2 < nmemb; loop_V2++) {\n\t\t\tif ((*comparator)((void *)(&base_ptr[loop_V2*size]), (void *)(&base_ptr[(loop_V2-1)*size])) < 0) {\n\t\t\t\tSWAP((void *)(&base_ptr[loop_V2*size]), (void *)(&base_ptr[(loop_V2-1)*size]), size);\n\t\t\t}\n\t\t}\n\t}\n}\n\nextern int strcmp(const char *s1, const char *s2);\n\nint cmpstringp(const void *p1, const void *p2)\n{\n\treturn strcmp(*(char *const *)p1, *(char *const *)p2);\n}\n\nint cmpintp(const void *p1, const void *p2)\n{\n\treturn (*(int *)p1 > *(int *)p2) - (*(int *)p1 < *(int *)p2);\n}\n\nextern int printf(const char *format, ...);\n\nint main(void) {\n\t// Test that our bubble sort is working properly\n\tint array[10] = {6, 8, 3, 2, 7, 0, 100, -66, 63, 44}; \n\n\tbubble_sort_V1(array, 10, sizeof(int), cmpintp);\n\n\tfor (size_t i = 0; i < 10; i++) printf(\"%d, \", array[i]);\n\tprintf(\"\\n\");\n\n\treturn 0;\n}\n\n/**\n * selection_sort_V1\n * selection sort using the stdlib::qsort interface\n * @param base       pointer to start of array to be sorted\n * @param nmemb      number of elements in array to be sorted\n * @param size       number of bytes of each element\n * @param comparator function to compare two element\n */\nvoid selection_sort_V1 (void *base, size_t nmemb, size_t size, compar comparator)\n{\n\t\n\t(void) base, (void) nmemb, (void) size, (void) comparator;\n\treturn;\n}\n\n/**\n * insertion_sort_V1\n * insertion sort using the stdlib::qsort interface\n * @param base       pointer to start of array to be sorted\n * @param nmemb      number of elements in array to be sorted\n * @param size       number of bytes of each element\n * @param comparator function to compare two element\n */\nvoid insertion_sort_V1 (void *base, size_t nmemb, size_t size, compar comparator)\n{\n\tchar *base_ptr = (char *)base;\n\tfor (size_t i = 1; i < nmemb; i++) {\n\t\twhile ((*comparator)((void *)(&base_ptr[i*size]), (void *)(&base_ptr[(i-1)*size])) < 0) {\n\t\t\tSWAP((void *)(&base_ptr[i*size]), (void *)(&base_ptr[(i-1)*size]), size);\n\t\t}\n\t}\n}"
+          ],
+          "check_paragraphs": [
+            "As always autotests are available"
+          ],
+          "check_code_blocks": [
+            "            2041 autotest editing_programs Q2"
+          ],
+          "links": []
+        },
+        {
+          "number": 3,
+          "prompt": "Write a sed command to print all lines starting with extern .",
+          "extra_paragraphs": [],
+          "hint_paragraphs": [
+            "It should print:"
+          ],
+          "hint_code_blocks": [
+            "extern int strcmp(const char *s1, const char *s2);\nextern int printf(const char *format, ...);"
+          ],
+          "check_paragraphs": [
+            "As always autotests are available"
+          ],
+          "check_code_blocks": [
+            "            2041 autotest editing_programs Q3"
+          ],
+          "links": []
+        },
+        {
+          "number": 4,
+          "prompt": "Write a sed command to replace all include statements using \" \" with < > .",
+          "extra_paragraphs": [],
+          "hint_paragraphs": [
+            "It should print:"
+          ],
+          "hint_code_blocks": [
+            "#include <stdlib.h>\n#include <stddef.h>\n#include <bits/types.h>\n\ntypedef int (*compar)(const void *, const void *);\n\n#define SWAP(a, b, size)             \\\n\tdo {                             \\\n\t\tsize_t __size = (size);      \\\n\t\tchar *__a = (a), *__b = (b); \\\n\t\tdo {                         \\\n\t\t\tchar __tmp = *__a;       \\\n\t\t\t*__a++ = *__b;           \\\n\t\t\t*__b++ = __tmp;          \\\n\t\t} while (--__size > 0);      \\\n\t} while (0)\n\n/**\n * bubble_sort_V1\n * dumb bubble sort using the stdlib::qsort interface\n * @param base       pointer to start of array to be sorted\n * @param nmemb      number of elements in array to be sorted\n * @param size       number of bytes of each element\n * @param comparator function to compare two element\n */\nvoid bubble_sort_V1 (void *base, size_t nmemb, size_t size, compar comparator)\n{\n\t// TODO: use better variable names.\n\tchar *base_ptr = (char *)base;\n\tfor (size_t loop_V1 = 0; loop_V1 < nmemb; loop_V1++) {\n\t\tfor (size_t loop_V2 = 1; loop_V2 < nmemb; loop_V2++) {\n\t\t\tif ((*comparator)((void *)(&base_ptr[loop_V2*size]), (void *)(&base_ptr[(loop_V2-1)*size])) < 0) {\n\t\t\t\tSWAP((void *)(&base_ptr[loop_V2*size]), (void *)(&base_ptr[(loop_V2-1)*size]), size);\n\t\t\t}\n\t\t}\n\t}\n}\n\nextern int strcmp(const char *s1, const char *s2);\n\nint cmpstringp(const void *p1, const void *p2)\n{\n\treturn strcmp(*(char *const *)p1, *(char *const *)p2);\n}\n\nint cmpintp(const void *p1, const void *p2)\n{\n\treturn (*(int *)p1 > *(int *)p2) - (*(int *)p1 < *(int *)p2);\n}\n\nextern int printf(const char *format, ...);\n\nint main(void) {\n\t// Test that our bubble sort is working properly\n\tint array[10] = {6, 8, 3, 2, 7, 0, 100, -66, 63, 44}; // TODO: make this array bigger\n\n\tbubble_sort_V1(array, 10, sizeof(int), cmpintp);\n\n\tfor (size_t i = 0; i < 10; i++) printf(\"%d, \", array[i]);\n\tprintf(\"\\n\");\n\n\treturn 0;\n}\n\n/**\n * selection_sort_V1\n * selection sort using the stdlib::qsort interface\n * @param base       pointer to start of array to be sorted\n * @param nmemb      number of elements in array to be sorted\n * @param size       number of bytes of each element\n * @param comparator function to compare two element\n */\nvoid selection_sort_V1 (void *base, size_t nmemb, size_t size, compar comparator)\n{\n\t// FIXME: implement this function.\n\t(void) base, (void) nmemb, (void) size, (void) comparator;\n\treturn;\n}\n\n/**\n * insertion_sort_V1\n * insertion sort using the stdlib::qsort interface\n * @param base       pointer to start of array to be sorted\n * @param nmemb      number of elements in array to be sorted\n * @param size       number of bytes of each element\n * @param comparator function to compare two element\n */\nvoid insertion_sort_V1 (void *base, size_t nmemb, size_t size, compar comparator)\n{\n\tchar *base_ptr = (char *)base;\n\tfor (size_t i = 1; i < nmemb; i++) {\n\t\twhile ((*comparator)((void *)(&base_ptr[i*size]), (void *)(&base_ptr[(i-1)*size])) < 0) {\n\t\t\tSWAP((void *)(&base_ptr[i*size]), (void *)(&base_ptr[(i-1)*size]), size);\n\t\t}\n\t}\n}"
+          ],
+          "check_paragraphs": [
+            "As always autotests are available"
+          ],
+          "check_code_blocks": [
+            "            2041 autotest editing_programs Q4"
+          ],
+          "links": []
+        },
+        {
+          "number": 5,
+          "prompt": "Write a sed command to remove the main method.",
+          "extra_paragraphs": [],
+          "hint_paragraphs": [
+            "It should print:"
+          ],
+          "hint_code_blocks": [
+            "#include \"stdlib.h\"\n#include <stddef.h>\n#include \"bits/types.h\"\n\ntypedef int (*compar)(const void *, const void *);\n\n#define SWAP(a, b, size)             \\\n\tdo {                             \\\n\t\tsize_t __size = (size);      \\\n\t\tchar *__a = (a), *__b = (b); \\\n\t\tdo {                         \\\n\t\t\tchar __tmp = *__a;       \\\n\t\t\t*__a++ = *__b;           \\\n\t\t\t*__b++ = __tmp;          \\\n\t\t} while (--__size > 0);      \\\n\t} while (0)\n\n/**\n * bubble_sort_V1\n * dumb bubble sort using the stdlib::qsort interface\n * @param base       pointer to start of array to be sorted\n * @param nmemb      number of elements in array to be sorted\n * @param size       number of bytes of each element\n * @param comparator function to compare two element\n */\nvoid bubble_sort_V1 (void *base, size_t nmemb, size_t size, compar comparator)\n{\n\t// TODO: use better variable names.\n\tchar *base_ptr = (char *)base;\n\tfor (size_t loop_V1 = 0; loop_V1 < nmemb; loop_V1++) {\n\t\tfor (size_t loop_V2 = 1; loop_V2 < nmemb; loop_V2++) {\n\t\t\tif ((*comparator)((void *)(&base_ptr[loop_V2*size]), (void *)(&base_ptr[(loop_V2-1)*size])) < 0) {\n\t\t\t\tSWAP((void *)(&base_ptr[loop_V2*size]), (void *)(&base_ptr[(loop_V2-1)*size]), size);\n\t\t\t}\n\t\t}\n\t}\n}\n\nextern int strcmp(const char *s1, const char *s2);\n\nint cmpstringp(const void *p1, const void *p2)\n{\n\treturn strcmp(*(char *const *)p1, *(char *const *)p2);\n}\n\nint cmpintp(const void *p1, const void *p2)\n{\n\treturn (*(int *)p1 > *(int *)p2) - (*(int *)p1 < *(int *)p2);\n}\n\nextern int printf(const char *format, ...);\n\n\n/**\n * selection_sort_V1\n * selection sort using the stdlib::qsort interface\n * @param base       pointer to start of array to be sorted\n * @param nmemb      number of elements in array to be sorted\n * @param size       number of bytes of each element\n * @param comparator function to compare two element\n */\nvoid selection_sort_V1 (void *base, size_t nmemb, size_t size, compar comparator)\n{\n\t// FIXME: implement this function.\n\t(void) base, (void) nmemb, (void) size, (void) comparator;\n\treturn;\n}\n\n/**\n * insertion_sort_V1\n * insertion sort using the stdlib::qsort interface\n * @param base       pointer to start of array to be sorted\n * @param nmemb      number of elements in array to be sorted\n * @param size       number of bytes of each element\n * @param comparator function to compare two element\n */\nvoid insertion_sort_V1 (void *base, size_t nmemb, size_t size, compar comparator)\n{\n\tchar *base_ptr = (char *)base;\n\tfor (size_t i = 1; i < nmemb; i++) {\n\t\twhile ((*comparator)((void *)(&base_ptr[i*size]), (void *)(&base_ptr[(i-1)*size])) < 0) {\n\t\t\tSWAP((void *)(&base_ptr[i*size]), (void *)(&base_ptr[(i-1)*size]), size);\n\t\t}\n\t}\n}"
+          ],
+          "check_paragraphs": [
+            "As always autotests are available"
+          ],
+          "check_code_blocks": [
+            "            2041 autotest editing_programs Q5"
+          ],
+          "links": []
+        }
+      ],
+      "footer_paragraphs": [
+        "When you are finished working on this exercise, you must submit your work by running give :",
+        "before Monday 02 March 2026 12:00 (midday) (2026-03-02 12:00:00) to obtain the marks for this lab exercise."
+      ],
+      "footer_code_blocks": [
+        "2041 autotest editing_programs",
+        "give cs2041 lab02_editing_programs editing_programs_answers.txt"
+      ],
+      "links": [],
+      "file_matches": [
+        "editing_programs_answers.txt"
+      ]
+    },
+    {
+      "label": "Challenge Exercise",
+      "title": "Exploring Regular Expression Extensions",
+      "intro_paragraphs": [
+        "There is a template file named advanced_ab_answers.txt which you must use to enter the answers for this exercise.",
+        "The autotest scripts depend on the format of advanced_ab_answers.txt so just add your answers don't otherwise change the file.",
+        "Use grep -P to test your answers to these questions.",
+        "These questions can't be solved using the standard regular expression language described in lectures. The following commands may provide useful information:",
+        "We've provided a set of test cases in input.txt"
+      ],
+      "intro_code_blocks": [
+        "    man 1 grep\n    info grep\n    man 7 regex\n    perldoc perlre"
+      ],
+      "intro_lists": [],
+      "questions": [
+        {
+          "number": 1,
+          "prompt": "Write a grep -P command that prints the lines in a file named input.txt containing only the characters A and B such that there are exactly n A's followed by exactly n B's and no other characters.",
+          "extra_paragraphs": [
+            "Matching AAABBB AB AABB AAAAAAAAAABBBBBBBBBB Not Matching AAABB ABBBBB AAAAAA AABBAB",
+            "As always autotests are available"
+          ],
+          "hint_paragraphs": [],
+          "hint_code_blocks": [],
+          "check_paragraphs": [],
+          "check_code_blocks": [
+            "            2041 autotest advanced_ab"
+          ],
+          "links": []
+        }
+      ],
+      "footer_paragraphs": [
+        "When you are finished working on this exercise, you must submit your work by running give :",
+        "before Monday 02 March 2026 12:00 (midday) (2026-03-02 12:00:00) to obtain the marks for this lab exercise."
+      ],
+      "footer_code_blocks": [
+        "2041 autotest advanced_ab",
+        "give cs2041 lab02_advanced_ab advanced_ab_answers.txt"
+      ],
+      "links": [],
+      "file_matches": [
+        "advanced_ab_answers.txt",
+        "input.txt"
+      ]
+    }
+  ]
+}
