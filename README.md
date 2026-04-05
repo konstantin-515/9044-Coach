@@ -20,6 +20,7 @@
 - 想练 `dash`、`grep -E`、regex、文本处理，但不想每次手动搭测试环境
 - 想把练习、测试、错题笔记放在一个目录里
 - 想让新题尽量贴近自己的薄弱点和笔记重点
+- 想在复习前先看一眼自己归档练习里最常犯的错
 
 这个 skill 就是为了解决这些问题：
 
@@ -27,6 +28,7 @@
 2. 生成一套新的练习，而不是照搬原题
 3. 自动创建一个可以直接练习的目录
 4. 留出 `notebook.md` 方便你积累命令、易错点、反思
+5. 在你想复习时，总结归档目录里的错因和高频提醒
 
 ---
 
@@ -361,7 +363,57 @@ archives/
 
 ---
 
-## 10. notebook.md 是干什么的
+## 11. 错因总结模式
+
+这个 skill 现在也支持“按归档笔记总结错因”。
+
+它适合这些请求：
+
+- “我想复习一下之前的错因”
+- “总结一下归档里的 notebook”
+- “帮我看看我最常错什么”
+- “按归档笔记给我做一份复习总结”
+
+它会优先扫描：
+
+- `archives/<topic>/<testNN>/notebook.md`
+- `archives/<topic>/<testNN>/metadata.json`
+
+然后把这些栏目汇总出来：
+
+- `我卡住的点`
+- `我做错的点`
+- `需要记住的命令/选项`
+- `下次再做这题时要提醒自己的话`
+
+默认输出文件：
+
+```text
+archives/_summaries/mistake-summary.md
+archives/_summaries/mistake-summary.json
+```
+
+如果你只想看一个主题，也可以按主题输出：
+
+```text
+archives/_summaries/mistake-summary-re.md
+archives/_summaries/mistake-summary-re.json
+```
+
+总结内容会尽量包括：
+
+- 总共扫描了多少份归档笔记
+- 哪些主题最常出现
+- 高频卡点和高频错误
+- 最常需要回顾的命令/选项
+- 按主题分组的复习提醒
+- 一小段下一步复习建议
+
+如果当前还没有归档笔记，skill 也会照样生成一份“空状态总结”，提醒你先归档哪些练习。
+
+---
+
+## 12. notebook.md 是干什么的
 
 `notebook.md` 不是题解，而是你自己的复习记录。
 
@@ -385,7 +437,7 @@ archives/
 
 ---
 
-## 11. 支持的模式
+## 13. 支持的模式
 
 这个 skill 当前支持这些模式：
 
@@ -393,6 +445,8 @@ archives/
 - `drill`：短小专项练习
 - `mock-exam`：小型模拟卷
 - `workspace`：生成完整练习目录
+- `archive`：归档已完成练习
+- `mistake-summary`：汇总归档笔记里的错因
 - `review`：复习某类题型
 - `hint`：给提示
 - `solution`：给思路或完整解
@@ -402,7 +456,7 @@ archives/
 
 ---
 
-## 12. subagent 分工
+## 14. subagent 分工
 
 当用户明确要求使用 subagent / delegation 时，推荐分工：
 
@@ -419,7 +473,7 @@ archives/
 
 ---
 
-## 13. 设计原则
+## 15. 设计原则
 
 这个 skill 的核心原则：
 
@@ -433,7 +487,7 @@ archives/
 
 ---
 
-## 14. 已知说明
+## 16. 已知说明
 
 - `references/knowledge-base/sample_data/test05/` 下应优先使用 `compare_directory1/` 和 `compare_directory2/`
 - 同级旧的 `directory1` / `directory2` 顶层残留文件应忽略
@@ -441,7 +495,7 @@ archives/
 
 ---
 
-## 15. 推荐使用方式
+## 17. 推荐使用方式
 
 比较推荐的调用方式：
 
@@ -450,16 +504,20 @@ archives/
 - “用 9044-coach 给我出 2 道期末风格题，不要答案”
 - “参考我的笔记再给我生成 test02”
 - “用 9044-coach 帮我检查这个 solution.sh 还有哪些边界没覆盖”
+- “我想复习一下之前的错因”
+- “请帮我总结归档 notebook 里的高频错误”
 - “主 agent 出题，1 个 subagent 出数据，1 个 subagent 出测试脚本”
 
 ---
 
-## 16. 维护这个 skill 时先看哪里
+## 18. 维护这个 skill 时先看哪里
 
 如果以后你还要继续改这个 skill，建议优先看：
 
 - `SKILL.md`：主规则
 - `references/workspace-rules.md`：练习目录生成规则
+- `references/archive-rules.md`：归档规则
+- `references/mistake-summary-rules.md`：错因总结规则
 - `references/output-templates.md`：README / notebook / 测试脚本模板
 - `references/question-quality-checklist.md`：质量门禁
 - `references/source-map.md`：知识来源说明

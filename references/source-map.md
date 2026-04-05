@@ -59,6 +59,13 @@ When generating a question:
 3. Read copied support files only if you need concrete sample data shapes.
 4. Avoid scanning the whole archive unless the user asks for a mixed-topic set.
 
+When summarizing past mistakes:
+
+1. Read `archives/**/metadata.json` when present.
+2. Read `archives/**/notebook.md` next.
+3. Group by the archive topic folder before trying broader heuristics.
+4. Write the compact result to `archives/_summaries/`.
+
 ## Topic Hints
 
 - regex and grep foundations: `lab01`

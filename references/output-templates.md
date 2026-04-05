@@ -162,12 +162,65 @@ Hard rule:
 
 When subagents are available:
 
-- main agent writes `README.md` and placeholder solution file
 - main agent writes `metadata.json`, `README.md`, and the placeholder solution file
 - data subagent writes files under `data/` and `expected/`
 - test subagent writes files under `tests/`
 
 The main agent should then validate that the test script references the actual generated filenames.
+
+## Mistake Summary Output Template
+
+When the user wants to review archived mistakes, write a Markdown summary with this shape:
+
+```markdown
+# 归档错因总结
+
+- 生成时间：
+- 扫描的归档笔记数：
+- 涉及主题数：
+
+## 总览
+
+| Topic | Notebook Count | Exercises |
+| --- | --- | --- |
+
+## 高频卡点
+
+- ...
+
+## 最常需要复习的命令/选项
+
+- ...
+
+## 最常出现的提醒
+
+- ...
+
+## 主题：`<topic>`
+
+- 练习数：
+- 练习列表：
+
+### 高频卡点
+
+- ...
+
+### 高频错误
+
+- ...
+
+### 需要回顾的命令/选项
+
+- ...
+
+### 重要提醒
+
+- ...
+
+## 下一步建议
+
+- ...
+```
 
 ### README Template
 

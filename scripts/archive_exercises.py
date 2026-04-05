@@ -146,6 +146,10 @@ def read_metadata(path: pathlib.Path) -> dict:
     return data if isinstance(data, dict) else {}
 
 
+def write_metadata(path: pathlib.Path, data: dict) -> None:
+    path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
+
+
 def infer_topic(folder: pathlib.Path) -> tuple[str, int, list[str]]:
     metadata = read_metadata(folder / "metadata.json")
     topic_hint = slugify_topic(str(metadata.get("topic_hint", "")).strip())
@@ -202,6 +206,11 @@ def archive_one(workspace_root: pathlib.Path, name: str, explicit_topic: str | N
         return False, f"SKIP {name}: destination already exists at {destination}"
 
     shutil.move(str(source), str(destination))
+    metadata_path = destination / "metadata.json"
+    metadata = read_metadata(metadata_path)
+    metadata["status"] = "archived"
+    metadata["topic_hint"] = topic
+    write_metadata(metadata_path, metadata)
     if explicit_topic:
         return True, f"MOVED {name} -> archives/{topic}/{name} (topic set explicitly)"
     return True, f"MOVED {name} -> archives/{topic}/{name} (auto topic, score={score})"

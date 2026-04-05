@@ -55,9 +55,10 @@ Before opening the larger knowledge-base files, prefer this fast path:
 4. [references/data-shapes.md](references/data-shapes.md)
 5. [references/workspace-rules.md](references/workspace-rules.md) when creating folders on disk
 6. [references/archive-rules.md](references/archive-rules.md) when archiving completed exercises
-7. [references/question-quality-checklist.md](references/question-quality-checklist.md) before finalizing a generated exercise
-8. inspect `references/user-notes/` when the user has stored personal notes there
-9. open files under `references/knowledge-base/` only as needed
+7. [references/mistake-summary-rules.md](references/mistake-summary-rules.md) when summarizing archived notebook mistakes
+8. [references/question-quality-checklist.md](references/question-quality-checklist.md) before finalizing a generated exercise
+9. inspect `references/user-notes/` when the user has stored personal notes there
+10. open files under `references/knowledge-base/` only as needed
 
 ## Supported Modes
 
@@ -68,6 +69,7 @@ Choose the lightest mode that satisfies the user:
 - `mock-exam`: generate a small exam-style set with difficulty progression
 - `workspace`: generate a practice folder with prompt, data files, and tests
 - `archive`: move completed exercise folders from `exercises/` into topic-based folders under `archives/`
+- `mistake-summary`: summarize archived `notebook.md` files into a review report
 - `review`: explain what a topic or archive pattern is testing
 - `hint`: give staged hints for a question
 - `solution`: give a solution outline or full worked answer
@@ -79,17 +81,19 @@ Parse the request in this order:
 
 1. If the user shares an attempted answer or asks for checking, use `checker`.
 2. If the user asks to archive, move, store away, or整理 completed exercises, use `archive`.
-3. If the user explicitly asks for hints only, use `hint`.
-4. If the user explicitly asks for a full answer or worked solution, use `solution`.
-5. If the user explicitly asks for review, summary, or concept explanation, use `review`.
-6. If the user explicitly asks for a mock exam or multiple-question set, use `mock-exam`.
-7. If the user explicitly says `chat only`, `just give me the question here`, or otherwise says no files should be created, use `question` or `drill`.
-8. Otherwise, default to `workspace`.
+3. If the user asks to summarize mistakes, archived notebooks, weak points, or says they want revision based on past exercises, use `mistake-summary`.
+4. If the user explicitly asks for hints only, use `hint`.
+5. If the user explicitly asks for a full answer or worked solution, use `solution`.
+6. If the user explicitly asks for review, summary, or concept explanation, use `review`.
+7. If the user explicitly asks for a mock exam or multiple-question set, use `mock-exam`.
+8. If the user explicitly says `chat only`, `just give me the question here`, or otherwise says no files should be created, use `question` or `drill`.
+9. Otherwise, default to `workspace`.
 
 Hard rule:
 
 - if the user asks for a question, practice, drill, test, exercise, or revision task and does not explicitly forbid file creation, treat it as `workspace`
 - if the user asks to archive exercises and does not specify a topic folder, infer the topic automatically and archive to `archives/<topic>/`
+- if the user asks to review past mistakes and archived notebooks exist, prefer `mistake-summary` before generating new questions
 
 ## Agent Split
 
@@ -131,6 +135,7 @@ Hard rule:
 - `workspace` mode is not satisfied by chat-only output
 - when mode is `workspace`, create the folder and files on disk before sending the final response
 - when mode is `archive`, move the folder on disk before sending the final response
+- when mode is `mistake-summary`, write the summary file on disk before sending the final response
 
 ## What To Generate
 
@@ -171,6 +176,16 @@ If the mode is `workspace`, generate a folder on disk containing at least:
 Use ASCII filenames and keep the folder self-contained.
 
 Use `scripts/init_workspace.py` to scaffold the folder whenever possible, then fill in the generated files with the real question, data, expected outputs, and tests.
+
+If the mode is `mistake-summary`, generate at least:
+
+1. `archives/_summaries/mistake-summary.md`
+2. `archives/_summaries/mistake-summary.json`
+
+If the user asked for one topic only, prefer:
+
+1. `archives/_summaries/mistake-summary-<topic>.md`
+2. `archives/_summaries/mistake-summary-<topic>.json`
 
 For shell tasks in this course, default to:
 
@@ -268,7 +283,7 @@ For this user, prefer:
 
 ## Workflow
 
-1. Determine the user's mode: question, drill, mock exam, review, hint, solution, or checker.
+1. Determine the user's mode: question, drill, mock exam, workspace, archive, mistake-summary, review, hint, solution, or checker.
 2. Inspect the fast reference files to identify likely matching topics and data shapes.
 3. Open detailed archive files only if needed for style or format fidelity.
 4. Create a fresh question or explanation that matches the local course style without copying.
@@ -280,6 +295,7 @@ For this user, prefer:
 10. Before finishing, run the validation checklist below mentally.
 11. If a workspace was created, ensure the folder name follows the workspace naming rule.
 12. If mode is `archive`, ensure the source folder no longer remains under `exercises/` and the destination exists under `archives/`.
+13. If mode is `mistake-summary`, ensure the summary files were written under `archives/_summaries/`.
 
 For `workspace` mode, perform step 5 concretely:
 
@@ -294,6 +310,13 @@ For `archive` mode, perform the move concretely:
 - if the user supplied a topic, pass it through as an override
 - otherwise let the script infer the topic automatically
 - only then respond with a summary of which folders moved where
+
+For `mistake-summary` mode, perform the summary concretely:
+
+- call `scripts/summarize_archived_notebooks.py`
+- pass `--topic <topic>` only when the user explicitly wants one topic
+- write both Markdown and JSON summaries under `archives/_summaries/`
+- only then respond with the summary file path and the main repeated weak points
 
 ## Workspace Folder Contract
 
@@ -354,6 +377,7 @@ Before returning a generated question, make sure:
 - if the test runner writes failure artifacts, the printed paths match the created files
 - if mode was `workspace`, the exercise folder actually exists on disk and is not just described in chat
 - if mode was `archive`, the archived folder exists under `archives/<topic>/` and no live copy remains under `exercises/`
+- if mode was `mistake-summary`, both Markdown and JSON summary files exist under `archives/_summaries/`
 
 ## Fallback Strategy
 
@@ -366,6 +390,7 @@ If something blocks the ideal flow, degrade in this order:
 5. If folder creation fails, do not pretend the task is done; report the failure and the blocking reason.
 6. If archive topic inference is weak, move the exercise into `archives/misc/` instead of guessing aggressively.
 7. If some requested exercises are missing, archive the ones that exist and report the missing ones.
+8. If there are no archived notebooks yet, still create an empty-state mistake summary file that explains what to archive next.
 
 ## When The User Is Vague
 
@@ -377,7 +402,7 @@ Good defaults:
 - "give me final practice": one exam-style shell or text-processing question
 - "give me 3 questions": mix pipeline, regex, and file-processing styles
 - "quiz me": one question first, then wait
-- "help me revise": provide a short topic menu plus one starter question
+- "help me revise": if archived notebooks exist, summarize the archived mistakes first; otherwise provide a short topic menu plus one starter question
 
 ## Safety And Integrity
 
