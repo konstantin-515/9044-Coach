@@ -1,0 +1,7 @@
+interface:
+  display_name: "9044 Coach"
+  short_description: "生成 9044 风格练习、工作区与归档流程"
+  default_prompt: "Use $9044-coach to create a COMP9044-style practice workspace or archive completed exercises."
+
+policy:
+  allow_implicit_invocation: true

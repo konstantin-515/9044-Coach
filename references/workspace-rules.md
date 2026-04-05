@@ -14,11 +14,18 @@ That folder should contain:
 - expected outputs
 - a runnable test script
 
+Hard rule:
+
+- for `workspace` mode, creating the folder and files on disk is mandatory
+- if no files were created, the task is incomplete even if the question text in chat is good
+- prefer using `scripts/init_workspace.py` to create the folder skeleton before filling in the real content
+
 ## Recommended Agent Ownership
 
 When subagents are available, use this ownership split:
 
 - main agent owns `README.md`, target filename choice, folder naming, and final validation
+- main agent owns `metadata.json`, `README.md`, target filename choice, folder naming, and final validation
 - data subagent owns `data/` and `expected/`
 - test subagent owns `tests/`
 
@@ -56,17 +63,33 @@ For a new exercise:
 
 Create only one folder for each exercise. Do not create both a numbered folder and a descriptive alias folder.
 
+If a specific `testNN` is requested and already exists:
+
+- do not silently overwrite it
+- create the next available `testNN`, unless the user explicitly asked to reuse the old folder
+
 ## Minimum File Set
 
 For shell questions:
 
 ```text
 testNN/
+  metadata.json
   README.md
   notebook.md
   solution.sh
   data/
+    sample01_input.txt
+    sample02_input.txt
+    sample03_input.txt
+    edge01_input.txt
+    edge02_input.txt
   expected/
+    sample01_output.txt
+    sample02_output.txt
+    sample03_output.txt
+    edge01_output.txt
+    edge02_output.txt
   tests/run_tests.sh
 ```
 
@@ -76,6 +99,7 @@ For Python questions:
 
 ```text
 exercise-name/
+  metadata.json
   README.md
   solution.py
   data/
@@ -98,7 +122,7 @@ Example shell placeholder:
 # 在 Windows 上可以这样运行：
 # 1. 在 PowerShell 中启动 WSL
 # 2. cd 到这个练习目录
-# 3. 执行：dash solution.sh < data/sample_input.txt
+# 3. 执行：dash solution.sh < data/sample01_input.txt
 # 4. 测试：dash tests/run_tests.sh
 #
 # 在下面写你的答案。
@@ -115,8 +139,18 @@ Example Python placeholder:
 
 Each workspace should have at least:
 
-- one normal case
-- one edge case
+- three visible sample cases when feasible
+- two visible edge cases when feasible
+
+Prefer numbered filenames such as:
+
+- `data/sample01_input.txt`
+- `data/sample02_input.txt`
+- `data/sample03_input.txt`
+- `data/edge01_input.txt`
+- `data/edge02_input.txt`
+
+with matching files under `expected/`.
 
 Good edge cases include:
 
@@ -149,8 +183,9 @@ Prefer this reporting order:
 
 For study use, prefer keeping failed actual outputs under a stable path such as:
 
-- `tests/.artifacts/sample.actual.txt`
-- `tests/.artifacts/edge.actual.txt`
+- `tests/.artifacts/sample01.actual.txt`
+- `tests/.artifacts/sample02.actual.txt`
+- `tests/.artifacts/edge01.actual.txt`
 
 and print those paths when a case fails.
 
@@ -183,6 +218,32 @@ Under `knowledge-base/sample_data/test05/`, prefer:
 - `compare_directory2/`
 
 Ignore any legacy top-level files named `directory1` or `directory2` there. They are residue from an earlier bad copy and are not valid directory samples.
+
+## Metadata Expectations
+
+Each generated workspace should include `metadata.json`.
+
+This file should be small and machine-readable. Include at least:
+
+- `title`
+- `language`
+- `topic_hint`
+- `topics`
+- `status`
+
+Example:
+
+```json
+{
+  "title": "Regex practice",
+  "language": "shell",
+  "topic_hint": "re",
+  "topics": ["regex", "grep"],
+  "status": "active"
+}
+```
+
+When the real topic is known, the main agent should update `topic_hint` before finishing.
 
 ## README Expectations
 

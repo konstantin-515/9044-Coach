@@ -124,26 +124,46 @@ When the user wants a folder they can work in, create this structure on disk and
 
 ```text
 testNN/
+  metadata.json
   README.md
   notebook.md
   solution.sh
   data/
-    sample_input.txt
-    edge_input.txt
+    sample01_input.txt
+    sample02_input.txt
+    sample03_input.txt
+    edge01_input.txt
+    edge02_input.txt
   expected/
-    sample_output.txt
-    edge_output.txt
+    sample01_output.txt
+    sample02_output.txt
+    sample03_output.txt
+    edge01_output.txt
+    edge02_output.txt
   tests/
     run_tests.sh
 ```
 
 For Python questions, replace `solution.sh` and `run_tests.sh` with `.py` when appropriate.
 
+Prefer multiple visible cases by default:
+
+- three sample cases such as `sample01` to `sample03`
+- two edge cases such as `edge01` and `edge02`
+
+Hard rule:
+
+- do not stop at a chat-only question if the mode is `workspace`
+- first create the folder and files on disk
+- then fill the files
+- only then summarize the result in chat
+
 ### Delegation Notes
 
 When subagents are available:
 
 - main agent writes `README.md` and placeholder solution file
+- main agent writes `metadata.json`, `README.md`, and the placeholder solution file
 - data subagent writes files under `data/` and `expected/`
 - test subagent writes files under `tests/`
 
@@ -210,7 +230,7 @@ dash tests/run_tests.sh
 ```text
 1. 在 PowerShell 中启动 WSL
 2. 执行 README 里给出的 cd 命令进入当前练习目录
-3. 运行：dash solution.sh < data/sample_input.txt
+3. 运行：dash solution.sh < data/sample01_input.txt
 4. 测试：dash tests/run_tests.sh
 ```
 ```
@@ -363,8 +383,21 @@ run_case() {
     fi
 }
 
-run_case "sample" "data/sample_input.txt" "expected/sample_output.txt" "output mismatch on the normal case"
-run_case "edge" "data/edge_input.txt" "expected/edge_output.txt" "edge-case handling is incorrect"
+run_case_group() {
+    prefix="$1"
+    reason="$2"
+
+    for input_file in data/${prefix}[0-9][0-9]_input.txt; do
+        [ -f "$input_file" ] || continue
+        file_name="${input_file##*/}"
+        case_name="${file_name%_input.txt}"
+        expected_file="expected/${case_name}_output.txt"
+        run_case "$case_name" "$input_file" "$expected_file" "$reason"
+    done
+}
+
+run_case_group "sample" "output mismatch on a visible sample case"
+run_case_group "edge" "edge-case handling is incorrect"
 
 echo "$pass_count/$test_count tests passed"
 ```
@@ -376,7 +409,7 @@ echo "$pass_count/$test_count tests passed"
 # 在 Windows 上可以这样运行：
 # 1. 在 PowerShell 中启动 WSL
 # 2. cd 到这个练习目录
-# 3. 执行：dash solution.sh < data/sample_input.txt
+# 3. 执行：dash solution.sh < data/sample01_input.txt
 # 4. 测试：dash tests/run_tests.sh
 #
 # 在下面写你的答案。

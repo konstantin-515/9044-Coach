@@ -54,9 +54,10 @@ Before opening the larger knowledge-base files, prefer this fast path:
 3. [references/output-templates.md](references/output-templates.md)
 4. [references/data-shapes.md](references/data-shapes.md)
 5. [references/workspace-rules.md](references/workspace-rules.md) when creating folders on disk
-6. [references/question-quality-checklist.md](references/question-quality-checklist.md) before finalizing a generated exercise
-7. inspect `references/user-notes/` when the user has stored personal notes there
-8. open files under `references/knowledge-base/` only as needed
+6. [references/archive-rules.md](references/archive-rules.md) when archiving completed exercises
+7. [references/question-quality-checklist.md](references/question-quality-checklist.md) before finalizing a generated exercise
+8. inspect `references/user-notes/` when the user has stored personal notes there
+9. open files under `references/knowledge-base/` only as needed
 
 ## Supported Modes
 
@@ -66,10 +67,29 @@ Choose the lightest mode that satisfies the user:
 - `drill`: generate short focused drills on one topic
 - `mock-exam`: generate a small exam-style set with difficulty progression
 - `workspace`: generate a practice folder with prompt, data files, and tests
+- `archive`: move completed exercise folders from `exercises/` into topic-based folders under `archives/`
 - `review`: explain what a topic or archive pattern is testing
 - `hint`: give staged hints for a question
 - `solution`: give a solution outline or full worked answer
 - `checker`: review the user's answer and point out likely issues
+
+## Request Parsing
+
+Parse the request in this order:
+
+1. If the user shares an attempted answer or asks for checking, use `checker`.
+2. If the user asks to archive, move, store away, or整理 completed exercises, use `archive`.
+3. If the user explicitly asks for hints only, use `hint`.
+4. If the user explicitly asks for a full answer or worked solution, use `solution`.
+5. If the user explicitly asks for review, summary, or concept explanation, use `review`.
+6. If the user explicitly asks for a mock exam or multiple-question set, use `mock-exam`.
+7. If the user explicitly says `chat only`, `just give me the question here`, or otherwise says no files should be created, use `question` or `drill`.
+8. Otherwise, default to `workspace`.
+
+Hard rule:
+
+- if the user asks for a question, practice, drill, test, exercise, or revision task and does not explicitly forbid file creation, treat it as `workspace`
+- if the user asks to archive exercises and does not specify a topic folder, infer the topic automatically and archive to `archives/<topic>/`
 
 ## Agent Split
 
@@ -102,9 +122,15 @@ If the user does not specify constraints, default to:
 - difficulty: `exam-style`
 - scope: `dash shell, grep -E, sed, awk, regex, text processing`
 - help level: `hints only`
-- output: `practice folder + README + data files + test script + sample tests + edge cases + marking table + knowledge points`
+- output: `practice folder + README + data files + test script + multiple visible sample tests + edge cases + marking table + knowledge points`
 
 Prefer course-authentic questions over generic computer science puzzles.
+
+Hard rule:
+
+- `workspace` mode is not satisfied by chat-only output
+- when mode is `workspace`, create the folder and files on disk before sending the final response
+- when mode is `archive`, move the folder on disk before sending the final response
 
 ## What To Generate
 
@@ -135,13 +161,16 @@ If the user asks for a mock exam, also add:
 If the mode is `workspace`, generate a folder on disk containing at least:
 
 1. `README.md` with the full problem statement
-2. `notebook.md` as a study-notes template for the user
-3. `tests/` with at least one runnable test script
-4. `data/` with sample input files or table-shaped data
-5. `expected/` with expected outputs for the sample and edge tests
-6. a placeholder target filename the user is expected to implement, such as `solution.sh` or `solution.py`
+2. `metadata.json` with title, language, and topic hints for later archiving
+3. `notebook.md` as a study-notes template for the user
+4. `tests/` with at least one runnable test script
+5. `data/` with sample input files or table-shaped data
+6. `expected/` with expected outputs for the sample and edge tests
+7. a placeholder target filename the user is expected to implement, such as `solution.sh` or `solution.py`
 
 Use ASCII filenames and keep the folder self-contained.
+
+Use `scripts/init_workspace.py` to scaffold the folder whenever possible, then fill in the generated files with the real question, data, expected outputs, and tests.
 
 For shell tasks in this course, default to:
 
@@ -171,11 +200,18 @@ When generating a practice workspace, default to `question only` inside the file
 
 Each generated question must contain at least:
 
-- one realistic sample input and output pair
-- one edge case input and output pair
+- multiple visible sample input and output pairs when feasible
+- at least one edge case input and output pair
 - one short marking table
 - one short knowledge-point list
 - one short common-mistakes list
+
+For `workspace` mode, prefer:
+
+- three visible sample cases such as `sample01`, `sample02`, `sample03`
+- two visible edge cases such as `edge01`, `edge02`
+
+Do not default to only one sample and one edge unless the task is unusually small.
 
 Use at least one Markdown table per question. Prefer this table shape:
 
@@ -243,6 +279,21 @@ For this user, prefer:
 9. Reveal only the amount of help the user asked for.
 10. Before finishing, run the validation checklist below mentally.
 11. If a workspace was created, ensure the folder name follows the workspace naming rule.
+12. If mode is `archive`, ensure the source folder no longer remains under `exercises/` and the destination exists under `archives/`.
+
+For `workspace` mode, perform step 5 concretely:
+
+- call `scripts/init_workspace.py` to create the folder skeleton
+- write or update `metadata.json`, `README.md`, `notebook.md`, `solution.*`, `data/*`, `expected/*`, and `tests/*`
+- only then respond with a summary
+
+For `archive` mode, perform the move concretely:
+
+- call `scripts/archive_exercises.py`
+- pass the requested exercise spec such as `test01` or `test01-03`
+- if the user supplied a topic, pass it through as an override
+- otherwise let the script infer the topic automatically
+- only then respond with a summary of which folders moved where
 
 ## Workspace Folder Contract
 
@@ -251,15 +302,22 @@ When generating a practice folder, prefer this structure:
 ```text
 testNN/
   README.md
+  metadata.json
   notebook.md
   solution.sh or solution.py
   data/
-    sample_input.txt
-    edge_input.txt
+    sample01_input.txt
+    sample02_input.txt
+    sample03_input.txt
+    edge01_input.txt
+    edge02_input.txt
     optional table data such as .tsv, .psv, or .txt
   expected/
-    sample_output.txt
-    edge_output.txt
+    sample01_output.txt
+    sample02_output.txt
+    sample03_output.txt
+    edge01_output.txt
+    edge02_output.txt
   tests/
     run_tests.sh or run_tests.py
 ```
@@ -269,7 +327,7 @@ Guidelines:
 - use sequential short names such as `test01`, `test02`, `test03`
 - create exactly one workspace folder for the exercise
 - choose `solution.sh` for shell tasks and `solution.py` for Python tasks
-- include at least one normal case and one edge case
+- prefer three visible sample cases and two visible edge cases
 - keep generated data small enough to inspect manually
 - if table-like data helps, create it as `.tsv`, `.psv`, or `.txt`
 - make the test runner executable in a normal local workflow
@@ -290,9 +348,24 @@ Before returning a generated question, make sure:
 - the question fits the requested language and difficulty
 - the answer level matches what the user asked for
 - if a workspace was generated, all referenced files actually exist and the test runner points to the correct target filename
+- if a workspace was generated, `metadata.json` exists and its topic hint matches the generated exercise when known
 - only one exercise folder was created for this exercise
 - if the workspace is on Windows, `README.md` includes the actual converted WSL path such as `/mnt/f/...`
 - if the test runner writes failure artifacts, the printed paths match the created files
+- if mode was `workspace`, the exercise folder actually exists on disk and is not just described in chat
+- if mode was `archive`, the archived folder exists under `archives/<topic>/` and no live copy remains under `exercises/`
+
+## Fallback Strategy
+
+If something blocks the ideal flow, degrade in this order:
+
+1. If the requested exercise folder name already exists, create the next available `testNN`.
+2. If subagents are unavailable, do the same ownership split in one agent.
+3. If user notes exist only as PDF and are not directly readable, use the filename/topic as a hint only.
+4. If full test content cannot be generated immediately, still create the folder scaffold and clearly state what remains incomplete.
+5. If folder creation fails, do not pretend the task is done; report the failure and the blocking reason.
+6. If archive topic inference is weak, move the exercise into `archives/misc/` instead of guessing aggressively.
+7. If some requested exercises are missing, archive the ones that exist and report the missing ones.
 
 ## When The User Is Vague
 

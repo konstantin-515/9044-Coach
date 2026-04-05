@@ -76,6 +76,20 @@ exercises/test02/
 
 每次只生成一个目录，不再同时生成“日期版目录”和“slug 版目录”。
 
+完成后的练习默认建议从 `exercises/` 归档到：
+
+```text
+archives/<topic>/testNN/
+```
+
+例如：
+
+```text
+archives/re/test01/
+archives/shell/test02/
+archives/python/test03/
+```
+
 ---
 
 ## 4. 练习目录结构
@@ -223,7 +237,7 @@ cd /mnt/f/Codex/9044-skill/exercises/test01
 # 在 Windows 上可以这样运行：
 # 1. 在 PowerShell 中启动 WSL
 # 2. cd 到这个练习目录
-# 3. 执行：dash solution.sh < data/sample_input.txt
+# 3. 执行：dash solution.sh < data/sample01_input.txt
 # 4. 测试：dash tests/run_tests.sh
 #
 # 在下面写你的答案。
@@ -258,6 +272,92 @@ tests/.artifacts/edge.actual.txt
 ```
 
 这样你就可以反复比对自己的输出和期望输出。
+
+---
+
+## 10. 归档模式
+
+这个 skill 现在也支持“归档已完成练习”。
+
+目标是把：
+
+- `exercises/`
+
+保持成“正在做的区域”，而把：
+
+- `archives/`
+
+当成“已经做完、按主题归档的区域”。
+
+### 归档后结构
+
+```text
+exercises/
+  test04/
+  test05/
+
+archives/
+  re/
+    test01/
+  shell/
+    test02/
+  python/
+    test03/
+  misc/
+    test06/
+```
+
+### 支持的归档输入
+
+- 单个：`test01`
+- 范围：`test01-03`
+- 组合：`test01,test03-05`
+
+### 自动主题判断
+
+如果你不指定目标文件夹，skill 会自动判断归档到哪里。
+
+它会优先参考：
+
+- `README.md`
+- `notebook.md`
+- 题目的语言类型，例如 `solution.sh` 或 `solution.py`
+- 题目里出现的关键词，比如 `regex`、`grep`、`sed`、`awk`、`pipeline`、`shell`、`git`、`python`
+
+默认会尽量归到这些短主题目录：
+
+- `re`
+- `grep`
+- `sed`
+- `awk`
+- `pipeline`
+- `shell`
+- `files`
+- `git`
+- `python`
+- `misc`
+
+如果自动判断不够有把握，就归到 `misc/`，而不是乱猜。
+
+### 归档示例
+
+你可以直接说：
+
+- “请帮我归档 test01”
+- “请帮我归档 test01-03”
+- “请帮我把 test01-03 归档”
+
+如果你想手动指定，也可以说：
+
+- “请帮我把 test01-03 归档到 re 文件夹下”
+
+### 归档规则
+
+- 归档是移动，不是复制
+- 原来的 `exercises/testNN` 会被移走
+- 目标目录不存在时会自动创建
+- 如果 `archives/<topic>/testNN` 已经存在，不会静默覆盖
+- 如果请求里有不存在的 test，会明确告诉你哪些没找到
 
 ---
 
