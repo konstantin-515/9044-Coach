@@ -6,6 +6,8 @@ Use this file when the user wants the skill to produce a debug report alongside 
 
 Keep the main workflow unchanged, but also write a compact debug report that helps evaluate speed, token pressure, and workflow shape.
 
+The human-facing Markdown report should be in Chinese.
+
 Debug is a modifier:
 
 - do the normal task first
@@ -27,10 +29,14 @@ At minimum, capture:
 
 - request text
 - resolved main mode
+- resolved route kind such as `lightweight` or `full`
 - start time and end time
 - total wall-clock duration
 - short per-stage timing breakdown
 - tool-call counts
+- references used for the main task
+- primary bottleneck and secondary bottleneck
+- optimization hints
 - non-debug files created or updated
 - estimated non-debug token usage
 
@@ -69,6 +75,9 @@ Prefer using:
 The script should:
 
 - accept timestamps, stage timings, and file lists
+- accept reference file lists and route kind
 - estimate tokens from text length heuristics
+- identify the slowest stage as the bottleneck
+- generate simple optimization hints from timing and token shape
 - write both Markdown and JSON outputs
 - stay deterministic and safe to run repeatedly

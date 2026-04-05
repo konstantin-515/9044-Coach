@@ -492,9 +492,13 @@ debug-reports/debug-<mode>-<timestamp>.json
 
 - 请求内容
 - 解析后的主 mode
+- 解析后的执行路径（`lightweight` 或 `full`）
 - 总执行时间
 - 各阶段耗时
 - 工具调用次数
+- 使用了哪些参考文件
+- 当前主瓶颈和次要瓶颈
+- 自动生成的优化建议
 - 创建或更新了哪些非 debug 文件
 - 估算的非 debug token 消耗
 
@@ -511,7 +515,45 @@ debug-reports/debug-<mode>-<timestamp>.json
 
 ---
 
-## 15. subagent 分工
+## 15. 轻量生成路径
+
+这个 skill 现在还支持一条“轻量生成路径”，主要用来处理这种请求：
+
+- 单题
+- 主题明确
+- 你更关心速度，而不是广泛参考很多资料
+
+例如：
+
+- “生成一个 grep 练习”
+- “给我一个 regex drill”
+- “做一个 shell 单题，并启动 debug”
+
+这类请求默认优先走 `lightweight`，它会尽量只读：
+
+1. `topic-index.md`
+2. `output-templates.md`
+3. 一个最相关的小 reference 文件
+
+只有在这些信息还不够时，才升级到完整路径去读更多资料。
+
+这样做的目的就是：
+
+- 降低 `reference_lookup`
+- 降低 context token
+- 让单题生成更快
+
+如果是下面这些情况，就不该走轻量路径：
+
+- 你要一套题
+- 你要 mock exam
+- 你要 mixed topic
+- 你明确要求大量参考个人笔记或 PDF
+- 你要高度贴近 archive 某几份资料
+
+---
+
+## 16. subagent 分工
 
 当用户明确要求使用 subagent / delegation 时，推荐分工：
 
@@ -528,7 +570,7 @@ debug-reports/debug-<mode>-<timestamp>.json
 
 ---
 
-## 16. 设计原则
+## 17. 设计原则
 
 这个 skill 的核心原则：
 
@@ -542,7 +584,7 @@ debug-reports/debug-<mode>-<timestamp>.json
 
 ---
 
-## 17. 已知说明
+## 18. 已知说明
 
 - `references/knowledge-base/sample_data/test05/` 下应优先使用 `compare_directory1/` 和 `compare_directory2/`
 - 同级旧的 `directory1` / `directory2` 顶层残留文件应忽略
@@ -550,7 +592,7 @@ debug-reports/debug-<mode>-<timestamp>.json
 
 ---
 
-## 18. 推荐使用方式
+## 19. 推荐使用方式
 
 比较推荐的调用方式：
 
@@ -563,11 +605,12 @@ debug-reports/debug-<mode>-<timestamp>.json
 - “请帮我总结归档 notebook 里的高频错误”
 - “生成一个 grep 练习，并启动 debug”
 - “归档 test01-03，并开启 debug”
+- “生成一个 regex 单题，优先走轻量路径并输出 debug”
 - “主 agent 出题，1 个 subagent 出数据，1 个 subagent 出测试脚本”
 
 ---
 
-## 19. 维护这个 skill 时先看哪里
+## 20. 维护这个 skill 时先看哪里
 
 如果以后你还要继续改这个 skill，建议优先看：
 
@@ -576,6 +619,7 @@ debug-reports/debug-<mode>-<timestamp>.json
 - `references/archive-rules.md`：归档规则
 - `references/mistake-summary-rules.md`：错因总结规则
 - `references/debug-rules.md`：debug 调试规则
+- `references/lightweight-path-rules.md`：轻量生成路径规则
 - `references/output-templates.md`：README / notebook / 测试脚本模板
 - `references/question-quality-checklist.md`：质量门禁
 - `references/source-map.md`：知识来源说明

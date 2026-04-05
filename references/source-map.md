@@ -59,6 +59,13 @@ When generating a question:
 3. Read copied support files only if you need concrete sample data shapes.
 4. Avoid scanning the whole archive unless the user asks for a mixed-topic set.
 
+When the request is a single clear-topic workspace or drill:
+
+1. Try the lightweight path first.
+2. Start with `topic-index.md`.
+3. Then read only one of `question-patterns.md`, `data-shapes.md`, or `workspace-rules.md`.
+4. Open one merged archive file only if the small references are still insufficient.
+
 When summarizing past mistakes:
 
 1. Read `archives/**/metadata.json` when present.

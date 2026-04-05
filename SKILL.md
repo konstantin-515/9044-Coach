@@ -56,10 +56,11 @@ Before opening the larger knowledge-base files, prefer this fast path:
 5. [references/workspace-rules.md](references/workspace-rules.md) when creating folders on disk
 6. [references/archive-rules.md](references/archive-rules.md) when archiving completed exercises
 7. [references/mistake-summary-rules.md](references/mistake-summary-rules.md) when summarizing archived notebook mistakes
-8. [references/debug-rules.md](references/debug-rules.md) when the user enables debug output
-9. [references/question-quality-checklist.md](references/question-quality-checklist.md) before finalizing a generated exercise
-10. inspect `references/user-notes/` when the user has stored personal notes there
-11. open files under `references/knowledge-base/` only as needed
+8. [references/lightweight-path-rules.md](references/lightweight-path-rules.md) when the request is a single clear task and speed matters
+9. [references/debug-rules.md](references/debug-rules.md) when the user enables debug output
+10. [references/question-quality-checklist.md](references/question-quality-checklist.md) before finalizing a generated exercise
+11. inspect `references/user-notes/` when the user has stored personal notes there
+12. open files under `references/knowledge-base/` only as needed
 
 ## Supported Modes
 
@@ -96,12 +97,18 @@ Treat debug as a modifier, not a standalone primary mode:
 - keep the main mode as `workspace`, `archive`, `mistake-summary`, or whatever the main task requires
 - when `debug_enabled = true`, produce the normal result first and also write a debug report on disk
 
+Determine the route kind early:
+
+- use `lightweight` when the request is one clear topic, one small task, and does not need broad archive coverage
+- use `full` when the request is mixed-topic, exam-set, archive-heavy, or strongly tied to detailed notes/PDFs
+
 Hard rule:
 
 - if the user asks for a question, practice, drill, test, exercise, or revision task and does not explicitly forbid file creation, treat it as `workspace`
 - if the user asks to archive exercises and does not specify a topic folder, infer the topic automatically and archive to `archives/<topic>/`
 - if the user asks to review past mistakes and archived notebooks exist, prefer `mistake-summary` before generating new questions
 - if the user enables debug, do not replace the main task with chat-only analysis; perform the task and then write debug artifacts
+- if the request is a single clear `workspace`, `question`, or `drill`, prefer the lightweight path before expanding to full reference lookup
 
 ## Agent Split
 
@@ -204,8 +211,12 @@ If debug is enabled, generate at least:
 The debug report should include:
 
 - request and resolved mode
+- resolved route kind
 - wall-clock timing and stage timings
 - tool-call counts
+- references used
+- primary bottleneck and secondary bottleneck
+- optimization hints
 - files created or updated
 - estimated non-debug token usage
 - a note that token numbers are estimates unless exact billing counters are available
@@ -307,18 +318,27 @@ For this user, prefer:
 ## Workflow
 
 1. Determine the user's mode: question, drill, mock exam, workspace, archive, mistake-summary, review, hint, solution, or checker.
-2. Inspect the fast reference files to identify likely matching topics and data shapes.
-3. Open detailed archive files only if needed for style or format fidelity.
-4. Create a fresh question or explanation that matches the local course style without copying.
-5. If the mode is `workspace`, create a self-contained exercise folder on disk.
-6. If subagents are available, assign one subagent to generate data files and one subagent to generate the test runner.
-7. Integrate both outputs into the final folder.
-8. Add a marking table, knowledge-point summary, and common-mistakes list.
-9. Reveal only the amount of help the user asked for.
-10. Before finishing, run the validation checklist below mentally.
-11. If a workspace was created, ensure the folder name follows the workspace naming rule.
-12. If mode is `archive`, ensure the source folder no longer remains under `exercises/` and the destination exists under `archives/`.
-13. If mode is `mistake-summary`, ensure the summary files were written under `archives/_summaries/`.
+2. Determine whether the request should use the `lightweight` route or the `full` route.
+3. Inspect the fast reference files to identify likely matching topics and data shapes.
+4. Open detailed archive files only if needed for style or format fidelity.
+5. Create a fresh question or explanation that matches the local course style without copying.
+6. If the mode is `workspace`, create a self-contained exercise folder on disk.
+7. If subagents are available, assign one subagent to generate data files and one subagent to generate the test runner.
+8. Integrate both outputs into the final folder.
+9. Add a marking table, knowledge-point summary, and common-mistakes list.
+10. Reveal only the amount of help the user asked for.
+11. Before finishing, run the validation checklist below mentally.
+12. If a workspace was created, ensure the folder name follows the workspace naming rule.
+13. If mode is `archive`, ensure the source folder no longer remains under `exercises/` and the destination exists under `archives/`.
+14. If mode is `mistake-summary`, ensure the summary files were written under `archives/_summaries/`.
+
+For the `lightweight` route:
+
+- read `references/topic-index.md`
+- read `references/output-templates.md`
+- read only one of `references/question-patterns.md`, `references/data-shapes.md`, or `references/workspace-rules.md` as needed
+- open at most one detailed merged archive file if still required
+- if that is not enough, escalate to `full` and record the escalation in debug output
 
 For `workspace` mode, perform step 5 concretely:
 
@@ -413,6 +433,7 @@ Before returning a generated question, make sure:
 - if mode was `mistake-summary`, both Markdown and JSON summary files exist under `archives/_summaries/`
 - if debug was enabled, both Markdown and JSON debug reports exist in the expected debug location
 - if debug was enabled, the report clearly labels token counts as estimated when exact billing counts are unavailable
+- if the route was `lightweight`, the reference list is short and clearly recorded in debug output
 
 ## Fallback Strategy
 
@@ -428,6 +449,7 @@ If something blocks the ideal flow, degrade in this order:
 8. If there are no archived notebooks yet, still create an empty-state mistake summary file that explains what to archive next.
 9. If archive copying succeeds but source deletion fails, do not call the archive finished; report `COPIED_OK CLEANUP_FAILED` and request escalated cleanup.
 10. If exact token counts are unavailable, emit explicit estimates instead of pretending they are exact.
+11. If the lightweight route is too thin to write a reliable spec, escalate to the full route instead of guessing.
 
 ## When The User Is Vague
 

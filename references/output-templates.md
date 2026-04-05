@@ -227,38 +227,53 @@ When the user wants to review archived mistakes, write a Markdown summary with t
 When debug is enabled, write a compact report shaped like this:
 
 ```markdown
-# Skill Debug Report
+# Skill 调试报告
 
-- Request:
-- Mode:
-- Target Path:
-- Started At:
-- Ended At:
-- Total Duration Ms:
+- 请求：
+- 主模式：
+- 执行路径：
+- 目标路径：
+- 开始时间：
+- 结束时间：
+- 总耗时（毫秒）：
 
-## Stage Timings
+## 阶段耗时
 
-| Stage | Duration Ms |
+| 阶段 | 耗时（毫秒） | 占比 |
+| --- | --- | --- |
+
+## 工具调用
+
+| 工具 | 次数 |
 | --- | --- |
 
-## Tool Calls
+## 使用的参考文件
 
-| Tool | Count |
-| --- | --- |
+- 数量：
+- ...
 
-## Estimated Non-Debug Tokens
+## 主要瓶颈
 
-- Context Estimate:
-- Output Estimate:
-- Total Estimate:
-- Note: estimated from text length; not billing-accurate
+- 主瓶颈：
+- 次要瓶颈：
 
-## Files Touched
+## 优化建议
 
-- Created or updated:
-- Count:
+- ...
 
-## Notes
+## 估算的非 Debug Token 消耗
+
+- 上下文估算：
+- 输出估算：
+- 总估算：
+- 说明：
+
+## 变更文件
+
+- 数量：
+- ...
+
+## 备注
 
 - ...
 ```
