@@ -35,7 +35,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
 
 def load_spec(path: pathlib.Path) -> dict:
     try:
-        data = json.loads(path.read_text(encoding="utf-8"))
+        data = json.loads(path.read_text(encoding="utf-8-sig"))
     except (OSError, json.JSONDecodeError) as exc:
         raise ValueError(f"failed to read spec json: {path}: {exc}") from exc
     if not isinstance(data, dict):
@@ -60,14 +60,27 @@ def list_value(payload: dict, key: str) -> list[str]:
 def normalize_cases(raw_cases: object, default_names: tuple[str, ...]) -> list[dict[str, str]]:
     cases: list[dict[str, str]] = []
     items = raw_cases if isinstance(raw_cases, list) else []
-    for index, name in enumerate(default_names):
-        raw = items[index] if index < len(items) and isinstance(items[index], dict) else {}
+    for index, raw in enumerate(items):
+        if not isinstance(raw, dict):
+            continue
+        name = str(raw.get("name", "")).strip() or f"{default_names[0][:-2]}{index + 1:02d}"
         cases.append(
             {
                 "name": name,
                 "input": str(raw.get("input", "")),
                 "expected": str(raw.get("expected", "")),
                 "reason": str(raw.get("reason", "")).strip(),
+            }
+        )
+    for index, name in enumerate(default_names):
+        if index < len(cases):
+            continue
+        cases.append(
+            {
+                "name": name,
+                "input": "",
+                "expected": "",
+                "reason": "",
             }
         )
     return cases
@@ -203,6 +216,8 @@ def main(argv: list[str]) -> int:
         constraints=constraints,
         knowledge_points=knowledge_points,
         common_mistakes=common_mistakes,
+        sample_cases=sample_cases,
+        edge_cases=edge_cases,
     )
     write_file(readme_path, readme_text)
 

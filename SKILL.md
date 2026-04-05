@@ -274,6 +274,7 @@ For `workspace` mode, prefer:
 
 - three visible sample cases such as `sample01`, `sample02`, `sample03`
 - two visible edge cases such as `edge01`, `edge02`
+- for harder or full-route exercises, prefer four or more visible sample cases when that improves clarity
 
 Do not default to only one sample and one edge unless the task is unusually small.
 
@@ -295,6 +296,7 @@ For `workspace` mode, the `README.md` must also include:
 - whether input comes from stdin, command line arguments, or data files
 - the exact WSL path for this exercise folder
 - a ready-to-copy `cd` command using that WSL path
+- explicit visible sample input/output blocks, not just sample filenames
 
 For this user, prefer:
 

@@ -150,6 +150,7 @@ Prefer multiple visible cases by default:
 
 - three sample cases such as `sample01` to `sample03`
 - two edge cases such as `edge01` and `edge02`
+- for more complex integrated questions, prefer four or more visible sample cases if they clarify the rules
 
 Hard rule:
 

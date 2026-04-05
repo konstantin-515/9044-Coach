@@ -52,6 +52,18 @@ def required_pairs(kind: str) -> list[tuple[str, str]]:
     return pairs
 
 
+def discover_case_pairs(workspace: pathlib.Path) -> list[tuple[str, str]]:
+    data_dir = workspace / "data"
+    expected_dir = workspace / "expected"
+    pairs: list[tuple[str, str]] = []
+    if not data_dir.exists() or not expected_dir.exists():
+        return pairs
+    for input_path in sorted(data_dir.glob("*_input.txt")):
+        case_name = input_path.name.removesuffix("_input.txt")
+        pairs.append((f"data/{input_path.name}", f"expected/{case_name}_output.txt"))
+    return pairs
+
+
 def validate_workspace(workspace: pathlib.Path, language: str) -> dict:
     checks: list[dict] = []
     solution_name = "solution.sh" if language == "shell" else "solution.py"
@@ -63,8 +75,11 @@ def validate_workspace(workspace: pathlib.Path, language: str) -> dict:
     solution = workspace / solution_name
     test_runner = workspace / test_name
 
+    discovered_pairs = discover_case_pairs(workspace)
+    required_case_pairs = discovered_pairs or required_pairs(language)
+
     required_paths = [readme, metadata, notebook, solution, test_runner]
-    for left, right in required_pairs(language):
+    for left, right in required_case_pairs:
         required_paths.append(workspace / left)
         required_paths.append(workspace / right)
 
@@ -139,18 +154,28 @@ def validate_workspace(workspace: pathlib.Path, language: str) -> dict:
 
     pairs_ok = True
     bad_pairs: list[str] = []
-    for left, right in required_pairs(language):
+    for left, right in required_case_pairs:
         left_path = workspace / left
         right_path = workspace / right
         if left_path.exists() != right_path.exists():
             pairs_ok = False
             bad_pairs.append(f"{left} <-> {right}")
+    sample_count = sum(1 for left, _ in required_case_pairs if pathlib.Path(left).name.startswith("sample"))
+    edge_count = sum(1 for left, _ in required_case_pairs if pathlib.Path(left).name.startswith("edge"))
     checks.append(
         check(
             pairs_ok,
             "case_pairs",
             "data/ 与 expected/ 的样例文件成对存在。",
             "data/ 与 expected/ 存在不成对的样例文件。",
+        )
+    )
+    checks.append(
+        check(
+            sample_count >= 3 and edge_count >= 2,
+            "case_volume",
+            "可见样例数量达到最低要求。",
+            "可见样例过少；默认至少需要 3 个 sample 和 2 个 edge。",
         )
     )
 
@@ -169,6 +194,8 @@ def validate_workspace(workspace: pathlib.Path, language: str) -> dict:
         "missing_paths": missing_paths,
         "errors": errors,
         "readme_chinese_chars": chinese_char_count(readme_text),
+        "sample_case_count": sample_count,
+        "edge_case_count": edge_count,
     }
 
 

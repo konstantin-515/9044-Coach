@@ -144,6 +144,7 @@ Each workspace should have at least:
 
 - three visible sample cases when feasible
 - two visible edge cases when feasible
+- for more complex or exam-style integrated tasks, prefer four to six visible sample cases when that makes the contract clearer
 
 Prefer numbered filenames such as:
 
@@ -206,6 +207,7 @@ This is a study workspace, not a hidden autograder. So:
 - edge tests may be visible too
 - you may add slightly stricter checks in the runner
 - do not describe them as official or hidden school tests
+- the `README.md` should show explicit sample input/output blocks for the visible cases, not only file names
 
 ## Data File Guidance
 

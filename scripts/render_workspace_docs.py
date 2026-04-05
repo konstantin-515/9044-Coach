@@ -24,6 +24,32 @@ def bullet_lines(items: list[str], fallback: str) -> str:
     return "\n".join(f"- {item}" for item in clean)
 
 
+def case_block(title: str, input_text: str, expected_text: str) -> str:
+    safe_input = input_text if input_text else "\n"
+    safe_expected = expected_text if expected_text else "\n"
+    return (
+        f"### {title}\n\n"
+        "输入：\n\n"
+        "```text\n"
+        f"{safe_input}"
+        "```\n\n"
+        "输出：\n\n"
+        "```text\n"
+        f"{safe_expected}"
+        "```\n"
+    )
+
+
+def render_case_section(section_title: str, cases: list[dict[str, str]], empty_fallback: str) -> str:
+    if not cases:
+        return f"## {section_title}\n\n- {empty_fallback}\n"
+    rendered = "\n\n".join(
+        case_block(case["name"], case.get("input", ""), case.get("expected", ""))
+        for case in cases
+    )
+    return f"## {section_title}\n\n{rendered}\n"
+
+
 def build_readme(
     *,
     title: str,
@@ -38,7 +64,11 @@ def build_readme(
     constraints: list[str],
     knowledge_points: list[str],
     common_mistakes: list[str],
+    sample_cases: list[dict[str, str]] | None = None,
+    edge_cases: list[dict[str, str]] | None = None,
 ) -> str:
+    sample_cases = sample_cases or []
+    edge_cases = edge_cases or []
     return f"""# {title}
 
 ## 题目说明
@@ -83,13 +113,9 @@ def build_readme(
 cd {wsl_path}
 ```
 
-## 可见样例
+{render_case_section("可见样例", sample_cases, "请补充至少一个可见样例。")}
 
-{bullet_lines(list(SAMPLE_CASES), "sample01")}
-
-## 可见边界案例
-
-{bullet_lines(list(EDGE_CASES), "edge01")}
+{render_case_section("可见边界案例", edge_cases, "请补充至少一个边界样例。")}
 
 ## 评分关注点
 
@@ -210,6 +236,8 @@ def main(argv: list[str]) -> int:
         constraints=args.constraint,
         knowledge_points=args.knowledge_point,
         common_mistakes=args.common_mistake,
+        sample_cases=[],
+        edge_cases=[],
     )
     write_file(readme_path, readme_text)
 
