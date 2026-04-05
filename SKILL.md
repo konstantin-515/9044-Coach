@@ -309,6 +309,8 @@ For `archive` mode, perform the move concretely:
 - pass the requested exercise spec such as `test01` or `test01-03`
 - if the user supplied a topic, pass it through as an override
 - otherwise let the script infer the topic automatically
+- treat archive as a two-phase operation: copy, verify, then delete the source
+- if the script reports `COPIED_OK CLEANUP_FAILED`, tell the user the archive copy is complete and request escalated cleanup instead of retrying blindly
 - only then respond with a summary of which folders moved where
 
 For `mistake-summary` mode, perform the summary concretely:
@@ -377,6 +379,7 @@ Before returning a generated question, make sure:
 - if the test runner writes failure artifacts, the printed paths match the created files
 - if mode was `workspace`, the exercise folder actually exists on disk and is not just described in chat
 - if mode was `archive`, the archived folder exists under `archives/<topic>/` and no live copy remains under `exercises/`
+- if mode was `archive` and cleanup failed, clearly report that the archive copy was verified and the remaining work is privileged cleanup
 - if mode was `mistake-summary`, both Markdown and JSON summary files exist under `archives/_summaries/`
 
 ## Fallback Strategy
@@ -391,6 +394,7 @@ If something blocks the ideal flow, degrade in this order:
 6. If archive topic inference is weak, move the exercise into `archives/misc/` instead of guessing aggressively.
 7. If some requested exercises are missing, archive the ones that exist and report the missing ones.
 8. If there are no archived notebooks yet, still create an empty-state mistake summary file that explains what to archive next.
+9. If archive copying succeeds but source deletion fails, do not call the archive finished; report `COPIED_OK CLEANUP_FAILED` and request escalated cleanup.
 
 ## When The User Is Vague
 

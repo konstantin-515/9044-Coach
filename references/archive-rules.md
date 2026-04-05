@@ -32,7 +32,11 @@ When the user asks to archive one or more exercises:
 - place them under `archives/<topic>/`
 - do not leave a second live copy behind in `exercises/`
 
-This is a move, not a copy.
+The final result should behave like a move, but the implementation should be:
+
+1. copy
+2. verify
+3. delete source
 
 ## Input Style
 
@@ -85,6 +89,9 @@ If the inference is weak, archive to `misc`.
 - if `archives/<topic>/testNN` already exists, skip that exercise and report it
 - if `exercises/testNN` does not exist, report it clearly
 - if the user gives a range and only some folders exist, archive the ones that exist and report the skipped ones
+- ignore low-value transient paths such as `tests/.artifacts/` and `__pycache__/` during archive copy and verification
+- before deleting the source, verify that the archive copy is complete
+- if copying succeeds but deleting fails, do not hide that state behind a traceback
 
 ## User Experience
 
@@ -96,9 +103,10 @@ The result summary should say:
 
 Examples:
 
-- `MOVED test01 -> archives/re/test01`
-- `MOVED test02 -> archives/shell/test02`
+- `ARCHIVED test01 -> archives/re/test01`
+- `ARCHIVED test02 -> archives/shell/test02`
 - `SKIP test03: source folder not found`
+- `COPIED_OK CLEANUP_FAILED test04 -> archives/python/test04`
 
 ## Implementation
 
@@ -110,5 +118,13 @@ The script should:
 
 - create `archives/<topic>/` when missing
 - infer topic automatically when topic is not supplied
-- move folders with a filesystem move
+- copy relevant files first, then verify, then delete the source
+- compare at least the relevant relative path set before deleting the source
+- tolerate partial previous archive attempts by resuming copy into an existing destination directory when appropriate
+- report `COPIED_OK CLEANUP_FAILED` when the destination copy is verified but deleting the source folder fails
 - return a non-zero exit code if any requested folder could not be archived
+
+If elevated cleanup is needed after a verified copy:
+
+- request escalated cleanup instead of retrying blindly
+- prefer a non-login shell or PowerShell `-NoProfile` style invocation to reduce shell startup noise
