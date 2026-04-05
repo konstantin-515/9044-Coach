@@ -1,7 +1,7 @@
 interface:
   display_name: "9044 Coach"
-  short_description: "生成 9044 风格练习、归档练习并总结错因"
-  default_prompt: "Use $9044-coach to create a COMP9044-style practice workspace, archive completed exercises, or summarize archived mistakes."
+  short_description: "生成 9044 风格练习、归档练习、总结错因并支持 debug"
+  default_prompt: "Use $9044-coach to create a COMP9044-style practice workspace, archive completed exercises, summarize archived mistakes, or emit a debug report alongside the main task."
 
 policy:
   allow_implicit_invocation: true

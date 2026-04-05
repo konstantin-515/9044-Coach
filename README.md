@@ -459,7 +459,59 @@ archives/_summaries/mistake-summary-re.json
 
 ---
 
-## 14. subagent 分工
+## 14. Debug 调试开关
+
+这个 skill 现在支持一个 `debug` 调试开关。
+
+它不是一个单独 mode，而是一个附加功能。也就是说你可以这样说：
+
+- “生成一个 grep 练习，并启动 debug”
+- “给我一个 python re 练习目录，顺便输出 debug 信息”
+- “归档 test01-03，并开启 debug”
+
+这时 skill 会：
+
+1. 先正常完成主任务
+2. 再额外写一份 debug 报告
+
+如果主任务生成了练习目录，debug 文件会放在：
+
+```text
+testNN/debug/debug-report.md
+testNN/debug/debug-report.json
+```
+
+如果主任务没有对应的练习目录，就会写到工作区级别的：
+
+```text
+debug-reports/debug-<mode>-<timestamp>.md
+debug-reports/debug-<mode>-<timestamp>.json
+```
+
+### Debug 报告里会有什么
+
+- 请求内容
+- 解析后的主 mode
+- 总执行时间
+- 各阶段耗时
+- 工具调用次数
+- 创建或更新了哪些非 debug 文件
+- 估算的非 debug token 消耗
+
+### 关于 token 消耗
+
+这里要特别说明：
+
+- 这个 skill 目前拿不到平台的精确 billing token
+- 所以 debug 里写的是“估算 token”
+- 它会尽量按上下文文件和生成文件的文本长度估算
+- 并且默认不把 debug 文件本身算进去
+
+也就是说，这个 debug 更适合你做“相对比较”和“优化排查”，而不是做精确计费。
+
+---
+
+## 15. subagent 分工
 
 当用户明确要求使用 subagent / delegation 时，推荐分工：
 
@@ -476,7 +528,7 @@ archives/_summaries/mistake-summary-re.json
 
 ---
 
-## 15. 设计原则
+## 16. 设计原则
 
 这个 skill 的核心原则：
 
@@ -490,7 +542,7 @@ archives/_summaries/mistake-summary-re.json
 
 ---
 
-## 16. 已知说明
+## 17. 已知说明
 
 - `references/knowledge-base/sample_data/test05/` 下应优先使用 `compare_directory1/` 和 `compare_directory2/`
 - 同级旧的 `directory1` / `directory2` 顶层残留文件应忽略
@@ -498,7 +550,7 @@ archives/_summaries/mistake-summary-re.json
 
 ---
 
-## 17. 推荐使用方式
+## 18. 推荐使用方式
 
 比较推荐的调用方式：
 
@@ -509,11 +561,13 @@ archives/_summaries/mistake-summary-re.json
 - “用 9044-coach 帮我检查这个 solution.sh 还有哪些边界没覆盖”
 - “我想复习一下之前的错因”
 - “请帮我总结归档 notebook 里的高频错误”
+- “生成一个 grep 练习，并启动 debug”
+- “归档 test01-03，并开启 debug”
 - “主 agent 出题，1 个 subagent 出数据，1 个 subagent 出测试脚本”
 
 ---
 
-## 18. 维护这个 skill 时先看哪里
+## 19. 维护这个 skill 时先看哪里
 
 如果以后你还要继续改这个 skill，建议优先看：
 
@@ -521,6 +575,7 @@ archives/_summaries/mistake-summary-re.json
 - `references/workspace-rules.md`：练习目录生成规则
 - `references/archive-rules.md`：归档规则
 - `references/mistake-summary-rules.md`：错因总结规则
+- `references/debug-rules.md`：debug 调试规则
 - `references/output-templates.md`：README / notebook / 测试脚本模板
 - `references/question-quality-checklist.md`：质量门禁
 - `references/source-map.md`：知识来源说明

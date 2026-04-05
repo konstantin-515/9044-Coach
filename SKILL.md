@@ -56,9 +56,10 @@ Before opening the larger knowledge-base files, prefer this fast path:
 5. [references/workspace-rules.md](references/workspace-rules.md) when creating folders on disk
 6. [references/archive-rules.md](references/archive-rules.md) when archiving completed exercises
 7. [references/mistake-summary-rules.md](references/mistake-summary-rules.md) when summarizing archived notebook mistakes
-8. [references/question-quality-checklist.md](references/question-quality-checklist.md) before finalizing a generated exercise
-9. inspect `references/user-notes/` when the user has stored personal notes there
-10. open files under `references/knowledge-base/` only as needed
+8. [references/debug-rules.md](references/debug-rules.md) when the user enables debug output
+9. [references/question-quality-checklist.md](references/question-quality-checklist.md) before finalizing a generated exercise
+10. inspect `references/user-notes/` when the user has stored personal notes there
+11. open files under `references/knowledge-base/` only as needed
 
 ## Supported Modes
 
@@ -89,11 +90,18 @@ Parse the request in this order:
 8. If the user explicitly says `chat only`, `just give me the question here`, or otherwise says no files should be created, use `question` or `drill`.
 9. Otherwise, default to `workspace`.
 
+Treat debug as a modifier, not a standalone primary mode:
+
+- if the user says `debug`, `启动 debug`, `开启调试`, `debug this skill`, or equivalent, set `debug_enabled = true`
+- keep the main mode as `workspace`, `archive`, `mistake-summary`, or whatever the main task requires
+- when `debug_enabled = true`, produce the normal result first and also write a debug report on disk
+
 Hard rule:
 
 - if the user asks for a question, practice, drill, test, exercise, or revision task and does not explicitly forbid file creation, treat it as `workspace`
 - if the user asks to archive exercises and does not specify a topic folder, infer the topic automatically and archive to `archives/<topic>/`
 - if the user asks to review past mistakes and archived notebooks exist, prefer `mistake-summary` before generating new questions
+- if the user enables debug, do not replace the main task with chat-only analysis; perform the task and then write debug artifacts
 
 ## Agent Split
 
@@ -136,6 +144,7 @@ Hard rule:
 - when mode is `workspace`, create the folder and files on disk before sending the final response
 - when mode is `archive`, move the folder on disk before sending the final response
 - when mode is `mistake-summary`, write the summary file on disk before sending the final response
+- when debug is enabled, write the debug report on disk before sending the final response
 
 ## What To Generate
 
@@ -186,6 +195,20 @@ If the user asked for one topic only, prefer:
 
 1. `archives/_summaries/mistake-summary-<topic>.md`
 2. `archives/_summaries/mistake-summary-<topic>.json`
+
+If debug is enabled, generate at least:
+
+1. `debug/debug-report.md` and `debug/debug-report.json` inside the generated exercise folder when a workspace folder exists
+2. otherwise a report under `debug-reports/` at the workspace root
+
+The debug report should include:
+
+- request and resolved mode
+- wall-clock timing and stage timings
+- tool-call counts
+- files created or updated
+- estimated non-debug token usage
+- a note that token numbers are estimates unless exact billing counters are available
 
 For shell tasks in this course, default to:
 
@@ -320,6 +343,13 @@ For `mistake-summary` mode, perform the summary concretely:
 - write both Markdown and JSON summaries under `archives/_summaries/`
 - only then respond with the summary file path and the main repeated weak points
 
+If debug is enabled, after the main work is complete:
+
+- record start time, end time, and a short per-stage timing breakdown
+- record the reference files and generated non-debug files used for the main task
+- call `scripts/write_debug_report.py`
+- write the report after the main task so debug output does not contaminate the non-debug token estimate
+
 ## Workspace Folder Contract
 
 When generating a practice folder, prefer this structure:
@@ -381,6 +411,8 @@ Before returning a generated question, make sure:
 - if mode was `archive`, the archived folder exists under `archives/<topic>/` and no live copy remains under `exercises/`
 - if mode was `archive` and cleanup failed, clearly report that the archive copy was verified and the remaining work is privileged cleanup
 - if mode was `mistake-summary`, both Markdown and JSON summary files exist under `archives/_summaries/`
+- if debug was enabled, both Markdown and JSON debug reports exist in the expected debug location
+- if debug was enabled, the report clearly labels token counts as estimated when exact billing counts are unavailable
 
 ## Fallback Strategy
 
@@ -395,6 +427,7 @@ If something blocks the ideal flow, degrade in this order:
 7. If some requested exercises are missing, archive the ones that exist and report the missing ones.
 8. If there are no archived notebooks yet, still create an empty-state mistake summary file that explains what to archive next.
 9. If archive copying succeeds but source deletion fails, do not call the archive finished; report `COPIED_OK CLEANUP_FAILED` and request escalated cleanup.
+10. If exact token counts are unavailable, emit explicit estimates instead of pretending they are exact.
 
 ## When The User Is Vague
 

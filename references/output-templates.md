@@ -222,6 +222,47 @@ When the user wants to review archived mistakes, write a Markdown summary with t
 - ...
 ```
 
+## Debug Report Template
+
+When debug is enabled, write a compact report shaped like this:
+
+```markdown
+# Skill Debug Report
+
+- Request:
+- Mode:
+- Target Path:
+- Started At:
+- Ended At:
+- Total Duration Ms:
+
+## Stage Timings
+
+| Stage | Duration Ms |
+| --- | --- |
+
+## Tool Calls
+
+| Tool | Count |
+| --- | --- |
+
+## Estimated Non-Debug Tokens
+
+- Context Estimate:
+- Output Estimate:
+- Total Estimate:
+- Note: estimated from text length; not billing-accurate
+
+## Files Touched
+
+- Created or updated:
+- Count:
+
+## Notes
+
+- ...
+```
+
 ### README Template
 
 ```markdown
