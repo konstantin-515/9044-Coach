@@ -35,10 +35,17 @@ At minimum, capture:
 - short per-stage timing breakdown
 - tool-call counts
 - references used for the main task
+- split reference files into content references, control-rule files, and debug-only files when possible
+- retry count
+- whether fallback or degradation was triggered
+- permission-related errors when they happen
+- stderr or shell-environment noise when it is relevant
+- main write methods when they are known
 - primary bottleneck and secondary bottleneck
 - optimization hints
 - non-debug files created or updated
 - estimated non-debug token usage
+- validation summary when a workspace validator was run
 
 ## Token Guidance
 
@@ -46,11 +53,12 @@ Unless exact billing counters are available from the platform, the debug report 
 
 Preferred breakdown:
 
-- estimated context tokens from skill files and reference files used
+- estimated context tokens from content and control references used for the main task
 - estimated non-debug output tokens from generated files
 - total estimated non-debug tokens
 
 Do not include the debug report files themselves in the token estimate.
+Prefer not to count debug-only rule files as main-task context tokens.
 
 ## Output Location
 
@@ -76,8 +84,13 @@ The script should:
 
 - accept timestamps, stage timings, and file lists
 - accept reference file lists and route kind
+- optionally accept a validation JSON summary
+- optionally accept retry, fallback, permission, stderr-noise, and write-method traces
 - estimate tokens from text length heuristics
 - identify the slowest stage as the bottleneck
-- generate simple optimization hints from timing and token shape
+- generate simple optimization hints from timing, token shape, and validation status
+- distinguish content references from control/debug files in the report
+- make it visible when spec-driven authoring was used instead of ad hoc file writes
+- make it obvious whether slowness came from actual retries or just heavy authoring
 - write both Markdown and JSON outputs
 - stay deterministic and safe to run repeatedly

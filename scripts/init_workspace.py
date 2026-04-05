@@ -127,12 +127,12 @@ cd {wsl_path}
 
 ## 评分关注点
 
-| Test Category | Purpose | Input Characteristic | Common Mistake |
+| 测试类别 | 目的 | 输入特征 | 常见错误 |
 | --- | --- | --- | --- |
-| Basic correctness | Verify core logic | Regular well-formed input | Solves only the happy path |
-| Multi-case coverage | Verify multiple visible examples | Different input patterns across several samples | Only passes one example style |
-| Edge handling | Verify corner cases | Empty, repeated, or messy patterns | Ignores special cases |
-| Output format | Verify exact formatting | Strict line-based output | Extra spaces or wrong ordering |
+| 基础正确性 | 验证核心逻辑 | 规则、干净、格式正常的输入 | 只能通过最简单的 happy path |
+| 多样例覆盖 | 验证是否适配不同输入形态 | 几个可见样例分别覆盖不同模式 | 只对一种样例写死处理 |
+| 边界处理 | 验证边界和脏数据情况 | 空行、重复、额外空格、大小写混合 | 忽略特殊情况 |
+| 输出格式 | 验证输出是否完全匹配 | 严格的逐行输出 | 多空格、顺序错误、漏换行 |
 
 ## 考点
 

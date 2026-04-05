@@ -19,6 +19,9 @@ Hard rule:
 - for `workspace` mode, creating the folder and files on disk is mandatory
 - if no files were created, the task is incomplete even if the question text in chat is good
 - prefer using `scripts/init_workspace.py` to create the folder skeleton before filling in the real content
+- after the question contract is stable, prefer using `scripts/fill_workspace_from_spec.py` to write the main content in one pass
+- after the question contract is stable, prefer using `scripts/render_workspace_docs.py` to write the final `README.md` and `metadata.json`
+- before finishing, prefer using `scripts/validate_workspace.py` to check the generated folder
 
 ## Recommended Agent Ownership
 
@@ -164,6 +167,12 @@ Good edge cases include:
 
 The test subagent should derive its checks from the final question contract, not invent a different task.
 
+For better speed and consistency:
+
+- prefer generating one compact spec first
+- then let `scripts/fill_workspace_from_spec.py` write `README.md`, `metadata.json`, `data/`, `expected/`, and the default test runner
+- avoid manually patching each sample file one by one unless the script path is genuinely blocked
+
 When a test fails, the runner should print a short reason, for example:
 
 - wrong ordering
@@ -256,6 +265,13 @@ When the real topic is known, the main agent should update `topic_hint` before f
 - what common mistakes to watch for
 
 For this user, `README.md` should be written in Chinese.
+
+Hard rule:
+
+- `README.md` must be Chinese, not mixed Chinese-plus-English boilerplate
+- the main headings should stay in Chinese, including `题目说明`, `输入`, `输出`, `文件说明`, `路径信息`, `考点`, `常见错误`, `如何开始`
+- if `README.md` is produced through a script, use `scripts/render_workspace_docs.py`
+- if `scripts/validate_workspace.py` reports the README is not Chinese enough, the task is not complete
 
 For shell tasks, `README.md` should state clearly that the intended shell is `dash` or portable POSIX `sh`.
 

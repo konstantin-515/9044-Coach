@@ -155,7 +155,9 @@ Hard rule:
 
 - do not stop at a chat-only question if the mode is `workspace`
 - first create the folder and files on disk
-- then fill the files
+- then prefer filling the files from one compact spec through `scripts/fill_workspace_from_spec.py`
+- prefer rendering the final Chinese `README.md` and `metadata.json` through `scripts/render_workspace_docs.py`
+- prefer validating the finished folder through `scripts/validate_workspace.py`
 - only then summarize the result in chat
 
 ### Delegation Notes
@@ -247,9 +249,32 @@ When debug is enabled, write a compact report shaped like this:
 | 工具 | 次数 |
 | --- | --- |
 
-## 使用的参考文件
+## 内容参考文件
 
 - 数量：
+- ...
+
+## 控制规则文件
+
+- 数量：
+- ...
+
+## Debug 专用文件
+
+- 数量：
+- ...
+
+## 重试与降级
+
+- 重试次数：
+- 是否触发降级：
+- 降级步骤：
+- 主要写入方式：
+
+## 异常与噪音
+
+- 权限错误数：
+- stderr / 环境噪音条数：
 - ...
 
 ## 主要瓶颈
@@ -260,6 +285,12 @@ When debug is enabled, write a compact report shaped like this:
 ## 优化建议
 
 - ...
+
+## 校验结果
+
+- 总结：
+- 是否通过：
+- README 中文检查：
 
 ## 估算的非 Debug Token 消耗
 

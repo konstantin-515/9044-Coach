@@ -25,6 +25,7 @@ Use this file as the final quality gate before returning a generated question or
 If files are generated on disk:
 
 - `README.md` must name the correct target file
+- `README.md` must be clearly written in Chinese for this user
 - `tests/` must reference the actual target filename
 - files mentioned in `README.md` must exist
 - expected outputs must match the provided sample data

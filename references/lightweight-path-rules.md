@@ -48,6 +48,8 @@ Hard budget:
 - do not read more than 3 small reference files by default
 - do not read more than 1 merged archive file unless the lightweight route is clearly insufficient
 - do not open PDF notes in the lightweight path unless the user explicitly asks
+- for `workspace` mode, prefer reusing `scripts/render_workspace_docs.py` and `scripts/validate_workspace.py` instead of manually rewriting long README and validation logic
+- for `workspace` mode, prefer `scripts/fill_workspace_from_spec.py` so the main content is written from one compact spec
 
 ## Fallback
 
@@ -63,3 +65,5 @@ When debug is enabled, record:
 - `route_kind = lightweight`
 - the exact reference files used
 - whether the lightweight route succeeded or escalated to full
+- whether the lightweight route reused script-based authoring and validation
+- whether spec-driven authoring was used

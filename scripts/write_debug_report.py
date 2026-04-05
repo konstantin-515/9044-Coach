@@ -20,10 +20,20 @@ STAGE_HINTS = {
     "references": "优先读压缩索引文件，只在必要时打开一份详细 merged 资料。",
     "workspace_creation": "把目录骨架和固定模板更多下放给脚本，减少生成阶段的重复组织。",
     "scaffold": "把骨架生成固定交给脚本，避免模型重复组织固定文件结构。",
-    "authoring": "压缩 README 和样例组织步骤，更多复用模板和固定表格。",
+    "authoring": "把题面、样例和 expected 收成 spec 驱动，一次性交给 fill_workspace_from_spec.py 渲染。",
     "validation": "合并重复校验，优先只检查关键一致性点。",
     "debug_report": "debug 输出已经偏重，必要时进一步压缩调试字段。",
 }
+
+CONTROL_REFERENCE_NAMES = {
+    "lightweight-path-rules.md",
+    "workspace-rules.md",
+    "question-quality-checklist.md",
+    "source-map.md",
+    "archive-rules.md",
+    "mistake-summary-rules.md",
+}
+DEBUG_REFERENCE_NAMES = {"debug-rules.md"}
 
 
 def parse_kv_list(values: list[str]) -> dict[str, int]:
@@ -36,6 +46,19 @@ def parse_kv_list(values: list[str]) -> dict[str, int]:
         if not name:
             raise ValueError(f"missing name in pair: {raw}")
         result[name] = int(value.strip())
+    return result
+
+
+def parse_text_kv_list(values: list[str]) -> dict[str, str]:
+    result: dict[str, str] = {}
+    for raw in values:
+        if "=" not in raw:
+            raise ValueError(f"expected name=value, got: {raw}")
+        name, value = raw.split("=", 1)
+        name = name.strip()
+        if not name:
+            raise ValueError(f"missing name in pair: {raw}")
+        result[name] = value.strip()
     return result
 
 
@@ -85,6 +108,38 @@ def estimate_paths(paths: list[pathlib.Path]) -> tuple[int, list[dict], list[str
     return total, details, missing
 
 
+def classify_reference(detail: dict) -> str:
+    name = pathlib.Path(detail["path"]).name
+    if name in DEBUG_REFERENCE_NAMES:
+        return "debug"
+    if name in CONTROL_REFERENCE_NAMES:
+        return "control"
+    return "content"
+
+
+def split_reference_groups(reference_details: list[dict]) -> dict[str, list[dict]]:
+    groups = {"content": [], "control": [], "debug": []}
+    for detail in reference_details:
+        groups[classify_reference(detail)].append(detail)
+    return groups
+
+
+def token_sum(items: list[dict]) -> int:
+    return sum(item.get("estimated_tokens", 0) for item in items)
+
+
+def load_validation_summary(path_str: str) -> dict | None:
+    if not path_str:
+        return None
+    path = pathlib.Path(path_str).resolve()
+    if not path.exists():
+        return None
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+
+
 def resolve_report_paths(
     workspace_root: pathlib.Path, target_path: pathlib.Path | None, mode: str, ended_at: dt.datetime
 ) -> tuple[pathlib.Path, pathlib.Path]:
@@ -104,10 +159,7 @@ def resolve_report_paths(
 def percentage_map(stage_timings: dict[str, int], total_duration_ms: int) -> dict[str, float]:
     if total_duration_ms <= 0:
         return {name: 0.0 for name in stage_timings}
-    return {
-        name: round((value / total_duration_ms) * 100, 1)
-        for name, value in stage_timings.items()
-    }
+    return {name: round((value / total_duration_ms) * 100, 1) for name, value in stage_timings.items()}
 
 
 def pick_bottlenecks(stage_timings: dict[str, int]) -> tuple[dict | None, dict | None]:
@@ -124,10 +176,14 @@ def build_optimization_hints(payload: dict) -> list[str]:
     token_info = payload["estimated_non_debug_tokens"]
     context_estimate = token_info["context_estimate"]
     output_estimate = token_info["output_estimate"]
-    reference_count = len(payload["reference_files"])
+    content_reference_count = len(payload["reference_groups"]["content"])
     route_kind = payload["route_kind"]
     primary = payload["primary_bottleneck"]
     secondary = payload["secondary_bottleneck"]
+    validation = payload.get("validation")
+    retry_count = payload["retry_count"]
+    permission_errors = payload["permission_errors"]
+    stderr_noise = payload["stderr_noise"]
 
     if route_kind != "lightweight":
         hints.append("这次没有走轻量路径；如果是单题且主题明确，优先改成 lightweight route。")
@@ -139,22 +195,46 @@ def build_optimization_hints(payload: dict) -> list[str]:
         hint = STAGE_HINTS.get(secondary["stage"])
         if hint:
             hints.append(f"次要瓶颈在 `{secondary['stage']}`；{hint}")
-    if reference_count > 3:
-        hints.append("参考文件数量偏多；普通单题建议把 reference 文件控制在 2 到 3 个。")
+    if content_reference_count > 3:
+        hints.append("内容参考文件偏多；普通单题建议把内容 reference 控制在 2 到 3 个。")
     if context_estimate > output_estimate * 2:
         hints.append("输入上下文 token 明显高于输出 token；优先压缩 reference 注入而不是压缩最终产物。")
+    if validation and not validation.get("ok", False):
+        hints.append("校验未通过；优先修复 README 中文性、路径信息或样例成对关系，再继续做性能优化。")
+    if retry_count > 0:
+        hints.append(f"这次发生了 {retry_count} 次重试；优先把对应步骤脚本化，减少二次写入或编码修复。")
+    if permission_errors:
+        hints.append("这次记录到了权限相关错误；优先避免需要删除/覆盖锁定文件的写法，并在必要时单独提权清理。")
+    if stderr_noise and not permission_errors:
+        hints.append("有环境噪音但没有真正的权限失败；后续优先用 -NoProfile 或更安静的 shell 启动方式。")
     if not hints:
         hints.append("这次链路已经比较轻；下一步优先关注稳定性和题目质量，而不是继续压缩。")
     return hints
+
+
+def append_reference_section(lines: list[str], title: str, items: list[dict], empty_text: str) -> None:
+    lines.extend(["", f"## {title}", ""])
+    lines.append(f"- 数量：{len(items)}")
+    if items:
+        for item in items:
+            lines.append(f"- `{item['path']}`（估算 {item['estimated_tokens']} tokens）")
+    else:
+        lines.append(f"- {empty_text}")
 
 
 def build_markdown(payload: dict) -> str:
     stage_timings = payload["stage_timings_ms"]
     stage_percentages = payload["stage_percentages"]
     tool_counts = payload["tool_counts"]
-    reference_files = payload["reference_files"]
+    reference_groups = payload["reference_groups"]
     primary = payload["primary_bottleneck"]
     secondary = payload["secondary_bottleneck"]
+    validation = payload.get("validation")
+    write_methods = payload["write_methods"]
+    fallback_steps = payload["fallback_steps"]
+    permission_errors = payload["permission_errors"]
+    stderr_noise = payload["stderr_noise"]
+
     lines = [
         "# Skill 调试报告",
         "",
@@ -174,34 +254,42 @@ def build_markdown(payload: dict) -> str:
     for name, value in stage_timings.items():
         lines.append(f"| `{name}` | {value} | {stage_percentages.get(name, 0.0)}% |")
 
-    lines.extend(
-        [
-            "",
-            "## 工具调用",
-            "",
-            "| 工具 | 次数 |",
-            "| --- | --- |",
-        ]
-    )
+    lines.extend(["", "## 工具调用", "", "| 工具 | 次数 |", "| --- | --- |"])
     if tool_counts:
         for name, value in tool_counts.items():
             lines.append(f"| `{name}` | {value} |")
     else:
         lines.append("| `-` | 0 |")
 
-    lines.extend(
-        [
-            "",
-            "## 使用的参考文件",
-            "",
-            f"- 数量：{len(reference_files)}",
-        ]
-    )
-    if reference_files:
-        for item in reference_files:
-            lines.append(f"- `{item['path']}`（估算 {item['estimated_tokens']} tokens）")
+    append_reference_section(lines, "内容参考文件", reference_groups["content"], "这次没有单独记录内容参考文件。")
+    append_reference_section(lines, "控制规则文件", reference_groups["control"], "这次没有单独记录控制规则文件。")
+    append_reference_section(lines, "Debug 专用文件", reference_groups["debug"], "这次没有额外使用 debug 专用文件。")
+
+    lines.extend(["", "## 重试与降级", ""])
+    lines.append(f"- 重试次数：{payload['retry_count']}")
+    lines.append(f"- 是否触发降级：{'是' if fallback_steps else '否'}")
+    if fallback_steps:
+        lines.append("- 降级步骤：")
+        for step in fallback_steps:
+            lines.append(f"  - {step}")
     else:
-        lines.append("- 这次没有单独记录参考文件。")
+        lines.append("- 降级步骤：无")
+    if write_methods:
+        lines.append("- 主要写入方式：")
+        for name, method in write_methods.items():
+            lines.append(f"  - `{name}`：{method}")
+    else:
+        lines.append("- 主要写入方式：未单独记录")
+
+    lines.extend(["", "## 异常与噪音", ""])
+    lines.append(f"- 权限错误数：{len(permission_errors)}")
+    if permission_errors:
+        for item in permission_errors:
+            lines.append(f"  - {item}")
+    lines.append(f"- stderr / 环境噪音条数：{len(stderr_noise)}")
+    if stderr_noise:
+        for item in stderr_noise:
+            lines.append(f"  - {item}")
 
     lines.extend(["", "## 主要瓶颈", ""])
     if primary:
@@ -215,6 +303,18 @@ def build_markdown(payload: dict) -> str:
             f"- 次要瓶颈：`{secondary['stage']}`，耗时 {secondary['duration_ms']} ms，占比 {secondary['percentage']}%"
         )
 
+    if validation:
+        lines.extend(["", "## 校验结果", ""])
+        lines.append(f"- 总结：{validation.get('summary', '未提供')}")
+        lines.append(f"- 是否通过：{'是' if validation.get('ok') else '否'}")
+        if "readme_chinese_chars" in validation:
+            lines.append(f"- README 中文字符数：{validation['readme_chinese_chars']}")
+        failed_checks = [item for item in validation.get("checks", []) if not item.get("ok")]
+        if failed_checks:
+            lines.append("- 未通过项：")
+            for item in failed_checks:
+                lines.append(f"  - `{item['name']}`：{item['message']}")
+
     lines.extend(["", "## 优化建议", ""])
     for hint in payload["optimization_hints"]:
         lines.append(f"- {hint}")
@@ -226,6 +326,8 @@ def build_markdown(payload: dict) -> str:
             "## 估算的非 Debug Token 消耗",
             "",
             f"- 上下文估算：{token_info['context_estimate']}",
+            f"- 其中内容参考估算：{token_info['content_reference_estimate']}",
+            f"- 其中控制规则估算：{token_info['control_reference_estimate']}",
             f"- 输出估算：{token_info['output_estimate']}",
             f"- 总估算：{token_info['total_estimate']}",
             f"- 说明：{token_info['note']}",
@@ -233,21 +335,16 @@ def build_markdown(payload: dict) -> str:
     )
 
     files = payload["files_touched"]
-    lines.extend(
-        [
-            "",
-            "## 变更文件",
-            "",
-            f"- 数量：{files['count']}",
-        ]
-    )
+    lines.extend(["", "## 变更文件", "", f"- 数量：{files['count']}"])
     for item in files["paths"]:
         lines.append(f"- `{item}`")
 
-    if payload["missing_context_paths"] or payload["missing_generated_paths"]:
+    if payload["missing_context_paths"] or payload["missing_reference_paths"] or payload["missing_generated_paths"]:
         lines.extend(["", "## 缺失路径", ""])
         for item in payload["missing_context_paths"]:
             lines.append(f"- 缺失的上下文文件：`{item}`")
+        for item in payload["missing_reference_paths"]:
+            lines.append(f"- 缺失的参考文件：`{item}`")
         for item in payload["missing_generated_paths"]:
             lines.append(f"- 缺失的生成文件：`{item}`")
 
@@ -273,6 +370,12 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--context-file", action="append", default=[], help="File used as non-debug context")
     parser.add_argument("--reference-file", action="append", default=[], help="Reference file used for the main task")
     parser.add_argument("--generated-file", action="append", default=[], help="Non-debug generated or updated file")
+    parser.add_argument("--validation-json", default="", help="Optional JSON summary from validate_workspace.py")
+    parser.add_argument("--retry-count", type=int, default=0)
+    parser.add_argument("--fallback-step", action="append", default=[], help="Repeated fallback step descriptions")
+    parser.add_argument("--permission-error", action="append", default=[], help="Repeated permission-related errors")
+    parser.add_argument("--stderr-note", action="append", default=[], help="Repeated stderr or environment noise notes")
+    parser.add_argument("--write-method", action="append", default=[], help="Repeated write method as name=value")
     parser.add_argument("--note", action="append", default=[], help="Repeated note lines")
     return parser.parse_args(argv)
 
@@ -302,6 +405,7 @@ def main(argv: list[str]) -> int:
     try:
         stage_timings = parse_kv_list(args.stage)
         tool_counts = parse_kv_list(args.tool)
+        write_methods = parse_text_kv_list(args.write_method)
     except ValueError as error:
         print(f"ERROR: {error}", file=sys.stderr)
         return 2
@@ -310,23 +414,27 @@ def main(argv: list[str]) -> int:
     context_paths = normalize_paths(args.context_file)
     reference_paths = normalize_paths(args.reference_file)
     generated_paths = normalize_paths(args.generated_file)
-
     if not reference_paths:
         reference_paths = context_paths
 
-    context_estimate, context_details, missing_context = estimate_paths(context_paths)
-    reference_estimate, reference_details, missing_references = estimate_paths(reference_paths)
+    _, context_details, missing_context = estimate_paths(context_paths)
+    _, reference_details, missing_references = estimate_paths(reference_paths)
     output_estimate, output_details, missing_generated = estimate_paths(generated_paths)
+    reference_groups = split_reference_groups(reference_details)
+    content_reference_estimate = token_sum(reference_groups["content"])
+    control_reference_estimate = token_sum(reference_groups["control"])
+    debug_reference_estimate = token_sum(reference_groups["debug"])
+    context_estimate = content_reference_estimate + control_reference_estimate
 
     total_duration_ms = max(0, int((ended_at - started_at).total_seconds() * 1000))
+    if total_duration_ms == 0 and stage_timings:
+        total_duration_ms = sum(max(0, value) for value in stage_timings.values())
     stage_percentages = percentage_map(stage_timings, total_duration_ms)
     primary, secondary = pick_bottlenecks(stage_timings)
     if primary is not None:
         primary["percentage"] = stage_percentages.get(primary["stage"], 0.0)
     if secondary is not None:
         secondary["percentage"] = stage_percentages.get(secondary["stage"], 0.0)
-
-    md_path, json_path = resolve_report_paths(workspace_root, target_path, args.mode, ended_at)
 
     payload = {
         "request": args.request,
@@ -341,13 +449,16 @@ def main(argv: list[str]) -> int:
         "tool_counts": tool_counts,
         "estimated_non_debug_tokens": {
             "context_estimate": context_estimate,
-            "reference_estimate": reference_estimate,
+            "content_reference_estimate": content_reference_estimate,
+            "control_reference_estimate": control_reference_estimate,
+            "debug_reference_estimate": debug_reference_estimate,
             "output_estimate": output_estimate,
             "total_estimate": context_estimate + output_estimate,
-            "note": "按文本长度估算，不是平台 billing 的精确 token；默认不包含 debug 文件本身。",
+            "note": "按文本长度估算，不是平台 billing 的精确 token；默认不包含 debug 文件本身，也不把 debug 专用规则文件算进主任务上下文。",
         },
         "context_files": context_details,
         "reference_files": reference_details,
+        "reference_groups": reference_groups,
         "generated_files": output_details,
         "files_touched": {
             "count": len(generated_paths),
@@ -358,10 +469,17 @@ def main(argv: list[str]) -> int:
         "missing_generated_paths": missing_generated,
         "primary_bottleneck": primary,
         "secondary_bottleneck": secondary,
+        "validation": load_validation_summary(args.validation_json),
+        "retry_count": max(0, args.retry_count),
+        "fallback_steps": args.fallback_step,
+        "permission_errors": args.permission_error,
+        "stderr_noise": args.stderr_note,
+        "write_methods": write_methods,
         "notes": args.note,
     }
     payload["optimization_hints"] = build_optimization_hints(payload)
 
+    md_path, json_path = resolve_report_paths(workspace_root, target_path, args.mode, ended_at)
     md_path.write_text(build_markdown(payload), encoding="utf-8", newline="\n")
     json_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
 

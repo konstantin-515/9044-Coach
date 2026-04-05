@@ -191,7 +191,14 @@ If the mode is `workspace`, generate a folder on disk containing at least:
 
 Use ASCII filenames and keep the folder self-contained.
 
-Use `scripts/init_workspace.py` to scaffold the folder whenever possible, then fill in the generated files with the real question, data, expected outputs, and tests.
+Hard rule for this user:
+
+- the exercise `README.md` must be Chinese
+- if a generated `README.md` is too English-heavy or misses the expected Chinese section headings, the workspace is not finished yet
+
+Use `scripts/init_workspace.py` to scaffold the folder whenever possible, then prefer `scripts/fill_workspace_from_spec.py` to fill the generated files from one compact spec instead of writing each file separately.
+Use `scripts/render_workspace_docs.py` to write the final Chinese `README.md` and refreshed `metadata.json` whenever possible.
+Use `scripts/validate_workspace.py` before finalizing a generated workspace whenever possible.
 
 If the mode is `mistake-summary`, generate at least:
 
@@ -214,9 +221,17 @@ The debug report should include:
 - resolved route kind
 - wall-clock timing and stage timings
 - tool-call counts
-- references used
+- content references used
+- control-rule files used
+- debug-only files used
+- retry count
+- fallback steps when a fallback or degradation happened
+- permission-related errors when relevant
+- stderr or environment-noise notes when relevant
+- main write methods when known
 - primary bottleneck and secondary bottleneck
 - optimization hints
+- validation summary when available
 - files created or updated
 - estimated non-debug token usage
 - a note that token numbers are estimates unless exact billing counters are available
@@ -337,13 +352,17 @@ For the `lightweight` route:
 - read `references/topic-index.md`
 - read `references/output-templates.md`
 - read only one of `references/question-patterns.md`, `references/data-shapes.md`, or `references/workspace-rules.md` as needed
+- prefer spec-driven authoring and script-based validation over manually rewriting long README or repeated checks
 - open at most one detailed merged archive file if still required
 - if that is not enough, escalate to `full` and record the escalation in debug output
 
 For `workspace` mode, perform step 5 concretely:
 
 - call `scripts/init_workspace.py` to create the folder skeleton
+- produce one compact question spec and prefer `scripts/fill_workspace_from_spec.py` to write README, metadata, cases, and test skeleton in one pass
+- prefer `scripts/render_workspace_docs.py` when writing the final Chinese `README.md` and refreshed `metadata.json`
 - write or update `metadata.json`, `README.md`, `notebook.md`, `solution.*`, `data/*`, `expected/*`, and `tests/*`
+- call `scripts/validate_workspace.py` before finishing whenever possible
 - only then respond with a summary
 
 For `archive` mode, perform the move concretely:
