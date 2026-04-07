@@ -174,6 +174,56 @@ For better speed and consistency:
 - then let `scripts/fill_workspace_from_spec.py` write `README.md`, `metadata.json`, `data/`, `expected/`, and the default test runner
 - avoid manually patching each sample file one by one unless the script path is genuinely blocked
 
+For shell-topic diversity:
+
+- generic shell practice must not collapse into endless `zid`, `course code`, or term-tag parsing
+- if recent exercises already used regex/pipeline student-record style data, prefer file or directory tasks next
+- a fresh shell exercise should often change the task family itself, not only the labels inside the input rows
+
+## Case Design Diversity
+
+Visible samples and edge cases should cover different *behaviors*, not just minor text rewrites.
+
+Bad:
+
+- three samples that all test the same simple regex match
+- two edge cases that differ only in one character
+
+Good:
+
+- one normal happy-path sample
+- one duplicate or repeated-record sample
+- one malformed or partially invalid input sample
+- one tie or ordering sample
+- one no-match, empty, or already-correct sample
+- one safety-related edge case such as collision, hidden files, or names with spaces
+
+For file and directory tasks, strongly prefer including some of:
+
+- filenames with spaces
+- target file already exists
+- no matching files
+- same filename but different contents
+- file present in only one directory
+- hidden files that should be ignored
+- nested or multiple input directories
+
+For backup and snapshot tasks, strongly prefer including some of:
+
+- first save with no previous backup
+- next save when `.0` already exists
+- restore after files changed
+- hidden files ignored
+- the tool should not back itself up
+
+For pipeline and regex tasks, strongly prefer including some of:
+
+- duplicate records
+- malformed records
+- case-sensitivity traps
+- ties requiring secondary sort
+- valid-looking rows that should still be ignored
+
 When a test fails, the runner should print a short reason, for example:
 
 - wrong ordering

@@ -53,14 +53,25 @@ Before opening the larger knowledge-base files, prefer this fast path:
 2. [references/question-patterns.md](references/question-patterns.md)
 3. [references/output-templates.md](references/output-templates.md)
 4. [references/data-shapes.md](references/data-shapes.md)
-5. [references/workspace-rules.md](references/workspace-rules.md) when creating folders on disk
-6. [references/archive-rules.md](references/archive-rules.md) when archiving completed exercises
-7. [references/mistake-summary-rules.md](references/mistake-summary-rules.md) when summarizing archived notebook mistakes
-8. [references/lightweight-path-rules.md](references/lightweight-path-rules.md) when the request is a single clear task and speed matters
-9. [references/debug-rules.md](references/debug-rules.md) when the user enables debug output
-10. [references/question-quality-checklist.md](references/question-quality-checklist.md) before finalizing a generated exercise
-11. inspect `references/user-notes/` when the user has stored personal notes there
-12. open files under `references/knowledge-base/` only as needed
+5. [references/scenario-bank.md](references/scenario-bank.md) when the user asked for generic shell practice and the scenario should rotate
+6. [references/shell-diversity-rules.md](references/shell-diversity-rules.md) when the user asked for generic shell practice and recent exercises may be too similar
+7. [references/case-design-rules.md](references/case-design-rules.md) when planning visible samples and edge cases
+8. [references/workspace-rules.md](references/workspace-rules.md) when creating folders on disk
+9. [references/archive-rules.md](references/archive-rules.md) when archiving completed exercises
+10. [references/mistake-summary-rules.md](references/mistake-summary-rules.md) when summarizing archived notebook mistakes
+11. [references/lightweight-path-rules.md](references/lightweight-path-rules.md) when the request is a single clear task and speed matters
+12. [references/debug-rules.md](references/debug-rules.md) when the user enables debug output
+13. [references/question-quality-checklist.md](references/question-quality-checklist.md) before finalizing a generated exercise
+14. inspect `references/user-notes/` when the user has stored personal notes there
+15. open files under `references/knowledge-base/` only as needed
+
+For generic shell-practice requests, also prefer:
+
+- `scripts/suggest_next_track.py` to inspect recent `metadata.json` files under `exercises/` and `archives/`
+- use its recommendation to avoid repeating the same regex/pipeline style over and over
+- use `references/scenario-bank.md` so the story/data world rotates too
+- use `references/shell-diversity-rules.md` so generic shell work does not collapse back into student-record parsing
+- use `references/case-design-rules.md` so the visible samples test different behaviors
 
 ## Supported Modes
 
@@ -275,6 +286,7 @@ For `workspace` mode, prefer:
 - three visible sample cases such as `sample01`, `sample02`, `sample03`
 - two visible edge cases such as `edge01`, `edge02`
 - for harder or full-route exercises, prefer four or more visible sample cases when that improves clarity
+- make the visible cases behaviorally different, not just minor string variations
 
 Do not default to only one sample and one edge unless the task is unusually small.
 
@@ -297,6 +309,7 @@ For `workspace` mode, the `README.md` must also include:
 - the exact WSL path for this exercise folder
 - a ready-to-copy `cd` command using that WSL path
 - explicit visible sample input/output blocks, not just sample filenames
+- visible samples and edge cases that cover different behaviors or failure modes
 
 For this user, prefer:
 
@@ -483,6 +496,15 @@ Good defaults:
 - "give me 3 questions": mix pipeline, regex, and file-processing styles
 - "quiz me": one question first, then wait
 - "help me revise": if archived notebooks exist, summarize the archived mistakes first; otherwise provide a short topic menu plus one starter question
+
+For generic shell requests with no explicit topic:
+
+- do not default again to `zid`, `course code`, or term-style record processing if recent exercises already used that family
+- rotate through shell-core, file-directory, backup-snapshot, and pipeline-text tracks
+- make sure file and directory automation appears regularly
+- rotate the story scenario too: logs, source files, web files, media collections, backups, directory mirrors, and similar course-authentic worlds
+- treat "different type" as a different shell task family, not the same parsing pattern with different labels
+- if the recent 3 shell exercises are still mostly text/regex/pipeline, the next generic shell exercise should prefer `file-directory` or `backup-snapshot`
 
 ## Safety And Integrity
 

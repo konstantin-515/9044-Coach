@@ -93,6 +93,13 @@ Suggested sequence:
 2. aggregation or regex
 3. directory or mixed exam-style task
 
+When the user asks for several shell questions, avoid making all of them student-record or regex-only stories. Prefer mixing in:
+
+- file rename
+- directory compare
+- backup or snapshot
+- quoting-sensitive file traversal
+
 ## Mark-My-Answer Template
 
 When the user shares an attempted answer, respond with:
@@ -151,6 +158,8 @@ Prefer multiple visible cases by default:
 - three sample cases such as `sample01` to `sample03`
 - two edge cases such as `edge01` and `edge02`
 - for more complex integrated questions, prefer four or more visible sample cases if they clarify the rules
+
+The visible cases should represent different behaviors, not tiny rewrites of the same case.
 
 Hard rule:
 

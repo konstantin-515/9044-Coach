@@ -85,7 +85,89 @@ Common traps:
 - mishandling empty files
 - ignoring files present in only one directory
 
-### 5. Small Python Text-Processing Programs
+### 5. File Renaming And Extension Migration
+
+Typical input:
+
+- many files in one directory
+- filenames where suffix or pattern matters
+
+Common tasks:
+
+- rename `.htm` to `.html`
+- rename by pattern
+- skip collisions safely
+- preserve unrelated files
+
+Common traps:
+
+- overwriting an existing target file
+- weak quoting when filenames contain spaces
+- renaming too broadly
+
+### 6. File Tree Traversal And Safe Quoting
+
+Typical input:
+
+- one or more directories
+- nested files
+- filenames or directory names that contain spaces
+
+Common tasks:
+
+- walk a directory tree
+- extract information from file or directory names
+- apply a command to matching files
+- compare path-derived metadata with file contents
+
+Common traps:
+
+- broken quoting
+- relying on unsafe glob assumptions
+- parsing filenames too rigidly
+
+### 7. Backup And Snapshot Workflows
+
+Typical input:
+
+- the current directory state
+- repeated saves or restores
+
+Common tasks:
+
+- create numbered backups
+- create `.snapshot.N` directories
+- ignore hidden or disallowed files
+- restore a chosen snapshot safely
+
+Common traps:
+
+- wrong numbering logic
+- backing up files that should be ignored
+- calling scripts with `./` when the marking environment expects `$PATH`
+
+### 8. Metadata From Filenames And Directory Names
+
+Typical input:
+
+- music collections
+- images
+- filenames that encode track numbers, artist names, dates, or tags
+
+Common tasks:
+
+- derive metadata from names
+- repair tags
+- label files using path-derived information
+- build fake datasets with a required directory layout
+
+Common traps:
+
+- brittle splitting rules
+- mishandling punctuation or spaces
+- assuming every filename is perfectly clean
+
+### 9. Small Python Text-Processing Programs
 
 Typical input:
 
@@ -113,6 +195,8 @@ To make a new question:
 - combine two familiar operations into one question
 - add one hidden constraint such as sorting, deduplication, or case normalization
 - keep the input realistic and course-like
+- rotate the story scenario as well as the operation pattern
+- avoid reusing student-record, zID, course, or term stories repeatedly unless the user explicitly asks for them
 
 ## Coaching Variants
 
@@ -129,7 +213,43 @@ Use the same pattern family in different coaching modes:
 - one clean operation plus one tricky formatting rule
 - one aggregation task plus one normalization rule
 - one directory task plus one edge-case requirement
+- one rename or backup task plus one safety rule
+- one file-tree task where quoting is essential
 - one Python text-processing task with strict output format
+
+## Rotation Guidance
+
+When the user asks for generic `shell` practice or a mixed final-style shell question:
+
+- do not keep repeating `zid`, `course code`, `term`, or other student-record style data
+- if the recent exercises already emphasize regex, grep, or structured table parsing, rotate to one of:
+  - file renaming
+  - directory comparison
+  - backups or snapshots
+  - file-tree traversal with quoting
+  - metadata derived from filenames or directory names
+- prefer file and directory automation regularly because it is a real course capability, not an edge topic
+- a "different question" means a different task family, not the same regex/pipeline idea with different labels
+- generic shell practice should regularly surface folder/file tasks because many students under-practice them
+
+## Sample Diversity Guidance
+
+Do not generate visible cases that are all variants of the same regex/filter.
+
+Prefer a visible case mix such as:
+
+- one happy-path example
+- one repeated or duplicate case
+- one malformed or invalid-input case
+- one ordering or tie-break case
+- one no-match or ignore-this case
+
+For file and directory questions, visible cases should often demonstrate:
+
+- filenames with spaces
+- existing targets or naming collisions
+- files that should not be touched
+- same-name / different-content comparisons
 
 ## Bad Question Shapes
 
